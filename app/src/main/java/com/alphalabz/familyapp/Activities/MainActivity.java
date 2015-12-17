@@ -1,15 +1,15 @@
 package com.alphalabz.familyapp.Activities;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.alphalabz.familyapp.Fragments.BlankFragment;
+import com.alphalabz.familyapp.Fragments.Profile;
+import com.alphalabz.familyapp.Fragments.profile2;
 import com.alphalabz.familyapp.R;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -17,7 +17,6 @@ import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
@@ -58,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
                 .withToolbar(toolbar)
                 .withActionBarDrawerToggleAnimated(true)
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName("Item 1").withIcon(FontAwesome.Icon.faw_android),
-                        new PrimaryDrawerItem().withName("Item 2").withIcon(FontAwesome.Icon.faw_android),
+                        new PrimaryDrawerItem().withName("Home").withIcon(FontAwesome.Icon.faw_android),
+                        new PrimaryDrawerItem().withName("Profile").withIcon(FontAwesome.Icon.faw_android),
                         new PrimaryDrawerItem().withName("Item 3").withIcon(FontAwesome.Icon.faw_android),
                         new PrimaryDrawerItem().withName("Item 4").withIcon(FontAwesome.Icon.faw_android),
                         new PrimaryDrawerItem().withName("Item 5").withIcon(FontAwesome.Icon.faw_android)
@@ -74,7 +73,18 @@ public class MainActivity extends AppCompatActivity {
                             //getSupportActionBar().setTitle(name);
                             Fragment fragment;
                             switch (i) {
-
+                                case 1:
+                                    fragment = new BlankFragment();
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                                    break;
+                                case 2:
+                                    fragment = new Profile();
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                                    break;
+                                case 3:
+                                    fragment = new profile2();
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                                    break;
 
                                 default:
                                     fragment = new BlankFragment();

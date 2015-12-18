@@ -41,6 +41,6 @@ dependencies {
     compile 'com.android.support:support-v4:23.1.1'
     compile 'com.mikepenz:fontawesome-typeface:4.4.0.1@aar'
     compile 'com.github.nirhart:parallaxscroll:1.0'
-    compile 'com.google.android.gms:play-services:4.3.23'
+    compile 'com.google.android.gms:play-services:8.4.0'
 
 }

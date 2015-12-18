@@ -8,8 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.alphalabz.familyapp.Fragments.BlankFragment;
-import com.alphalabz.familyapp.Fragments.Profile;
-import com.alphalabz.familyapp.Fragments.profile2;
+import com.alphalabz.familyapp.Fragments.ProfileFragment;
 import com.alphalabz.familyapp.R;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -70,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
                         if (drawerItem != null && drawerItem instanceof Nameable) {
                             String name = ((Nameable) drawerItem).getName().getText(MainActivity.this);
-                            //getSupportActionBar().setTitle(name);
+                            getSupportActionBar().setTitle(name);
                             Fragment fragment;
                             switch (i) {
                                 case 1:
@@ -78,11 +77,7 @@ public class MainActivity extends AppCompatActivity {
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
                                 case 2:
-                                    fragment = new Profile();
-                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
-                                    break;
-                                case 3:
-                                    fragment = new profile2();
+                                    fragment = new ProfileFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
 

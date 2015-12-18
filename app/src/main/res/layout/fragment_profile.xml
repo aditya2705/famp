@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.alphalabz.familyapp.Fragments.Profile">
+    tools:context=".Fragments.ProfileFragment">
 
     <com.nirhart.parallaxscroll.views.ParallaxScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -18,7 +18,7 @@
             <ImageView
                 android:id="@+id/header_imageview"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="@dimen/_190sdp"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
                 android:src="@drawable/background_profile" />
@@ -28,36 +28,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/header_imageview"
-                android:background="#CDDC39"
+                android:background="@color/md_lime_500"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:paddingBottom="16dp"
-                android:paddingTop="32dp">
+                android:paddingBottom="@dimen/_16sdp"
+                android:paddingTop="@dimen/_32sdp">
 
 
                 <TextView
                     android:id="@+id/profile_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Mr XYZ"
-                    android:textSize="17dp"
+                    android:textSize="@dimen/_17sdp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/profile_birthdate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="@dimen/_4sdp"
                     android:gravity="center"
-                    android:text="Birthdate"
-                    android:textColor="#FF707070" />
+                    android:textColor="@color/profile_font" />
 
                 <TextView
+                    android:id="@+id/profile_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="@dimen/_4sdp"
                     android:gravity="center"
-                    android:text="xyz@gmail.com"
-                    android:textColor="#FF707070" />
+                    android:textColor="@color/profile_font" />
 
 
             </LinearLayout>
@@ -79,10 +78,10 @@
                     <android.support.v7.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:layout_marginTop="16dp">
+                        android:layout_marginBottom="@dimen/_16sdp"
+                        android:layout_marginLeft="@dimen/_16sdp"
+                        android:layout_marginRight="@dimen/_16sdp"
+                        android:layout_marginTop="@dimen/_16sdp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -90,6 +89,16 @@
                             android:background="@color/white"
                             android:gravity="center"
                             android:orientation="vertical">
+
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="@dimen/_8sdp"
+                                android:text="Personal Details"
+                                android:textAlignment="center"
+                                android:textColor="@color/half_black"
+                                android:textStyle="bold" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -109,10 +118,9 @@
                                         android:id="@+id/profile_firstname"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:text="Hello"
                                         android:textAlignment="center"
                                         android:textColor="@color/half_black"
-                                        android:textSize="15dp"
+                                        android:textSize="@dimen/_15sdp"
                                         android:textStyle="bold" />
                                 </LinearLayout>
 
@@ -127,10 +135,9 @@
                                         android:id="@+id/profile_familyname"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:text="Shah"
                                         android:textAlignment="center"
                                         android:textColor="@color/half_black"
-                                        android:textSize="15dp"
+                                        android:textSize="@dimen/_15sdp"
                                         android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
@@ -155,7 +162,7 @@
                                         android:text="First Name"
                                         android:textAlignment="center"
                                         android:textColor="@color/half_black"
-                                        android:textSize="12dp" />
+                                        android:textSize="@dimen/_12sdp" />
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -171,25 +178,9 @@
                                         android:text="Family Name"
                                         android:textAlignment="center"
                                         android:textColor="@color/half_black"
-                                        android:textSize="12dp" />
+                                        android:textSize="@dimen/_12sdp" />
                                 </LinearLayout>
                             </LinearLayout>
-                        </LinearLayout>
-                    </android.support.v7.widget.CardView>
-
-                    <android.support.v7.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/white"
-                            android:gravity="center"
-                            android:orientation="vertical">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -209,10 +200,9 @@
                                         android:id="@+id/profile_fathername"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:text="Mr ABC"
                                         android:textAlignment="center"
                                         android:textColor="@color/half_black"
-                                        android:textSize="15dp"
+                                        android:textSize="@dimen/_15sdp"
                                         android:textStyle="bold" />
                                 </LinearLayout>
 
@@ -227,10 +217,9 @@
                                         android:id="@+id/profile_mothername"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:text="Mrs. PQR"
                                         android:textAlignment="center"
                                         android:textColor="@color/half_black"
-                                        android:textSize="15dp"
+                                        android:textSize="@dimen/_15sdp"
                                         android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
@@ -255,7 +244,7 @@
                                         android:text="Father's Name"
                                         android:textAlignment="center"
                                         android:textColor="@color/half_black"
-                                        android:textSize="12dp" />
+                                        android:textSize="@dimen/_12sdp" />
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -271,7 +260,7 @@
                                         android:text="Mother's Name"
                                         android:textAlignment="center"
                                         android:textColor="@color/half_black"
-                                        android:textSize="12dp" />
+                                        android:textSize="@dimen/_12sdp" />
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
@@ -280,20 +269,20 @@
                     <android.support.v7.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp">
+                        android:layout_marginBottom="@dimen/_16sdp"
+                        android:layout_marginLeft="@dimen/_16sdp"
+                        android:layout_marginRight="@dimen/_16sdp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="@dimen/_14sdp">
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:padding="8dp"
+                                android:padding="@dimen/_8sdp"
                                 android:text="Contact Details"
                                 android:textAlignment="center"
                                 android:textColor="@color/half_black"
@@ -314,9 +303,9 @@
 
 
                                 <TextView
+                                    android:id="@+id/profile_mobile"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="+91348734923"
                                     android:textColor="@color/half_black" />
 
                             </LinearLayout>
@@ -337,9 +326,9 @@
 
 
                                 <TextView
+                                    android:id="@+id/profile_phone"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="+91646344563"
                                     android:textColor="@color/half_black" />
 
                             </LinearLayout>
@@ -347,6 +336,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/_10sdp"
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:orientation="horizontal">
 
@@ -360,14 +350,18 @@
 
 
                                 <TextView
+                                    android:id="@+id/profile_address"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Sardar Patel Institute of Technology, \nAndheri West,\nMumbai"
                                     android:textColor="@color/half_black" />
 
                             </LinearLayout>
 
-
+                            <fragment
+                                android:id="@+id/map"
+                                class="com.google.android.gms.maps.SupportMapFragment"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_221sdp" />
                         </LinearLayout>
 
                     </android.support.v7.widget.CardView>
@@ -379,12 +373,12 @@
 
             <!-- cheat code: negative margin -->
             <ImageView
-                android:layout_width="75dp"
-                android:layout_height="75dp"
+                android:id="@+id/user_icon"
+                android:layout_width="@dimen/_75sdp"
+                android:layout_height="@dimen/_75sdp"
                 android:layout_above="@+id/informations_container"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="-16dp"
-                android:src="@drawable/user1" />
+                android:layout_marginBottom="@dimen/_minus16sdp" />
 
         </RelativeLayout>
     </com.nirhart.parallaxscroll.views.ParallaxScrollView>

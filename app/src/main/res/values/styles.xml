@@ -65,4 +65,12 @@
         <item name="android:displayOptions">homeAsUp</item>
     </style>
 
+    <style name="CustomTextAppearance" parent="TextAppearance.MaterialCalendarWidget.Header">
+        <item name="android:textColor">@color/md_black_1000</item>
+    </style>
+
+    <style name="CustomDayAppearance" parent="TextAppearance.MaterialCalendarWidget.Header">
+        <item name="android:textColor">@color/md_grey_500</item>
+    </style>
+
 </resources>

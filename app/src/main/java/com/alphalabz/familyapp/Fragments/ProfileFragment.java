@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alphalabz.familyapp.Objects.Person;
 import com.alphalabz.familyapp.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,52 +38,54 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
-        setPersonalData(v, "Rushabh", "Shah", "Manoj", "Swati", "10/07/1994", "rms@gmail.com", 'M');
         final LatLng location = new LatLng(-37.813, 144.962);
         String address = "Sardar Patel Institute of Technoogy,\nAndheri W,\nMumbai";
-        setContactDetails(v, "+919855453344", "+912225435442", address, location);
+        Person rms = new Person("Rushabh", "Shah", "Manoj", "Swati", "10/07/1994", "rms@gmail.com", 'M', "+919855453344", "+912225435442", address, location);
+
+        setPersonalData(v, rms);
+        setContactDetails(v, rms);
         return v;
     }
 
-    public void setPersonalData(View v, String name, String familyName, String fatherName, String motherName, String birthdate, String email, char gender) {
+    public void setPersonalData(View v, Person p) {
         ImageView userIcon = (ImageView) v.findViewById(R.id.user_icon);
         userIcon.setImageResource(R.drawable.user1);
 
         TextView nameT = (TextView) v.findViewById(R.id.profile_name);
-        String newName = gender == 'M' ? "Mr " + name : "Miss " + name;
+        String newName = p.getGender() == 'M' ? "Mr " + p.getName() : "Miss " + p.getName();
         nameT.setText(newName);
 
         TextView firstNameT = (TextView) v.findViewById(R.id.profile_firstname);
-        firstNameT.setText(name);
+        firstNameT.setText(p.getName());
 
         TextView familyNameT = (TextView) v.findViewById(R.id.profile_familyname);
-        familyNameT.setText(familyName);
+        familyNameT.setText(p.getFamilyName());
 
         TextView fatherNameT = (TextView) v.findViewById(R.id.profile_fathername);
-        fatherNameT.setText(fatherName);
+        fatherNameT.setText(p.getFatherName());
 
         TextView motherNameT = (TextView) v.findViewById(R.id.profile_mothername);
-        motherNameT.setText(motherName);
+        motherNameT.setText(p.getMotherName());
 
         TextView birthdateT = (TextView) v.findViewById(R.id.profile_birthdate);
-        birthdateT.setText(birthdate);
+        birthdateT.setText(p.getBirthdate());
 
         TextView emailT = (TextView) v.findViewById(R.id.profile_email);
-        emailT.setText(email);
+        emailT.setText(p.getEmail());
 
     }
 
-    public void setContactDetails(View v, String mobile, String phone, String address, LatLng location) {
+    public void setContactDetails(View v, Person p) {
         TextView mobileT = (TextView) v.findViewById(R.id.profile_mobile);
-        mobileT.setText(mobile);
+        mobileT.setText(p.getMobile());
 
         TextView phoneT = (TextView) v.findViewById(R.id.profile_phone);
-        phoneT.setText(phone);
+        phoneT.setText(p.getPhone());
 
         TextView addressT = (TextView) v.findViewById(R.id.profile_address);
-        addressT.setText(address);
+        addressT.setText(p.getAddress());
 
-        setUpMap(location);
+        setUpMap(p.getLocation());
     }
 
     public void setUpMap(LatLng location) {

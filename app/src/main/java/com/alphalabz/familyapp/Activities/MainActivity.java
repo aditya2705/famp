@@ -1,6 +1,7 @@
 package com.alphalabz.familyapp.Activities;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.alphalabz.familyapp.Fragments.BlankFragment;
+import com.alphalabz.familyapp.Fragments.EventTableFragment;
 import com.alphalabz.familyapp.Fragments.EventsFragment;
 import com.alphalabz.familyapp.Fragments.ProfileFragment;
 import com.alphalabz.familyapp.R;
@@ -24,8 +26,13 @@ import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static Context mContext;
     private Drawer result = null;
     private FloatingActionButton fab;
+
+    public static Context getContext() {
+        return mContext;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        mContext = getApplicationContext();
         //Account header for the Google Material Drawer
         //Responsive to multiple accounts
         AccountHeader headerResult = new AccountHeaderBuilder()
@@ -61,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                         new PrimaryDrawerItem().withName("Home").withIcon(FontAwesome.Icon.faw_android),
                         new PrimaryDrawerItem().withName("Profile").withIcon(FontAwesome.Icon.faw_android),
                         new PrimaryDrawerItem().withName("Events").withIcon(FontAwesome.Icon.faw_android),
-                        new PrimaryDrawerItem().withName("Item 4").withIcon(FontAwesome.Icon.faw_android),
+                        new PrimaryDrawerItem().withName("Data Table").withIcon(FontAwesome.Icon.faw_android),
                         new PrimaryDrawerItem().withName("Item 5").withIcon(FontAwesome.Icon.faw_android)
 
                 )
@@ -84,6 +91,10 @@ public class MainActivity extends AppCompatActivity {
                                     break;
                                 case 3:
                                     fragment = new EventsFragment();
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                                    break;
+                                case 4:
+                                    fragment = new EventTableFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
                                 default:
@@ -122,5 +133,4 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
@@ -10,48 +10,33 @@
         android:orientation="horizontal">
 
         <TableRow
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/_5sdp"
             android:paddingTop="@dimen/_5sdp">
 
             <TextView
                 android:id="@+id/date_row"
-                android:width="@dimen/_60sdp"
+                android:width="@dimen/_100sdp"
                 android:paddingLeft="@dimen/_10sdp"
-                android:text="Dates"
                 android:textColor="@color/md_black_1000"></TextView>
 
             <TextView
+                android:id="@+id/birthday_row"
                 android:width="@dimen/_100sdp"
-                android:text="Birthday"
                 android:textColor="@color/md_black_1000"></TextView>
 
             <TextView
-                android:width="@dimen/_100sdp"
-                android:text="Anniversary"
-                android:textColor="@color/md_black_1000"></TextView>
-
-            <TextView
-                android:width="@dimen/_100sdp"
-                android:text="City"
-                android:textColor="@color/md_black_1000"></TextView>
-
-            <TextView
-                android:width="@dimen/_100sdp"
-                android:text="Contact Number"
-                android:textColor="@color/md_black_1000"></TextView>
-
-            <TextView
+                android:id="@+id/anniversary_row"
                 android:width="@dimen/_200sdp"
-                android:text="Email"
                 android:textColor="@color/md_black_1000"></TextView>
+
 
         </TableRow>
     </LinearLayout>
 
     <TableRow
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <View

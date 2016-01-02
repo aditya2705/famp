@@ -1,11 +1,13 @@
 package com.alphalabz.familyapp.Fragments;
 
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import com.alphalabz.familyapp.Custom.EventDecorator;
 import com.alphalabz.familyapp.R;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -77,6 +80,29 @@ public class EventsFragment extends Fragment {
             super.onPostExecute(calendarDays);
 
             calendarView.addDecorator(new EventDecorator(Color.BLUE, calendarDays));
+            calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+                @Override
+                public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(
+                            getActivity()
+                    )
+                            .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    // Delete Action
+                                }
+                            })
+                            .setNegativeButton("Back", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    // Cancel Action
+                                }
+                            })
+                            .setTitle("Events")
+                            .create();
+                    alertDialog.show();
+                }
+            });
         }
     }
 }

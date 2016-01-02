@@ -30,7 +30,7 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
 
 
     public ProfileFragment() {
-        // Required empty public constructor
+        // Required empty public construct
     }
 
     @Override
@@ -38,9 +38,14 @@ public class ProfileFragment extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
+        String profileID = getArguments().getString("profile_id");
         final LatLng location = new LatLng(-37.813, 144.962);
         String address = "Sardar Patel Institute of Technoogy,\nAndheri W,\nMumbai";
         Person rms = new Person("Rushabh", "Shah", "Manoj", "Swati", "10/07/1994", "rms@gmail.com", 'M', "+919855453344", "+912225435442", address, location);
+
+        if (!profileID.equals("rms123")) {
+            rms = new Person("Aditya", "Rathi", "Mr Rathi", "Mrs Rathi", "10/07/1994", "ady@gmail.com", 'M', "+919855453344", "+912225435442", address, location);
+        }
 
         setPersonalData(v, rms);
         setContactDetails(v, rms);

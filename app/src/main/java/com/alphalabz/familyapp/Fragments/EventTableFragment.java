@@ -49,7 +49,7 @@ public class EventTableFragment extends Fragment {
         myDataset.add("July");
 
         // specify an adapter (see also next example)
-        EventTableAdapter mAdapter = new EventTableAdapter(myDataset);
+        EventTableAdapter mAdapter = new EventTableAdapter(this.getActivity(), myDataset);
         mRecyclerView.setAdapter(mAdapter);
 
         return v;

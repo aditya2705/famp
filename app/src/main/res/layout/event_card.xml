@@ -49,7 +49,7 @@
                     android:paddingTop="@dimen/_9sdp">
 
                     <TextView
-                        android:width="@dimen/_60sdp"
+                        android:width="@dimen/_100sdp"
                         android:paddingLeft="@dimen/_10sdp"
                         android:text="Dates"
                         android:textColor="@color/md_black_1000"></TextView>
@@ -60,23 +60,8 @@
                         android:textColor="@color/md_black_1000"></TextView>
 
                     <TextView
-                        android:width="@dimen/_100sdp"
-                        android:text="Anniversary"
-                        android:textColor="@color/md_black_1000"></TextView>
-
-                    <TextView
-                        android:width="@dimen/_100sdp"
-                        android:text="City"
-                        android:textColor="@color/md_black_1000"></TextView>
-
-                    <TextView
-                        android:width="@dimen/_100sdp"
-                        android:text="Contact Number"
-                        android:textColor="@color/md_black_1000"></TextView>
-
-                    <TextView
                         android:width="@dimen/_200sdp"
-                        android:text="Email"
+                        android:text="Anniversary"
                         android:textColor="@color/md_black_1000"></TextView>
 
                 </TableRow>

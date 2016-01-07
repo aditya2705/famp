@@ -23,11 +23,6 @@
 
             <TextView
                 android:id="@+id/birthday_row"
-                android:width="@dimen/_100sdp"
-                android:textColor="@color/md_black_1000"></TextView>
-
-            <TextView
-                android:id="@+id/anniversary_row"
                 android:width="@dimen/_200sdp"
                 android:textColor="@color/md_black_1000"></TextView>
 

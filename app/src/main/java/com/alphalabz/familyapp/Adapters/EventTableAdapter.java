@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.alphalabz.familyapp.Activities.MainActivity;
-import com.alphalabz.familyapp.Fragments.BlankFragment;
+import com.alphalabz.familyapp.Fragments.EventRowFragment;
 import com.alphalabz.familyapp.Fragments.ProfileFragment;
 import com.alphalabz.familyapp.R;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
@@ -25,12 +25,13 @@ import java.util.ArrayList;
  */
 public class EventTableAdapter extends RecyclerView.Adapter<EventTableAdapter.ViewHolder> implements View.OnClickListener {
     Context ct;
-
+    int i;
     private ArrayList<String> mDataset;
     // Provide a suitable constructor (depends on the kind of dataset)
-    public EventTableAdapter(Context context, ArrayList<String> myDataset) {
+    public EventTableAdapter(Context context, ArrayList<String> myDataset, int i) {
         mDataset = myDataset;
         ct = context;
+        this.i = i;
     }
 
     public void add(int position, String item) {
@@ -50,15 +51,7 @@ public class EventTableAdapter extends RecyclerView.Adapter<EventTableAdapter.Vi
                                                            int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_card, parent, false);
-        ViewPager viewPager = (ViewPager) v.findViewById(R.id.viewpager);
-        SmartTabLayout viewPagerTab = (SmartTabLayout) v.findViewById(R.id.viewpagertab);
-        FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
-                ((MainActivity) ct).getSupportFragmentManager(), FragmentPagerItems.with(ct)
-                .add("All", BlankFragment.class)
-                .add("Bday", BlankFragment.class)
-                .create());
-        viewPager.setAdapter(adapter);
-        viewPagerTab.setViewPager(viewPager);
+
 
         ViewHolder vh = new ViewHolder(v);
 
@@ -88,6 +81,16 @@ public class EventTableAdapter extends RecyclerView.Adapter<EventTableAdapter.Vi
         // - replace the contents of the view with that element
         final String name = mDataset.get(position);
         holder.txtHeader.setText(mDataset.get(position));
+        FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
+                ((MainActivity) ct).getSupportFragmentManager(), FragmentPagerItems.with(ct)
+                .add("All", EventRowFragment.class)
+                .add("Birthday", EventRowFragment.class)
+                .add("Anniversary", EventRowFragment.class)
+                .create());
+        holder.viewPager.setId(i++);
+        holder.viewPager.setAdapter(adapter);
+        holder.viewPagerTab.setCustomTabView(R.layout.custom_smart_tab, R.id.tab_text);
+        holder.viewPagerTab.setViewPager(holder.viewPager);
 
 
     }
@@ -104,11 +107,14 @@ public class EventTableAdapter extends RecyclerView.Adapter<EventTableAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public TextView txtHeader;
-
+        public SmartTabLayout viewPagerTab;
+        public ViewPager viewPager;
 
         public ViewHolder(View v) {
             super(v);
             txtHeader = (TextView) v.findViewById(R.id.month_name);
+            viewPager = (ViewPager) v.findViewById(R.id.viewpager);
+            viewPagerTab = (SmartTabLayout) v.findViewById(R.id.viewpagertab);
 
 
         }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
+import android.widget.TextView;
 
 import com.alphalabz.familyapp.Activities.MainActivity;
 import com.alphalabz.familyapp.R;
@@ -45,7 +46,7 @@ public class EventRowFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_event_row, container, false);
         TableLayout tl = (TableLayout) v.findViewById(R.id.month_table);
-       /* for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++) {
             View row = LayoutInflater.from(getContext()).inflate(R.layout.event_data,container, false);
 
             tl.addView(row);
@@ -55,7 +56,7 @@ public class EventRowFragment extends Fragment implements View.OnClickListener {
             date.setText("10/12/2015");
             bday.setText("Mr.Sharma");
             bday.setOnClickListener(this);
-        }*/
+        }
 
         return v;
     }

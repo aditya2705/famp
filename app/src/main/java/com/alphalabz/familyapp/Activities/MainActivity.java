@@ -21,6 +21,7 @@ import com.alphalabz.familyapp.Fragments.BlankFragment;
 import com.alphalabz.familyapp.Fragments.EventTableFragment;
 import com.alphalabz.familyapp.Fragments.EventsFragment;
 import com.alphalabz.familyapp.Fragments.ProfileFragment;
+import com.alphalabz.familyapp.Fragments.Test;
 import com.alphalabz.familyapp.R;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -116,6 +117,10 @@ public class MainActivity extends AppCompatActivity {
                                     break;
                                 case 4:
                                     fragment = new EventTableFragment();
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                                    break;
+                                case 5:
+                                    fragment = new Test();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
                                 default:

@@ -3,16 +3,20 @@ package com.alphalabz.familyapp.Adapters;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.alphalabz.familyapp.Activities.MainActivity;
+import com.alphalabz.familyapp.Fragments.BlankFragment;
 import com.alphalabz.familyapp.Fragments.ProfileFragment;
 import com.alphalabz.familyapp.R;
+import com.ogaclejapan.smarttablayout.SmartTabLayout;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
 import java.util.ArrayList;
 
@@ -21,6 +25,7 @@ import java.util.ArrayList;
  */
 public class EventTableAdapter extends RecyclerView.Adapter<EventTableAdapter.ViewHolder> implements View.OnClickListener {
     Context ct;
+
     private ArrayList<String> mDataset;
     // Provide a suitable constructor (depends on the kind of dataset)
     public EventTableAdapter(Context context, ArrayList<String> myDataset) {
@@ -45,22 +50,19 @@ public class EventTableAdapter extends RecyclerView.Adapter<EventTableAdapter.Vi
                                                            int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_card, parent, false);
+        ViewPager viewPager = (ViewPager) v.findViewById(R.id.viewpager);
+        SmartTabLayout viewPagerTab = (SmartTabLayout) v.findViewById(R.id.viewpagertab);
+        FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
+                ((MainActivity) ct).getSupportFragmentManager(), FragmentPagerItems.with(ct)
+                .add("All", BlankFragment.class)
+                .add("Bday", BlankFragment.class)
+                .create());
+        viewPager.setAdapter(adapter);
+        viewPagerTab.setViewPager(viewPager);
 
         ViewHolder vh = new ViewHolder(v);
-        TableLayout tl = (TableLayout) v.findViewById(R.id.month_table);
-        for (int i = 0; i < 9; i++) {
-            View row = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_row, parent, false);
-            tl.addView(row);
-            TextView date = (TextView) row.findViewById(R.id.date_row);
-            TextView bday = (TextView) row.findViewById(R.id.birthday_row);
-            TextView anniv = (TextView) row.findViewById(R.id.anniversary_row);
-            date.setText("10/12/2015");
-            bday.setText("Mr.Sharma");
-            anniv.setText("Mr and Mrs Patel");
-            bday.setOnClickListener(this);
 
 
-        }
 
 
         return vh;
@@ -87,6 +89,7 @@ public class EventTableAdapter extends RecyclerView.Adapter<EventTableAdapter.Vi
         final String name = mDataset.get(position);
         holder.txtHeader.setText(mDataset.get(position));
 
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -101,7 +104,7 @@ public class EventTableAdapter extends RecyclerView.Adapter<EventTableAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public TextView txtHeader;
-        public TextView txtFooter;
+
 
         public ViewHolder(View v) {
             super(v);
@@ -110,5 +113,4 @@ public class EventTableAdapter extends RecyclerView.Adapter<EventTableAdapter.Vi
 
         }
     }
-
 }

@@ -1,0 +1,46 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.alphalabz.familyapp.Fragments.EventRowFragment">
+
+    <TableLayout
+        android:id="@+id/month_table"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/_9sdp"
+            android:paddingTop="@dimen/_9sdp">
+
+            <TextView
+                android:width="@dimen/_100sdp"
+                android:paddingLeft="@dimen/_10sdp"
+                android:text="Dates"
+                android:textColor="@color/md_black_1000"></TextView>
+
+            <TextView
+                android:width="@dimen/_200sdp"
+                android:text="Occasion"
+                android:textColor="@color/md_black_1000"></TextView>
+
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <View
+                android:id="@+id/line1"
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:layout_weight="1"
+                android:background="#FF909090"
+                android:padding="2dip" />
+        </TableRow>
+
+    </TableLayout>
+</LinearLayout>

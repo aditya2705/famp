@@ -20,8 +20,8 @@ import com.alphalabz.familyapp.Custom.NotificationPublisher;
 import com.alphalabz.familyapp.Fragments.BlankFragment;
 import com.alphalabz.familyapp.Fragments.EventTableFragment;
 import com.alphalabz.familyapp.Fragments.EventsFragment;
+import com.alphalabz.familyapp.Fragments.GalleryFragment;
 import com.alphalabz.familyapp.Fragments.ProfileFragment;
-import com.alphalabz.familyapp.Fragments.Test;
 import com.alphalabz.familyapp.R;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                         new PrimaryDrawerItem().withName("Profile").withIcon(FontAwesome.Icon.faw_android),
                         new PrimaryDrawerItem().withName("Events").withIcon(FontAwesome.Icon.faw_android),
                         new PrimaryDrawerItem().withName("Data Table").withIcon(FontAwesome.Icon.faw_android),
-                        new PrimaryDrawerItem().withName("Item 5").withIcon(FontAwesome.Icon.faw_android)
+                        new PrimaryDrawerItem().withName("Gallery").withIcon(FontAwesome.Icon.faw_android)
 
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
                                 case 5:
-                                    fragment = new Test();
+                                    fragment = new GalleryFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
                                 default:

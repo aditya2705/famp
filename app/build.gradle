@@ -53,4 +53,5 @@ dependencies {
     compile 'com.ogaclejapan.smarttablayout:utils-v4:1.3.0@aar'
     compile 'com.github.dexafree:materiallist:3.1.2'
     compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.4.1'
+    compile 'com.daprlabs.aaron:cardstack:0.2.1'
 }

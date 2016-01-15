@@ -11,12 +11,23 @@
     tools:context="com.alphalabz.familyapp.Fragments.GalleryFragment">
 
 
-    <com.dexafree.materialList.view.MaterialListView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/material_listview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        app:column_count_landscape="2"
-        app:column_count_portrait="1" />
+    <com.daprlabs.cardstack.SwipeFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:swipedeck="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+        <com.daprlabs.cardstack.SwipeDeck
+            android:id="@+id/swipe_deck"
+            android:layout_width="match_parent"
+            android:layout_height="480dp"
+            android:padding="20dp"
+            swipedeck:card_spacing="10dp"
+            swipedeck:max_visible="3"
+            swipedeck:render_above="true"
+            swipedeck:rotation_degrees="15" />
+
+
+    </com.daprlabs.cardstack.SwipeFrameLayout>
 
 </LinearLayout>

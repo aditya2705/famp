@@ -36,28 +36,9 @@ public class GalleryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View v = inflater.inflate(R.layout.fragment_gallery, container, false);
-       /* MaterialListView mListView = (MaterialListView) v.findViewById(R.id.material_listview);
-        mListView.addOnItemTouchListener(new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(@NonNull Card card, int position) {
-                Log.d("CARD_TYPE", "" + card.getTag());
-                showCustomDialog();
-            }
 
-            @Override
-            public void onItemLongClick(@NonNull Card card, int position) {
-                Log.d("LONG_CLICK", "" + card.getTag());
-            }
-        });
-        List<Card> cards = new ArrayList<>();
-        for (int i = 0; i < 35; i++) {
-            cards.add(getCard());
-        }
-
-        mListView.getAdapter().addAll(cards);
-        */
         final SwipeDeck cardStack = (SwipeDeck) v.findViewById(R.id.swipe_deck);
 
         final ArrayList<Integer> testData = new ArrayList<>();

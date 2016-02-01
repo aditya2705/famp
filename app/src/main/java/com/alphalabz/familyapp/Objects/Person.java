@@ -1,17 +1,25 @@
 package com.alphalabz.familyapp.Objects;
 
+
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Rushabh on 19-12-2015.
  */
 public class Person {
 
-    String name, familyName, fatherName, motherName, birthdate, email;
-    char gender;
+    private String name, familyName, fatherName, motherName, birthdate, email;
+    private char gender;
+    private ArrayList<Person> children;
+    private String mobile, phone, address;
+    private LatLng location;
+    private int treeLevel;
 
-    String mobile, phone, address;
-    LatLng location;
+
+
 
     public Person(String name, String familyName, String fatherName, String motherName, String birthdate, String email, char gender, String mobile, String phone, String address, LatLng location) {
         setName(name);
@@ -25,7 +33,46 @@ public class Person {
         setPhone(phone);
         setMobile(mobile);
         setLocation(location);
+        children = new ArrayList<>();
     }
+
+
+    public boolean isParent(Person person)
+    {
+        return name.equals(person.getFatherName());
+    }
+
+    public boolean isChild(Person person)
+    {
+        return fatherName.equals(person.getName());
+    }
+
+    public void addChild(Person person)
+    {
+        children.add(person);
+    }
+
+    public int getChildCount()
+    {
+        return children.size();
+    }
+
+    public Person getChildAt(int index)
+    {
+        if(index < children.size())
+            return children.get(index);
+        return null;
+
+    }
+
+    public int getTreeLevel() {
+        return treeLevel;
+    }
+
+    public void setTreeLevel(int treeLevel) {
+        this.treeLevel = treeLevel;
+    }
+
 
     public String getName() {
         return name;

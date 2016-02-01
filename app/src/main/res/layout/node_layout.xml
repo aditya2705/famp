@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <LinearLayout
+        android:id="@+id/parent_branch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_10sdp"
+            android:background="@drawable/circle_drawable"/>
+
+        <View
+            android:layout_marginTop="@dimen/_minus5sdp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="@dimen/_5sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:background="@color/md_green_300"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/circle_drawable">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image_view"
+        android:layout_width="@dimen/_70sdp"
+        android:layout_height="@dimen/_70sdp"
+        app:civ_border_width="@dimen/_2sdp"
+        app:civ_border_color="#FF000000"
+        android:src="@drawable/profile"
+        />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/child_branch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <View
+            android:layout_marginBottom="@dimen/_minus5sdp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="@dimen/_5sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:background="@color/md_green_300"/>
+
+        <View
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_10sdp"
+            android:background="@drawable/circle_drawable"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

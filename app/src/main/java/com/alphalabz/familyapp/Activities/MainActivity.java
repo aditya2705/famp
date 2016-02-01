@@ -15,6 +15,7 @@ import com.alphalabz.familyapp.Fragments.EventTableFragment;
 import com.alphalabz.familyapp.Fragments.EventsFragment;
 import com.alphalabz.familyapp.Fragments.GalleryFragment;
 import com.alphalabz.familyapp.Fragments.ProfileFragment;
+import com.alphalabz.familyapp.Fragments.TreeViewFragment;
 import com.alphalabz.familyapp.R;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                             Fragment fragment;
                             switch (i) {
                                 case 1:
-                                    fragment = new BlankFragment();
+                                    fragment = new TreeViewFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
                                 case 2:

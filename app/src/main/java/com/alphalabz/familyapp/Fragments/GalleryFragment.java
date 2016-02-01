@@ -81,19 +81,7 @@ public class GalleryFragment extends Fragment {
         });
 
         return v;
-    }
 
-    public Card getCard() {
-        Card card = new Card.Builder(getContext())
-                .withProvider(new CardProvider())
-                .setLayout(R.layout.material_image_card)
-                .setTitle("Image Name")
-                .setDescription("Description of the image")
-                .setDrawable(R.drawable.background_profile)
-                .endConfig()
-                .build();
-
-        return card;
     }
 
 

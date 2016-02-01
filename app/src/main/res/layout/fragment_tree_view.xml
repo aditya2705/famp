@@ -6,6 +6,8 @@
     android:background="@color/md_white_1000"
     tools:context="com.alphalabz.familyapp.Fragments.TreeViewFragment">
 
+
+
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent" android:layout_height="fill_parent"
         android:scrollbars="vertical">
@@ -15,7 +17,7 @@
 
             <LinearLayout
                 android:id="@+id/parent_layout"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
@@ -24,29 +26,27 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <include
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        layout="@layout/node_layout"/>
+                <include
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    layout="@layout/child_layout" />
 
                     <include
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        layout="@layout/node_layout"/>
+                        layout="@layout/child_layout"/>
+                    <include
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        layout="@layout/child_layout"/>
 
                     <include
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        layout="@layout/node_layout"/>
-                    <include
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        layout="@layout/node_layout"/>
+                        layout="@layout/child_layout"/>
 
-                    <include
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        layout="@layout/node_layout"/>
+
+
 
 
                 </LinearLayout>
@@ -54,27 +54,17 @@
                 <include
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    layout="@layout/node_layout"/>
+                    layout="@layout/child_layout"/>
 
                 <include
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    layout="@layout/node_layout"/>
+                    layout="@layout/child_layout"/>
 
                 <include
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    layout="@layout/node_layout"/>
-
-                <include
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    layout="@layout/node_layout"/>
-
-                <include
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    layout="@layout/node_layout"/>
+                    layout="@layout/child_layout"/>
 
             </LinearLayout>
 

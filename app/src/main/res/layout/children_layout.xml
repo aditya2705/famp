@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:paddingLeft="@dimen/_10sdp"
-    android:paddingRight="@dimen/_10sdp"
+    android:paddingLeft="@dimen/_5sdp"
+    android:paddingRight="@dimen/_5sdp"
     android:layout_height="match_parent">
 
     <View
@@ -10,14 +10,20 @@
         android:layout_height="@dimen/_5sdp"
         android:layout_marginTop="@dimen/_5sdp"
         android:layout_marginBottom="@dimen/_minus10sdp"
-        android:layout_marginLeft="@dimen/_35sdp"
-        android:layout_marginRight="@dimen/_35sdp"
+        android:layout_marginLeft="@dimen/_80sdp"
+        android:layout_marginRight="@dimen/_80sdp"
         android:background="@color/md_green_300"/>
 
     <LinearLayout
+        android:id="@+id/child_adding_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
+        <include
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            layout="@layout/node_layout"/>
 
         <include
             android:layout_width="wrap_content"

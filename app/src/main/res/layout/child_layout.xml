@@ -5,11 +5,11 @@
     android:paddingRight="@dimen/_10sdp"
     android:layout_height="match_parent">
 
-
-
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_minus10sdp"
         android:layout_marginLeft="@dimen/_30sdp"
         android:layout_marginRight="@dimen/_30sdp"
         android:background="@color/md_green_300"/>
@@ -17,7 +17,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_minus5sdp"
         android:orientation="horizontal">
 
         <include

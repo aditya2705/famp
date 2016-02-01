@@ -13,15 +13,15 @@
         android:orientation="vertical">
 
         <View
-            android:layout_width="@dimen/_10sdp"
-            android:layout_height="@dimen/_10sdp"
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_15sdp"
             android:background="@drawable/circle_drawable"/>
 
         <View
             android:layout_marginTop="@dimen/_minus5sdp"
             android:layout_gravity="center_horizontal"
             android:layout_width="@dimen/_5sdp"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_height="@dimen/_30sdp"
             android:background="@color/md_green_300"/>
 
     </LinearLayout>
@@ -54,12 +54,12 @@
             android:layout_marginBottom="@dimen/_minus5sdp"
             android:layout_gravity="center_horizontal"
             android:layout_width="@dimen/_5sdp"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_height="@dimen/_30sdp"
             android:background="@color/md_green_300"/>
 
         <View
-            android:layout_width="@dimen/_10sdp"
-            android:layout_height="@dimen/_10sdp"
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_15sdp"
             android:background="@drawable/circle_drawable"/>
 
     </LinearLayout>

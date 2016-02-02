@@ -3,6 +3,7 @@ package com.alphalabz.familyapp.Objects;
 
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -21,6 +22,16 @@ public class Person {
     private ArrayList<Person> children;
     private LinearLayout childrenLayout;
     private LinearLayout selfViewLayout;
+
+    public RelativeLayout getPersonLayout() {
+        return personLayout;
+    }
+
+    public void setPersonLayout(RelativeLayout personLayout) {
+        this.personLayout = personLayout;
+    }
+
+    private RelativeLayout personLayout;
 
     public Person(String uniqueID, String firstName, String fatherID, String motherID, String birthDate, String email,
                   char gender, String mobile, String phone, String address, LatLng location, int treeLevel, ArrayList<Person> children, LinearLayout childrenLayout, LinearLayout selfViewLayout) {

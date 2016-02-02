@@ -31,19 +31,15 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
         String profileID = getArguments().getString("profile_id");
-        final LatLng location = new LatLng(-37.813, 144.962);
-        String address = "Sardar Patel Institute of Technoogy,\nAndheri W,\nMumbai";
-        Person rms = new Person("Rushabh", "Shah", "Manoj", "Swati", "10/07/1994", "rms@gmail.com", 'M', "+919855453344", "+912225435442", address, location);
 
-        if (!profileID.equals("rms123")) {
-            rms = new Person("Aditya", "Rathi", "Mr Rathi", "Mrs Rathi", "10/07/1994", "ady@gmail.com", 'M', "+919855453344", "+912225435442", address, location);
-        }
 
-        setPersonalData(v, rms);
-        setContactDetails(v, rms);
+        //Person rms = new Person();
+
+        //setPersonalData(v, rms);
+        //setContactDetails(v, rms);
         return v;
     }
-
+/*
     public void setPersonalData(View v, Person p) {
         ImageView userIcon = (ImageView) v.findViewById(R.id.user_icon);
         userIcon.setImageResource(R.drawable.user1);
@@ -59,13 +55,13 @@ public class ProfileFragment extends Fragment {
         familyNameT.setText(p.getFamilyName());
 
         TextView fatherNameT = (TextView) v.findViewById(R.id.profile_fathername);
-        fatherNameT.setText(p.getFatherName());
+        fatherNameT.setText(p.getFatherID());
 
         TextView motherNameT = (TextView) v.findViewById(R.id.profile_mothername);
         motherNameT.setText(p.getMotherName());
 
         TextView birthdateT = (TextView) v.findViewById(R.id.profile_birthdate);
-        birthdateT.setText(p.getBirthdate());
+        birthdateT.setText(p.getBirthDate());
 
         TextView emailT = (TextView) v.findViewById(R.id.profile_email);
         emailT.setText(p.getEmail());
@@ -84,6 +80,6 @@ public class ProfileFragment extends Fragment {
 
     }
 
-
+*/
 
 }

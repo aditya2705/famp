@@ -1,117 +1,84 @@
 package com.alphalabz.familyapp.Objects;
 
 
+import android.view.View;
+import android.widget.LinearLayout;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Rushabh on 19-12-2015.
  */
 public class Person {
 
-    private String name, familyName, fatherName, motherName, birthdate, email;
+    private String uniqueID, firstName, fatherID, motherID, birthDate, email;
     private char gender;
-    private ArrayList<Person> children;
     private String mobile, phone, address;
     private LatLng location;
     private int treeLevel;
+    private ArrayList<Person> children;
+    private LinearLayout childrenLayout;
+    private LinearLayout selfViewLayout;
 
-
-
-
-    public Person(String name, String familyName, String fatherName, String motherName, String birthdate, String email, char gender, String mobile, String phone, String address, LatLng location) {
-        setName(name);
-        setAddress(address);
-        setFamilyName(familyName);
-        setFatherName(fatherName);
-        setMotherName(motherName);
-        setBirthdate(birthdate);
-        setEmail(email);
-        setGender(gender);
-        setPhone(phone);
-        setMobile(mobile);
-        setLocation(location);
-        children = new ArrayList<>();
-    }
-
-
-    public boolean isParent(Person person)
-    {
-        return name.equals(person.getFatherName());
-    }
-
-    public boolean isChild(Person person)
-    {
-        return fatherName.equals(person.getName());
-    }
-
-    public void addChild(Person person)
-    {
-        children.add(person);
-    }
-
-    public int getChildCount()
-    {
-        return children.size();
-    }
-
-    public Person getChildAt(int index)
-    {
-        if(index < children.size())
-            return children.get(index);
-        return null;
-
-    }
-
-    public int getTreeLevel() {
-        return treeLevel;
-    }
-
-    public void setTreeLevel(int treeLevel) {
+    public Person(String uniqueID, String firstName, String fatherID, String motherID, String birthDate, String email,
+                  char gender, String mobile, String phone, String address, LatLng location, int treeLevel, ArrayList<Person> children, LinearLayout childrenLayout, LinearLayout selfViewLayout) {
+        this.uniqueID = uniqueID;
+        this.firstName = firstName;
+        this.fatherID = fatherID;
+        this.motherID = motherID;
+        this.birthDate = birthDate;
+        this.email = email;
+        this.gender = gender;
+        this.mobile = mobile;
+        this.phone = phone;
+        this.address = address;
+        this.location = location;
         this.treeLevel = treeLevel;
+        this.children = children;
+        this.childrenLayout = childrenLayout;
+        this.selfViewLayout = selfViewLayout;
     }
 
-
-    public String getName() {
-        return name;
+    public String getUniqueID() {
+        return uniqueID;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUniqueID(String uniqueID) {
+        this.uniqueID = uniqueID;
     }
 
-    public String getFamilyName() {
-        return familyName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFamilyName(String familyName) {
-        this.familyName = familyName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getFatherName() {
-        return fatherName;
+    public String getFatherID() {
+        return fatherID;
     }
 
-    public void setFatherName(String fatherName) {
-        this.fatherName = fatherName;
+    public void setFatherID(String fatherID) {
+        this.fatherID = fatherID;
     }
 
-    public String getMotherName() {
-        return motherName;
+    public String getMotherID() {
+        return motherID;
     }
 
-    public void setMotherName(String motherName) {
-        this.motherName = motherName;
+    public void setMotherID(String motherID) {
+        this.motherID = motherID;
     }
 
-    public String getBirthdate() {
-        return birthdate;
+    public String getBirthDate() {
+        return birthDate;
     }
 
-    public void setBirthdate(String birthdate) {
-        this.birthdate = birthdate;
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 
     public String getEmail() {
@@ -162,5 +129,63 @@ public class Person {
         this.location = location;
     }
 
+    public int getTreeLevel() {
+        return treeLevel;
+    }
 
+    public void setTreeLevel(int treeLevel) {
+        this.treeLevel = treeLevel;
+    }
+
+    public ArrayList<Person> getChildren() {
+        return children;
+    }
+
+    public void setChildren(ArrayList<Person> children) {
+        this.children = children;
+    }
+
+    public LinearLayout getChildrenLayout() {
+        return childrenLayout;
+    }
+
+    public void setChildrenLayout(LinearLayout childrenLayout) {
+        this.childrenLayout = childrenLayout;
+    }
+
+    public LinearLayout getSelfViewLayout() {
+        return selfViewLayout;
+    }
+
+    public void setSelfViewLayout(LinearLayout selfViewLayout) {
+        this.selfViewLayout = selfViewLayout;
+    }
+
+    public boolean isParent(Person person)
+    {
+        return uniqueID.equals(person.getFatherID());
+    }
+
+    public boolean isChild(Person person)
+    {
+        return fatherID.equals(person.getUniqueID());
+    }
+
+    public void addChild(Person person)
+    {
+        children.add(person);
+    }
+
+    public int getChildCount()
+    {
+        return children.size();
+    }
+
+    public Person getChildAt(int index)
+    {
+        if(index < children.size())
+            return children.get(index);
+        return null;
+
+    }
 }

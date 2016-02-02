@@ -7,7 +7,7 @@
     tools:context="com.alphalabz.familyapp.Fragments.TreeViewFragment">
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent" android:layout_height="fill_parent"
+        android:layout_width="match_parent" android:layout_height="match_parent"
         android:scrollbars="vertical">
 
         <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -18,26 +18,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/_minus20sdp"
+                android:paddingRight="@dimen/_15sdp"
+                android:paddingBottom="@dimen/_20sdp"
+                android:paddingTop="@dimen/_20sdp"
                 android:orientation="vertical">
-
-                <include
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    layout="@layout/node_layout"/>
-
-                <LinearLayout
-                    android:layout_marginTop="@dimen/_minus15sdp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <include
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        layout="@layout/children_layout"/>
-
-
-                </LinearLayout>
 
             </LinearLayout>
 

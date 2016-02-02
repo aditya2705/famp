@@ -37,13 +37,13 @@
             android:layout_height="@dimen/_5sdp"
             android:background="@color/md_green_300"
             android:layout_alignBottom="@+id/person_image_view"
-            android:layout_marginRight="@dimen/_25sdp"
+            android:layout_marginRight="@dimen/_30sdp"
             android:layout_alignRight="@+id/spouse_layout"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/person_image_view"
-        android:layout_width="@dimen/_70sdp"
-        android:layout_height="@dimen/_70sdp"
+        android:layout_width="@dimen/_75sdp"
+        android:layout_height="@dimen/_75sdp"
         app:civ_border_width="@dimen/_2sdp"
         app:civ_border_color="#FF000000"
         android:src="@drawable/profile"
@@ -62,27 +62,52 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/spouse_image_view"
-            android:layout_width="@dimen/_50sdp"
-            android:layout_height="@dimen/_50sdp"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_60sdp"
             app:civ_border_width="@dimen/_2sdp"
             app:civ_border_color="#FF000000"
             android:src="@drawable/profile"
             android:background="@drawable/circle_drawable"/>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
             <View
                 android:layout_width="@dimen/_5sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_gravity="center_horizontal"
+                android:layout_height="@dimen/_15sdp"
+                android:layout_centerHorizontal="true"
                 android:background="@color/md_green_300"/>
+
+
+
+            <TextView
+                android:id="@+id/spouse_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:textColor="#fff"
+                android:text="Spouse Name"
+                android:background="#000"
+                android:textSize="@dimen/_7sdp"
+                android:textStyle="bold"
+                android:padding="@dimen/_3sdp"/>
+
+
+    </RelativeLayout>
 
 
         </LinearLayout>
 
 
 
-
-
     </RelativeLayout>
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/child_branch"
@@ -104,6 +129,21 @@
             android:background="@drawable/circle_drawable"/>
 
     </LinearLayout>
+        
+        <TextView
+            android:id="@+id/person_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:textColor="#fff"
+            android:text="Person Name"
+            android:background="#000"
+            android:textSize="@dimen/_10sdp"
+            android:textStyle="bold"
+            android:padding="@dimen/_3sdp"/>
+
+    </RelativeLayout>
 
 
 </LinearLayout>

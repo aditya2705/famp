@@ -133,7 +133,7 @@ public class TreeViewFragment extends Fragment {
 
     private RelativeLayout getNodeLayout()
     {
-        return (RelativeLayout)LayoutInflater.from(getContext()).inflate(R.layout.new_node_layout,null,false);
+        return (RelativeLayout)LayoutInflater.from(getContext()).inflate(R.layout.node_layout,null,false);
     }
 
     public void bfs()
@@ -174,54 +174,9 @@ public class TreeViewFragment extends Fragment {
             }
 
         }
-
-
-        //bfsBranchFix();
     }
 
-    public void bfsBranchFix()
-    {
-        ArrayList<Person> Q = new ArrayList<>();
-        Q.add(rootPerson);
-        rootPerson.setTreeLevel(0);
 
-
-        while(!Q.isEmpty())
-        {
-            Person p = Q.get(0);
-            Q.remove(0);
-
-            RelativeLayout layout = p.getPersonLayout();
-            View branch = layout.findViewById(R.id.child_branch);
-           // R pChildLayout = (LinearLayout)p.getPersonLayout().findViewById(R.id.childLinearLayout);
-            int first = 0, last = p.getChildCount() - 1;
-            if(first <= last){
-
-                /*int marginLeft = p.getChildAt(first).getPersonLayout().getWidth()/2;
-                int marginRight = p.getChildAt(last).getPersonLayout().getWidth()/2;
-
-                Log.d("Margins",  + marginLeft + " " + marginRight);
-
-
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) branch.getLayoutParams();
-               // params.setMargins(0,marginForChildLayout,marginRight,0);
-                params.leftMargin = marginLeft;
-                params.rightMargin = marginRight;
-                branch.setLayoutParams(params);*/
-
-            }
-
-            for(int i = 0; i < p.getChildCount(); i++)
-            {
-                Person c = p.getChildAt(i);
-                Q.add(c);
-               // Log.d("Child",c.getFirstName());
-               // Log.d("Child","" + pChildLayout.getChildCount());
-
-            }
-
-        }
-    }
 
 
     public void getData(){

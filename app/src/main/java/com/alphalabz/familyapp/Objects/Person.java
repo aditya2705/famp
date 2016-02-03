@@ -14,161 +14,82 @@ import java.util.ArrayList;
  */
 public class Person {
 
-    String unique_id,first_name,last_name,mother_id,father_id,primary_parent,gender,spouse_id,birth_date,marriage_date,death_date,
-            mobile_number,landline,address,latitude,longitude,email,image_url;
+    private String uniqueID, firstName, fatherID, motherID, birthDate, email;
+    private char gender;
+    private String mobile, phone, address;
+    private LatLng location;
     private int treeLevel;
-    private ArrayList<Person> children = new ArrayList<>();
-    private LinearLayout childrenLayout = null;
+    private ArrayList<Person> children;
+    private LinearLayout childrenLayout;
+    private LinearLayout selfViewLayout;
 
-    public Person(String unique_id, String first_name, String last_name, String mother_id, String father_id, String primary_parent, String gender, String spouse_id, String birth_date, String marriage_date,
-                  String death_date, String mobile_number, String landline, String address, String latitude, String longitude, String email, String image_url, int treeLevel) {
-        this.unique_id = unique_id;
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.mother_id = mother_id;
-        this.father_id = father_id;
-        this.primary_parent = primary_parent;
-        this.gender = gender;
-        this.spouse_id = spouse_id;
-        this.birth_date = birth_date;
-        this.marriage_date = marriage_date;
-        this.death_date = death_date;
-        this.mobile_number = mobile_number;
-        this.landline = landline;
-        this.address = address;
-        this.latitude = latitude;
-        this.longitude = longitude;
+    public RelativeLayout getPersonLayout() {
+        return personLayout;
+    }
+
+    public void setPersonLayout(RelativeLayout personLayout) {
+        this.personLayout = personLayout;
+    }
+
+    private RelativeLayout personLayout;
+
+    public Person(String uniqueID, String firstName, String fatherID, String motherID, String birthDate, String email,
+                  char gender, String mobile, String phone, String address, LatLng location, int treeLevel, ArrayList<Person> children, LinearLayout childrenLayout, LinearLayout selfViewLayout) {
+        this.uniqueID = uniqueID;
+        this.firstName = firstName;
+        this.fatherID = fatherID;
+        this.motherID = motherID;
+        this.birthDate = birthDate;
         this.email = email;
-        this.image_url = image_url;
-        this.treeLevel = treeLevel;
-    }
-
-    public String getUnique_id() {
-        return unique_id;
-    }
-
-    public void setUnique_id(String unique_id) {
-        this.unique_id = unique_id;
-    }
-
-    public String getFirst_name() {
-        return first_name;
-    }
-
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
-    }
-
-    public String getLast_name() {
-        return last_name;
-    }
-
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
-    }
-
-    public String getMother_id() {
-        return mother_id;
-    }
-
-    public void setMother_id(String mother_id) {
-        this.mother_id = mother_id;
-    }
-
-    public String getFather_id() {
-        return father_id;
-    }
-
-    public void setFather_id(String father_id) {
-        this.father_id = father_id;
-    }
-
-    public String getPrimary_parent() {
-        return primary_parent;
-    }
-
-    public void setPrimary_parent(String primary_parent) {
-        this.primary_parent = primary_parent;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
         this.gender = gender;
-    }
-
-    public String getSpouse_id() {
-        return spouse_id;
-    }
-
-    public void setSpouse_id(String spouse_id) {
-        this.spouse_id = spouse_id;
-    }
-
-    public String getBirth_date() {
-        return birth_date;
-    }
-
-    public void setBirth_date(String birth_date) {
-        this.birth_date = birth_date;
-    }
-
-    public String getMarriage_date() {
-        return marriage_date;
-    }
-
-    public void setMarriage_date(String marriage_date) {
-        this.marriage_date = marriage_date;
-    }
-
-    public String getDeath_date() {
-        return death_date;
-    }
-
-    public void setDeath_date(String death_date) {
-        this.death_date = death_date;
-    }
-
-    public String getMobile_number() {
-        return mobile_number;
-    }
-
-    public void setMobile_number(String mobile_number) {
-        this.mobile_number = mobile_number;
-    }
-
-    public String getLandline() {
-        return landline;
-    }
-
-    public void setLandline(String landline) {
-        this.landline = landline;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
+        this.mobile = mobile;
+        this.phone = phone;
         this.address = address;
+        this.location = location;
+        this.treeLevel = treeLevel;
+        this.children = children;
+        this.childrenLayout = childrenLayout;
+        this.selfViewLayout = selfViewLayout;
     }
 
-    public String getLatitude() {
-        return latitude;
+    public String getUniqueID() {
+        return uniqueID;
     }
 
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
+    public void setUniqueID(String uniqueID) {
+        this.uniqueID = uniqueID;
     }
 
-    public String getLongitude() {
-        return longitude;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getFatherID() {
+        return fatherID;
+    }
+
+    public void setFatherID(String fatherID) {
+        this.fatherID = fatherID;
+    }
+
+    public String getMotherID() {
+        return motherID;
+    }
+
+    public void setMotherID(String motherID) {
+        this.motherID = motherID;
+    }
+
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 
     public String getEmail() {
@@ -179,12 +100,44 @@ public class Person {
         this.email = email;
     }
 
-    public String getImage_url() {
-        return image_url;
+    public char getGender() {
+        return gender;
     }
 
-    public void setImage_url(String image_url) {
-        this.image_url = image_url;
+    public void setGender(char gender) {
+        this.gender = gender;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public LatLng getLocation() {
+        return location;
+    }
+
+    public void setLocation(LatLng location) {
+        this.location = location;
     }
 
     public int getTreeLevel() {
@@ -203,17 +156,6 @@ public class Person {
         this.children = children;
     }
 
-    public RelativeLayout getPersonLayout() {
-        return personLayout;
-    }
-
-    public void setPersonLayout(RelativeLayout personLayout) {
-        this.personLayout = personLayout;
-    }
-
-    private RelativeLayout personLayout;
-
-
     public LinearLayout getChildrenLayout() {
         return childrenLayout;
     }
@@ -222,14 +164,22 @@ public class Person {
         this.childrenLayout = childrenLayout;
     }
 
+    public LinearLayout getSelfViewLayout() {
+        return selfViewLayout;
+    }
+
+    public void setSelfViewLayout(LinearLayout selfViewLayout) {
+        this.selfViewLayout = selfViewLayout;
+    }
+
     public boolean isParent(Person person)
     {
-        return unique_id.equals(person.getFather_id());
+        return uniqueID.equals(person.getFatherID());
     }
 
     public boolean isChild(Person person)
     {
-        return father_id.equals(person.getUnique_id());
+        return fatherID.equals(person.getUniqueID());
     }
 
     public void addChild(Person person)

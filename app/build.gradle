@@ -10,6 +10,7 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
 
     }
     buildTypes {
@@ -52,4 +53,5 @@ dependencies {
     compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.4.1'
     compile 'com.daprlabs.aaron:cardstack:0.2.1'
     compile 'de.hdodenhof:circleimageview:2.0.0'
+    compile 'com.github.rey5137:material:1.2.2'
 }

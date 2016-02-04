@@ -41,6 +41,7 @@ public class TreeViewFragment extends Fragment {
     private LinearLayout parentLayout;
     private Person rootPerson;
     private int marginForChildLayout;
+    private HashMap<String,Integer> membersListMap;
 
     private String membersListJsonString;
 
@@ -113,17 +114,17 @@ public class TreeViewFragment extends Fragment {
     {
         parentLayout.removeAllViews();
 
-        HashMap<String,Integer> map = new HashMap<>();
+        membersListMap = new HashMap<>();
         for(int i = 0; i < personList.size(); i++)
         {
             Person p = personList.get(i);
-            map.put(p.getUnique_id(),i);
+            membersListMap.put(p.getUnique_id(),i);
         }
         for(int i = 0; i < personList.size(); i++){
             Person p = personList.get(i);
             String fatherID = p.getFather_id();
-            if(map.containsKey(fatherID)){
-                int pos = map.get(fatherID);
+            if(membersListMap.containsKey(fatherID)){
+                int pos = membersListMap.get(fatherID);
                 personList.get(pos).addChild(p);
             }
             else
@@ -147,10 +148,12 @@ public class TreeViewFragment extends Fragment {
         rootPerson.setTreeLevel(0);
         RelativeLayout rootLayout = getNodeLayout();
         TextView personNameView = (TextView) rootLayout.findViewById(R.id.person_name);
+        TextView spouseNameView = (TextView) rootLayout.findViewById(R.id.spouse_name);
         personNameView.setText(rootPerson.getFirst_name());
+        spouseNameView.setText(personList.get(membersListMap.get(rootPerson.getSpouse_id())).getFirst_name());
+
         parentLayout.addView(rootLayout);
         rootPerson.setPersonLayout(rootLayout);
-
 
         while(!Q.isEmpty())
         {
@@ -160,9 +163,25 @@ public class TreeViewFragment extends Fragment {
             for(int i = 0; i < p.getChildCount(); i++)
             {
                 Person c = p.getChildAt(i);
+                p.getPersonLayout().findViewById(R.id.child_branch).setVisibility(View.VISIBLE);
                 RelativeLayout newNodeLayout = getNodeLayout();
                 personNameView = (TextView) newNodeLayout.findViewById(R.id.person_name);
+                spouseNameView = (TextView) newNodeLayout.findViewById(R.id.spouse_name);
                 personNameView.setText(c.getFirst_name());
+
+                String s=null;
+                if(membersListMap.get(c.getSpouse_id())!=null)
+                    s = personList.get(membersListMap.get(c.getSpouse_id())).getFirst_name();
+
+                if(s!=null&&!s.equals(""))
+                    spouseNameView.setText(s);
+                else {
+                    newNodeLayout.findViewById(R.id.spouse_layout).setVisibility(View.INVISIBLE);
+                    newNodeLayout.findViewById(R.id.spouse_branch).setVisibility(View.INVISIBLE);
+                }
+
+                newNodeLayout.findViewById(R.id.child_branch).setVisibility(View.INVISIBLE);
+
                 c.setPersonLayout(newNodeLayout);
                 pChildLayout.addView(c.getPersonLayout());
 

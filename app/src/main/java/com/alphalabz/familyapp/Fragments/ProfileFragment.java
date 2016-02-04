@@ -18,9 +18,6 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class ProfileFragment extends Fragment {
 
-    LatLng locationGlobal;
-
-
     public ProfileFragment() {
         // Required empty public construct
     }

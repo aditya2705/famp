@@ -27,9 +27,6 @@
             android:layout_height="@dimen/_5sdp"
             android:id="@+id/branch_image"
             android:background="@color/md_green_300"
-            android:layout_centerHorizontal="true"
-            android:layout_alignLeft="@+id/childLinearLayout"
-            android:layout_alignRight="@+id/childLinearLayout"
             android:layout_marginTop="@dimen/_5sdp" />
 
         <LinearLayout
@@ -37,18 +34,8 @@
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/node_layout"
-            android:id="@+id/childLinearLayout"></LinearLayout>
-
+            android:id="@+id/childLinearLayout"/>
 
     </LinearLayout>
-
-    <requestFocus
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="221dp"
-        android:layout_marginStart="221dp" />
 
 </RelativeLayout>

@@ -3,9 +3,9 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/md_blue_600</item>
-        <item name="colorPrimaryDark">@color/md_blue_700</item>
-        <item name="colorAccent">@color/md_blue_600</item>
+        <item name="colorPrimary">@color/md_green_600</item>
+        <item name="colorPrimaryDark">@color/md_green_700</item>
+        <item name="colorAccent">@color/md_green_600</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowActionBarOverlay">false</item>
     </style>
@@ -17,9 +17,9 @@
 
     <style name="CustomTheme" parent="MaterialDrawerTheme.Light.DarkToolbar">
         <!-- ...and here we setting appcompat’s color theming attrs -->
-        <item name="colorPrimary">@color/md_blue_600</item>
-        <item name="colorPrimaryDark">@color/md_blue_700</item>
-        <item name="colorAccent">@color/md_blue_600</item>
+        <item name="colorPrimary">@color/md_green_600</item>
+        <item name="colorPrimaryDark">@color/md_green_700</item>
+        <item name="colorAccent">@color/md_green_600</item>
         <item name="android:textColorPrimary">@color/md_white_1000</item>
         <item name="android:textColorSecondary">@color/md_white_1000</item>
         <item name="android:itemTextAppearance">@style/menuItemColor</item>
@@ -35,7 +35,7 @@
         <item name="material_drawer_hint_text">@color/material_drawer_hint_text</item>
         <item name="material_drawer_divider">@color/material_drawer_divider</item>
         <item name="material_drawer_selected">@color/md_grey_300</item>
-        <item name="material_drawer_selected_text">@color/md_blue_900</item>
+        <item name="material_drawer_selected_text">@color/md_green_800</item>
         <item name="material_drawer_header_selection_text">
             @color/material_drawer_header_selection_text
         </item>

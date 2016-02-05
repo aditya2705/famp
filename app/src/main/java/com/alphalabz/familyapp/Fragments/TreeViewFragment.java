@@ -20,8 +20,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alphalabz.familyapp.Activities.MainActivity;
-import com.alphalabz.familyapp.Objects.Person;
 import com.alphalabz.familyapp.Activities.ProfileActivity;
+import com.alphalabz.familyapp.Objects.Person;
+import com.alphalabz.familyapp.Objects.PersonLayout;
 import com.alphalabz.familyapp.R;
 
 import org.json.JSONArray;
@@ -44,35 +45,49 @@ public class TreeViewFragment extends Fragment {
     private MainActivity mainActivity;
 
     private View rootView;
-    private ArrayList<Person> personList;// = new ArrayList<>();
+    private ArrayList<PersonLayout> personList;// = new ArrayList<>();
     private LinearLayout parentLayout;
-    private Person rootPerson;
+    private PersonLayout rootPerson;
     private int marginForChildLayout;
-    private HashMap<String,Integer> membersListMap;
+    private HashMap<String, Integer> membersListMap;
 
     private String membersListJsonString;
 
-    private static final String RESULTS_FETCH_URL = "http://alpha95.net63.net/get_members.php";
+    private static final String RESULTS_FETCH_URL = "http://alpha95.net63.net/get_members_2.php";
 
-    private static final String TAG_RESULTS="result";
+    private static final String TAG_RESULTS = "result";
     private static final String TAG_ID = "unique_id";
+    private static final String TAG_GEN = "gen";
+    private static final String TAG_TITLE = "title";
     private static final String TAG_FIRST_NAME = "first_name";
+    private static final String TAG_MIDDLE_NAME = "middle_name";
     private static final String TAG_LAST_NAME = "last_name";
-    private static final String TAG_MOTHER_ID ="mother_id";
-    private static final String TAG_FATHER_ID ="father_id";
-    private static final String TAG_PRIMARY_PARENT ="primary_parent";
-    private static final String TAG_GENDER ="gender";
-    private static final String TAG_SPOUSE_ID ="spouse_id";
-    private static final String TAG_BIRTH_DATE="birth_date";
-    private static final String TAG_MARRIAGE_DATE="marriage_date";
-    private static final String TAG_DEATH_DATE="death_date";
-    private static final String TAG_MOBILE ="mobile_number";
-    private static final String TAG_LANDLINE ="landline";
-    private static final String TAG_ADDRESS ="address";
-    private static final String TAG_LATITUDE ="latitude";
-    private static final String TAG_LONGITUDE ="longitude";
-    private static final String TAG_EMAIL ="email";
-    private static final String TAG_IMAGE_URL ="image_url";
+    private static final String TAG_NICK_NAME = "nick_name";
+    private static final String TAG_GENDER = "gender";
+    private static final String TAG_IN_LAW = "in_law";
+    private static final String TAG_MOTHER_ID = "mother_id";
+    private static final String TAG_MOTHER_NAME = "mother_name";
+    private static final String TAG_FATHER_ID = "father_id";
+    private static final String TAG_FATHER_NAME = "father_name";
+    private static final String TAG_SPOUSE_ID = "spouse_id";
+    private static final String TAG_SPOUSE_NAME = "spouse_name";
+    private static final String TAG_BIRTH_DATE = "birth_date";
+    private static final String TAG_MARRIAGE_DATE = "marriage_date";
+    private static final String TAG_DEATH_DATE = "death_date";
+    private static final String TAG_MOBILE_NUMBER = "mobile_number";
+    private static final String TAG_ALTERNATE_NUMBER = "alternate_number";
+    private static final String TAG_RESIDENCE_NUMBER = "residence_number";
+    private static final String TAG_EMAIL1 = "email1";
+    private static final String TAG_EMAIL2 = "email2";
+    private static final String TAG_ADDRESS_1 = "address_1";
+    private static final String TAG_ADDRESS_2 = "address_2";
+    private static final String TAG_CITY = "city";
+    private static final String TAG_STATE_COUNTRY = "state_country";
+    private static final String TAG_PINCODE = "pincode";
+    private static final String TAG_DESIGNATION = "designation";
+    private static final String TAG_COMPANY = "company";
+    private static final String TAG_INDUSTRY_SPECIAL = "industry_special";
+    private static final String TAG_IMAGE_URL = "image_url";
 
     JSONArray membersJsonArray = null;
 
@@ -89,8 +104,9 @@ public class TreeViewFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        sharedPreferences = getActivity().getSharedPreferences("FAMP",0);
-        membersListJsonString = sharedPreferences.getString("MEMBERS_STRING","");
+
+        sharedPreferences = getActivity().getSharedPreferences("FAMP", 0);
+        membersListJsonString = sharedPreferences.getString("MEMBERS_STRING", "");
 
     }
 
@@ -103,13 +119,13 @@ public class TreeViewFragment extends Fragment {
         progressDialog.setTitle("Loading...");
         progressDialog.setCancelable(false);
 
-        parentLayout = (LinearLayout)rootView.findViewById(R.id.parent_layout);
+        parentLayout = (LinearLayout) rootView.findViewById(R.id.parent_layout);
 
         marginForChildLayout = (int) (getResources().getDimension(R.dimen._minus15sdp));
 
         personList = new ArrayList<>();
 
-        if(membersListJsonString.equals("")||membersListJsonString == null)
+        if (membersListJsonString.equals("") || membersListJsonString == null)
             getData();
         else
             showList();
@@ -117,40 +133,34 @@ public class TreeViewFragment extends Fragment {
         return rootView;
     }
 
-    public void buildPersonTree()
-    {
+    public void buildPersonTree() {
         parentLayout.removeAllViews();
 
         membersListMap = new HashMap<>();
-        for(int i = 0; i < personList.size(); i++)
-        {
-            Person p = personList.get(i);
-            membersListMap.put(p.getUnique_id(),i);
+        for (int i = 0; i < personList.size(); i++) {
+            PersonLayout p = personList.get(i);
+            membersListMap.put(p.getUnique_id(), i);
         }
-        for(int i = 0; i < personList.size(); i++){
-            Person p = personList.get(i);
+        for (int i = 0; i < personList.size(); i++) {
+            PersonLayout p = personList.get(i);
             String fatherID = p.getFather_id();
-            if(membersListMap.containsKey(fatherID)){
+            if (membersListMap.containsKey(fatherID)) {
                 int pos = membersListMap.get(fatherID);
                 personList.get(pos).addChild(p);
-            }
-            else
-            {
-                if(p.getPrimary_parent().equals("1"))
+            } else {
+                if (!p.getIn_law().equals("Y")&&i<=2)
                     rootPerson = p;
             }
         }
 
     }
 
-    private RelativeLayout getNodeLayout()
-    {
-        return (RelativeLayout)LayoutInflater.from(getContext()).inflate(R.layout.new_node_layout,null,false);
+    private RelativeLayout getNodeLayout() {
+        return (RelativeLayout) LayoutInflater.from(getContext()).inflate(R.layout.new_node_layout, null, false);
     }
 
-    public void bfs()
-    {
-        ArrayList<Person> Q = new ArrayList<>();
+    public void bfs() {
+        ArrayList<PersonLayout> Q = new ArrayList<>();
         Q.add(rootPerson);
         rootPerson.setTreeLevel(0);
         RelativeLayout rootLayout = getNodeLayout();
@@ -183,19 +193,17 @@ public class TreeViewFragment extends Fragment {
             }
         });
         personNameView.setText(rootPerson.getFirst_name());
-        spouseNameView.setText(personList.get(membersListMap.get(rootPerson.getSpouse_id())).getFirst_name());
+        //spouseNameView.setText(personList.get(membersListMap.get(rootPerson.getSpouse_id())).getFirst_name());
 
         parentLayout.addView(rootLayout);
         rootPerson.setPersonLayout(rootLayout);
 
-        while(!Q.isEmpty())
-        {
-            Person p = Q.get(0);
+        while (!Q.isEmpty()) {
+            PersonLayout p = Q.get(0);
             Q.remove(0);
-            LinearLayout pChildLayout = (LinearLayout)p.getPersonLayout().findViewById(R.id.childLinearLayout);
-            for(int i = 0; i < p.getChildCount(); i++)
-            {
-                final Person c = p.getChildAt(i);
+            LinearLayout pChildLayout = (LinearLayout) p.getPersonLayout().findViewById(R.id.childLinearLayout);
+            for (int i = 0; i < p.getChildCount(); i++) {
+                final PersonLayout c = p.getChildAt(i);
                 p.getPersonLayout().findViewById(R.id.child_branch).setVisibility(View.VISIBLE);
                 RelativeLayout newNodeLayout = getNodeLayout();
                 personNameView = (TextView) newNodeLayout.findViewById(R.id.person_name);
@@ -217,11 +225,11 @@ public class TreeViewFragment extends Fragment {
                 spouseImageView = (ImageView) newNodeLayout.findViewById(R.id.spouse_image_view);
 
 
-                String s=null;
-                if(membersListMap.get(c.getSpouse_id())!=null)
+                String s = null;
+                if (membersListMap.get(c.getSpouse_id()) != null)
                     s = personList.get(membersListMap.get(c.getSpouse_id())).getFirst_name();
 
-                if(s!=null&&!s.equals("")) {
+                if (s != null && !s.equals("")) {
                     spouseNameView.setText(s);
                     spouseNameView.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -236,8 +244,7 @@ public class TreeViewFragment extends Fragment {
                         }
                     });
                     personNameView.setText(c.getFirst_name());
-                }
-                else {
+                } else {
                     newNodeLayout.findViewById(R.id.spouse_layout).setVisibility(View.INVISIBLE);
                     newNodeLayout.findViewById(R.id.spouse_branch).setVisibility(View.INVISIBLE);
                 }
@@ -249,11 +256,8 @@ public class TreeViewFragment extends Fragment {
 
                 c.setTreeLevel(p.getTreeLevel() + 1);
                 Q.add(c);
-                Log.d("Child",c.getFirst_name());
-                Log.d("Child","" + pChildLayout.getChildCount());
-
-
-
+                Log.d("Child", c.getFirst_name());
+                Log.d("Child", "" + pChildLayout.getChildCount());
 
 
             }
@@ -265,55 +269,52 @@ public class TreeViewFragment extends Fragment {
             public void run() {
                 bfsBranchFix();
             }
-        },100);
+        }, 100);
         //bfsBranchFix();
     }
 
-    public void bfsBranchFix()
-    {
-        ArrayList<Person> Q = new ArrayList<>();
+    public void bfsBranchFix() {
+        ArrayList<PersonLayout> Q = new ArrayList<>();
         Q.add(rootPerson);
         rootPerson.setTreeLevel(0);
 
 
-        while(!Q.isEmpty())
-        {
-            Person p = Q.get(0);
+        while (!Q.isEmpty()) {
+            PersonLayout p = Q.get(0);
             Q.remove(0);
 
             RelativeLayout layout = p.getPersonLayout();
             View branch = layout.findViewById(R.id.branch_image);
-           // R pChildLayout = (LinearLayout)p.getPersonLayout().findViewById(R.id.childLinearLayout);
+            // R pChildLayout = (LinearLayout)p.getPersonLayout().findViewById(R.id.childLinearLayout);
             int first = 0, last = p.getChildCount() - 1;
-            if(first <= last){
+            if (first <= last) {
 
-                int marginLeft = p.getChildAt(first).getPersonLayout().getWidth()/2;
-                int marginRight = p.getChildAt(last).getPersonLayout().getWidth()/2;
+                int marginLeft = p.getChildAt(first).getPersonLayout().getWidth() / 2;
+                int marginRight = p.getChildAt(last).getPersonLayout().getWidth() / 2;
 
                 Log.d("Margins", +marginLeft + " " + marginRight);
 
 
                 LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) branch.getLayoutParams();
-               // params.setMargins(0,marginForChildLayout,marginRight,0);
+                // params.setMargins(0,marginForChildLayout,marginRight,0);
                 params.leftMargin = marginLeft;
                 params.rightMargin = marginRight;
                 branch.setLayoutParams(params);
 
             }
 
-            for(int i = 0; i < p.getChildCount(); i++)
-            {
-                Person c = p.getChildAt(i);
+            for (int i = 0; i < p.getChildCount(); i++) {
+                PersonLayout c = p.getChildAt(i);
                 Q.add(c);
-               // Log.d("Child",c.getFirstName());
-               // Log.d("Child","" + pChildLayout.getChildCount());
+                // Log.d("Child",c.getFirstName());
+                // Log.d("Child","" + pChildLayout.getChildCount());
 
             }
 
         }
     }
 
-    public void getData(){
+    public void getData() {
         class GetDataJSON extends AsyncTask<String, Void, String> {
 
             @Override
@@ -327,7 +328,7 @@ public class TreeViewFragment extends Fragment {
                     HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
                     //add request header
-                    con.setRequestProperty("Content-Type","application/json");
+                    con.setRequestProperty("Content-Type", "application/json");
                     inputStream = con.getInputStream();
                     BufferedReader reader = new BufferedReader(
                             new InputStreamReader(inputStream, "UTF-8"), 8);
@@ -335,76 +336,95 @@ public class TreeViewFragment extends Fragment {
                     StringBuilder sb = new StringBuilder();
 
                     String line = null;
-                    while ((line = reader.readLine()) != null)
-                    {
+                    while ((line = reader.readLine()) != null) {
                         sb.append(line + "\n");
                     }
                     result = sb.toString();
-                    Log.d("RESULT",result);
+                    Log.d("RESULT", result);
 
-                } catch (Exception e) {}
-                finally {
-                    try{if(inputStream != null)inputStream.close();}catch(Exception squish){}
+                } catch (Exception e) {
+                } finally {
+                    try {
+                        if (inputStream != null) inputStream.close();
+                    } catch (Exception squish) {
+                    }
                 }
                 return result;
             }
 
             @Override
-            protected void onPostExecute(String result){
-                progressDialog.dismiss();
-                membersListJsonString =result;
+            protected void onPostExecute(String result) {
+                membersListJsonString = result;
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("MEMBERS_STRING",membersListJsonString);
+                editor.putString("MEMBERS_STRING", membersListJsonString);
                 editor.apply();
                 showList();
             }
 
             @Override
             protected void onPreExecute() {
-                progressDialog.show();
                 super.onPreExecute();
+                progressDialog.show();
             }
         }
         GetDataJSON g = new GetDataJSON();
         g.execute();
     }
 
-    protected void showList(){
+    protected void showList() {
+
         try {
             JSONObject jsonObj = new JSONObject(membersListJsonString);
             membersJsonArray = jsonObj.getJSONArray(TAG_RESULTS);
 
-            for(int i = 0; i< membersJsonArray.length(); i++){
+            for (int i = 0; i < membersJsonArray.length(); i++) {
                 JSONObject c = membersJsonArray.getJSONObject(i);
 
-                String unique_id,first_name,last_name,mother_id,father_id,primary_parent,
-                        gender,spouse_id,birth_date,marriage_date,death_date, mobile_number,
-                        landline,address,latitude,longitude,email,image_url;
+                String unique_id,generation,title,first_name,middle_name,last_name,nick_name
+                        ,gender,in_law,mother_id,mother_name,father_id,father_name,spouse_id,spouse_name,birth_date,marriage_date,death_date,
+                        mobile_number,alternate_number,residence_number,email1,email2,address_1,address_2,city,state_country,pincode
+                        ,designation,company,industry_special,image_url;
 
 
                 unique_id = c.getString(TAG_ID);
+                generation = c.getString(TAG_GEN);
+                title = c.getString(TAG_TITLE);
                 first_name = c.getString(TAG_FIRST_NAME);
+                middle_name = c.getString(TAG_MIDDLE_NAME);
                 last_name = c.getString(TAG_LAST_NAME);
-                mother_id = c.getString(TAG_MOTHER_ID);
-                father_id = c.getString(TAG_FATHER_ID);
-                primary_parent = c.getString(TAG_PRIMARY_PARENT);
+                nick_name = c.getString(TAG_NICK_NAME);
                 gender = c.getString(TAG_GENDER);
+                in_law = c.getString(TAG_IN_LAW);
+                mother_id = c.getString(TAG_MOTHER_ID);
+                mother_name = c.getString(TAG_MOTHER_NAME);
+                father_id = c.getString(TAG_FATHER_ID);
+                father_name = c.getString(TAG_FATHER_NAME);
                 spouse_id = c.getString(TAG_SPOUSE_ID);
+                spouse_name = c.getString(TAG_SPOUSE_NAME);
                 birth_date = c.getString(TAG_BIRTH_DATE);
                 marriage_date = c.getString(TAG_MARRIAGE_DATE);
                 death_date = c.getString(TAG_DEATH_DATE);
-                mobile_number = c.getString(TAG_MOBILE);
-                landline = c.getString(TAG_LANDLINE);
-                address = c.getString(TAG_ADDRESS);
-                latitude = c.getString(TAG_LATITUDE);
-                longitude = c.getString(TAG_LONGITUDE);
-                email = c.getString(TAG_EMAIL);
+                mobile_number = c.getString(TAG_MOBILE_NUMBER);
+                alternate_number = c.getString(TAG_ALTERNATE_NUMBER);
+                residence_number = c.getString(TAG_RESIDENCE_NUMBER);
+                email1 = c.getString(TAG_EMAIL1);
+                email2 = c.getString(TAG_EMAIL2);
+                address_1 = c.getString(TAG_ADDRESS_1);
+                address_2 = c.getString(TAG_ADDRESS_2);
+                city = c.getString(TAG_CITY);
+                state_country = c.getString(TAG_STATE_COUNTRY);
+                pincode = c.getString(TAG_PINCODE);
+                designation = c.getString(TAG_DESIGNATION);
+                company = c.getString(TAG_COMPANY);
+                industry_special = c.getString(TAG_INDUSTRY_SPECIAL);
                 image_url = c.getString(TAG_IMAGE_URL);
 
 
-                Person person = new Person(unique_id,first_name,last_name,
-                        mother_id,father_id,primary_parent,gender,spouse_id,birth_date,marriage_date,
-                        death_date,mobile_number,landline,address,latitude,longitude,email,image_url,-1);
+                PersonLayout person = new PersonLayout(unique_id, generation, title, first_name, middle_name, last_name, nick_name,
+                        gender, in_law, mother_id, mother_name, father_id, father_name, spouse_id,
+                        spouse_name, birth_date, marriage_date, death_date, mobile_number, alternate_number,
+                        residence_number, email1, email2, address_1, address_2, city, state_country, pincode,
+                        designation, company, industry_special, image_url, -1);
 
                 personList.add(person);
 
@@ -414,6 +434,9 @@ public class TreeViewFragment extends Fragment {
             buildPersonTree();
             bfs();
 
+            progressDialog.dismiss();
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -421,12 +444,33 @@ public class TreeViewFragment extends Fragment {
     }
 
 
-    public void openProfileFragment(Person person){
+    public void openProfileFragment(PersonLayout person) {
 
-        Log.d("PERSON",person.getFirst_name());
-        Intent intent = new Intent(getActivity(), ProfileActivity.class);
+        Intent intent = new Intent(mainActivity, ProfileActivity.class);
+        Bundle bundle = new Bundle();
+
+        Person actualPerson = new PersonLayout(person);
+        bundle.putSerializable("Actual_Person", actualPerson);
+
+        Person motherOfPerson = null, fatherOfPerson = null, spouseOfPerson = null;
+
+        if (membersListMap.get(person.getMother_id()) != null)
+            motherOfPerson = new PersonLayout(personList.get(membersListMap.get(person.getMother_id())));
+
+        if (membersListMap.get(person.getFather_id()) != null)
+            fatherOfPerson = new PersonLayout(personList.get(membersListMap.get(person.getFather_id())));
+
+
+        if (membersListMap.get(person.getSpouse_id()) != null)
+            spouseOfPerson = new PersonLayout(personList.get(membersListMap.get(person.getSpouse_id())));
+
+
+        bundle.putSerializable("Person_Mother", motherOfPerson);
+        bundle.putSerializable("Person_Father", fatherOfPerson);
+        bundle.putSerializable("Person_Spouse", spouseOfPerson);
+
+        intent.putExtras(bundle);
         startActivity(intent);
-
 
     }
 
@@ -434,6 +478,6 @@ public class TreeViewFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mainActivity = (MainActivity)activity;
+        mainActivity = (MainActivity) activity;
     }
 }

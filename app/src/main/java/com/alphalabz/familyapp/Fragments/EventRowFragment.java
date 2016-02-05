@@ -47,7 +47,7 @@ public class EventRowFragment extends Fragment implements View.OnClickListener {
         View v = inflater.inflate(R.layout.fragment_event_row, container, false);
         TableLayout tl = (TableLayout) v.findViewById(R.id.month_table);
         for (int i = 0; i < 9; i++) {
-            View row = LayoutInflater.from(getContext()).inflate(R.layout.event_data,container, false);
+            View row = LayoutInflater.from(getContext()).inflate(R.layout.event_data, container, false);
 
             tl.addView(row);
 

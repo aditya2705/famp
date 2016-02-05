@@ -8,9 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -18,21 +16,16 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.alphalabz.familyapp.Fragments.BlankFragment;
 import com.alphalabz.familyapp.Fragments.EventTableFragment;
 import com.alphalabz.familyapp.Fragments.EventsFragment;
 import com.alphalabz.familyapp.Fragments.GalleryFragment;
-import com.alphalabz.familyapp.Fragments.ProfileFragment;
 import com.alphalabz.familyapp.Fragments.TreeViewFragment;
 import com.alphalabz.familyapp.R;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
-import com.mikepenz.materialdrawer.AccountHeader;
-import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 
 import java.io.BufferedReader;
@@ -43,19 +36,17 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String RESULTS_FETCH_URL = "http://alpha95.net63.net/get_members_2.php";
     private static Context mContext;
     private Drawer result = null;
     private FloatingActionButton fab;
+    private String membersListJsonString;
+    private SharedPreferences sharedPreferences;
+    private ProgressDialog progressDialog;
 
     public static Context getContext() {
         return mContext;
     }
-
-    private String membersListJsonString;
-    private static final String RESULTS_FETCH_URL = "http://alpha95.net63.net/get_members.php";
-    private SharedPreferences sharedPreferences;
-
-    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setTitle("Loading...");
         progressDialog.setCancelable(false);
 
-        sharedPreferences = getSharedPreferences("FAMP",0);
+        sharedPreferences = getSharedPreferences("FAMP", 0);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -174,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void getData(){
+    public void getData() {
         class GetDataJSON extends AsyncTask<String, Void, String> {
 
             @Override
@@ -188,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
                     HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
                     //add request header
-                    con.setRequestProperty("Content-Type","application/json");
+                    con.setRequestProperty("Content-Type", "application/json");
                     inputStream = con.getInputStream();
                     BufferedReader reader = new BufferedReader(
                             new InputStreamReader(inputStream, "UTF-8"), 8);
@@ -196,29 +187,31 @@ public class MainActivity extends AppCompatActivity {
                     StringBuilder sb = new StringBuilder();
 
                     String line = null;
-                    while ((line = reader.readLine()) != null)
-                    {
+                    while ((line = reader.readLine()) != null) {
                         sb.append(line + "\n");
                     }
                     result = sb.toString();
-                    Log.d("RESULT",result);
+                    Log.d("RESULT", result);
 
-                } catch (Exception e) {}
-                finally {
-                    try{if(inputStream != null)inputStream.close();}catch(Exception squish){}
+                } catch (Exception e) {
+                } finally {
+                    try {
+                        if (inputStream != null) inputStream.close();
+                    } catch (Exception squish) {
+                    }
                 }
                 return result;
             }
 
             @Override
-            protected void onPostExecute(String result){
+            protected void onPostExecute(String result) {
                 progressDialog.dismiss();
-                membersListJsonString =result;
+                membersListJsonString = result;
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("MEMBERS_STRING",membersListJsonString);
+                editor.putString("MEMBERS_STRING", membersListJsonString);
                 editor.apply();
 
-                if(getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof TreeViewFragment){
+                if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof TreeViewFragment) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TreeViewFragment()).commit();
                 }
             }

@@ -1,27 +1,23 @@
 package com.alphalabz.familyapp.Fragments;
 
 
-import android.app.Dialog;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.alphalabz.familyapp.Adapters.SwipeDeckAdapter;
 import com.alphalabz.familyapp.R;
-import com.daprlabs.cardstack.SwipeDeck;
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
-import com.dexafree.materialList.card.Card;
-import com.dexafree.materialList.card.CardProvider;
+import com.veinhorn.scrollgalleryview.ScrollGalleryView;
 
 import java.util.ArrayList;
 
 public class GalleryFragment extends Fragment {
 
-    private Dialog d;
-    private SubsamplingScaleImageView imageView;
+    private ScrollGalleryView scrollGalleryView;
 
 
     public GalleryFragment() {
@@ -39,51 +35,53 @@ public class GalleryFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_gallery, container, false);
 
-        final SwipeDeck cardStack = (SwipeDeck) v.findViewById(R.id.swipe_deck);
-
-        final ArrayList<Integer> testData = new ArrayList<>();
-        testData.add(R.drawable.gallery_1);
-        testData.add(R.drawable.gallery_2);
-        testData.add(R.drawable.gallery_3);
-        testData.add(R.drawable.background);
-        final ArrayList<Integer> testData2 = new ArrayList<>();
-        testData2.add(R.drawable.gallery_1);
-        testData2.add(R.drawable.gallery_2);
-        testData2.add(R.drawable.gallery_3);
-        testData2.add(R.drawable.background);
-
-        final SwipeDeckAdapter adapter = new SwipeDeckAdapter(testData, getContext());
-        cardStack.setAdapter(adapter);
-
-        cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
-            @Override
-            public void cardSwipedLeft(int position) {
-                Log.i("MainActivity", "card was swiped left, position in adapter: " + position);
-                testData.add(testData2.get(position % testData2.size()));
-
-                adapter.notifyDataSetChanged();
-
-            }
-
-
-            @Override
-            public void cardSwipedRight(int position) {
-                Log.i("MainActivity", "card was swiped right, position in adapter: " + position);
-                testData.add(testData2.get(position % testData2.size()));
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void cardsDepleted() {
-                Log.i("MainActivity", "no more cards");
-
-            }
-        });
+        scrollGalleryView = (ScrollGalleryView)v.findViewById(R.id.scroll_gallery_view);
+        scrollGalleryView
+                .setThumbnailSize(100)
+                .setZoom(true)
+                .setFragmentManager(getChildFragmentManager())
+                .addImage(R.drawable.gallery_2)
+                .addImage(R.drawable.gallery_3)
+                .addImage(R.drawable.gallery_4)
+                .addImage(R.drawable.gallery_5)
+                .addImage(R.drawable.gallery_6)
+                .addImage(R.drawable.gallery_1)
+                .addImage(R.drawable.gallery_7);
 
         return v;
 
     }
 
+    //Load a bitmap from a resource with a target size
+    static Bitmap decodeSampledBitmapFromResource(Resources res, int resId, int reqWidth, int reqHeight) {
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(res, resId, options);
+    }
+
+    //Given the bitmap size and View size calculate a subsampling size (powers of 2)
+    static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        int inSampleSize = 1;	//Default subsampling size
+        // See if image raw height and width is bigger than that of required view
+        if (options.outHeight > reqHeight || options.outWidth > reqWidth) {
+            //bigger
+            final int halfHeight = options.outHeight / 2;
+            final int halfWidth = options.outWidth / 2;
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+        return inSampleSize;
+    }
 
 
 }

@@ -134,7 +134,7 @@
             android:background="@drawable/circle_drawable"/>
 
     </LinearLayout>
-        
+
         <TextView
             android:id="@+id/person_name"
             android:layout_width="wrap_content"

@@ -1,7 +1,9 @@
 package com.alphalabz.familyapp.Fragments;
 
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,11 +14,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alphalabz.familyapp.Activities.MainActivity;
 import com.alphalabz.familyapp.Objects.Person;
+import com.alphalabz.familyapp.Activities.ProfileActivity;
 import com.alphalabz.familyapp.R;
 
 import org.json.JSONArray;
@@ -35,6 +40,8 @@ import java.util.HashMap;
  * A simple {@link Fragment} subclass.
  */
 public class TreeViewFragment extends Fragment {
+
+    private MainActivity mainActivity;
 
     private View rootView;
     private ArrayList<Person> personList;// = new ArrayList<>();
@@ -148,7 +155,33 @@ public class TreeViewFragment extends Fragment {
         rootPerson.setTreeLevel(0);
         RelativeLayout rootLayout = getNodeLayout();
         TextView personNameView = (TextView) rootLayout.findViewById(R.id.person_name);
+        ImageView personImageView = (ImageView) rootLayout.findViewById(R.id.person_image_view);
+        personNameView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openProfileFragment(rootPerson);
+            }
+        });
+        personImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openProfileFragment(rootPerson);
+            }
+        });
         TextView spouseNameView = (TextView) rootLayout.findViewById(R.id.spouse_name);
+        ImageView spouseImageView = (ImageView) rootLayout.findViewById(R.id.spouse_image_view);
+        spouseNameView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openProfileFragment(personList.get(membersListMap.get(rootPerson.getSpouse_id())));
+            }
+        });
+        spouseImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openProfileFragment(personList.get(membersListMap.get(rootPerson.getSpouse_id())));
+            }
+        });
         personNameView.setText(rootPerson.getFirst_name());
         spouseNameView.setText(personList.get(membersListMap.get(rootPerson.getSpouse_id())).getFirst_name());
 
@@ -162,19 +195,48 @@ public class TreeViewFragment extends Fragment {
             LinearLayout pChildLayout = (LinearLayout)p.getPersonLayout().findViewById(R.id.childLinearLayout);
             for(int i = 0; i < p.getChildCount(); i++)
             {
-                Person c = p.getChildAt(i);
+                final Person c = p.getChildAt(i);
                 p.getPersonLayout().findViewById(R.id.child_branch).setVisibility(View.VISIBLE);
                 RelativeLayout newNodeLayout = getNodeLayout();
                 personNameView = (TextView) newNodeLayout.findViewById(R.id.person_name);
-                spouseNameView = (TextView) newNodeLayout.findViewById(R.id.spouse_name);
+                personImageView = (ImageView) newNodeLayout.findViewById(R.id.person_image_view);
+                personNameView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openProfileFragment(c);
+                    }
+                });
+                personImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openProfileFragment(c);
+                    }
+                });
                 personNameView.setText(c.getFirst_name());
+                spouseNameView = (TextView) newNodeLayout.findViewById(R.id.spouse_name);
+                spouseImageView = (ImageView) newNodeLayout.findViewById(R.id.spouse_image_view);
+
 
                 String s=null;
                 if(membersListMap.get(c.getSpouse_id())!=null)
                     s = personList.get(membersListMap.get(c.getSpouse_id())).getFirst_name();
 
-                if(s!=null&&!s.equals(""))
+                if(s!=null&&!s.equals("")) {
                     spouseNameView.setText(s);
+                    spouseNameView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openProfileFragment(personList.get(membersListMap.get(c.getSpouse_id())));
+                        }
+                    });
+                    spouseImageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openProfileFragment(personList.get(membersListMap.get(c.getSpouse_id())));
+                        }
+                    });
+                    personNameView.setText(c.getFirst_name());
+                }
                 else {
                     newNodeLayout.findViewById(R.id.spouse_layout).setVisibility(View.INVISIBLE);
                     newNodeLayout.findViewById(R.id.spouse_branch).setVisibility(View.INVISIBLE);
@@ -359,6 +421,19 @@ public class TreeViewFragment extends Fragment {
     }
 
 
+    public void openProfileFragment(Person person){
+
+        Log.d("PERSON",person.getFirst_name());
+        Intent intent = new Intent(getActivity(), ProfileActivity.class);
+        startActivity(intent);
 
 
+    }
+
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mainActivity = (MainActivity)activity;
+    }
 }

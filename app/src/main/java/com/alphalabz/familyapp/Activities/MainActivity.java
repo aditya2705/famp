@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
                 .withActionBarDrawerToggleAnimated(true)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName("Home").withIcon(FontAwesome.Icon.faw_home),
-                        new PrimaryDrawerItem().withName("Profile").withIcon(FontAwesome.Icon.faw_user),
                         new PrimaryDrawerItem().withName("Events").withIcon(FontAwesome.Icon.faw_birthday_cake),
                         new PrimaryDrawerItem().withName("Data Table").withIcon(FontAwesome.Icon.faw_table),
                         new PrimaryDrawerItem().withName("Gallery").withIcon(FontAwesome.Icon.faw_image)
@@ -101,30 +100,17 @@ public class MainActivity extends AppCompatActivity {
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
                                 case 1:
-                                    Bundle b = new Bundle();
-                                    b.putString("profile_id", "rms123");
-
-                                    fragment = new ProfileFragment();
-                                    fragment.setArguments(b);
-                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
-                                    break;
-                                case 2:
                                     fragment = new EventsFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
-                                case 3:
+                                case 2:
                                     fragment = new EventTableFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
-                                case 4:
+                                case 3:
                                     fragment = new GalleryFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
-                                default:
-                                    fragment = new BlankFragment();
-                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
-                                    break;
-
                             }
                         }
 

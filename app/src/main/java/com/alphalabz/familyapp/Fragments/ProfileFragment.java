@@ -6,12 +6,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.alphalabz.familyapp.Objects.Person;
 import com.alphalabz.familyapp.R;
-import com.google.android.gms.maps.model.LatLng;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,9 +22,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_profile, container, false);
-        String profileID = getArguments().getString("profile_id");
-
+        View v = inflater.inflate(R.layout.activity_profile, container, false);
 
         //Person rms = new Person();
 

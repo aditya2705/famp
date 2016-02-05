@@ -7,9 +7,10 @@
     
     <LinearLayout
         android:id="@+id/parent_branch"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
         android:orientation="vertical">
 
         <View
@@ -29,8 +30,9 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        >
+        android:layout_gravity="center_horizontal">
+
+
 
         <View
             android:id="@+id/spouse_branch"
@@ -40,6 +42,7 @@
             android:layout_alignBottom="@+id/person_image_view"
             android:layout_marginRight="@dimen/_30sdp"
             android:layout_alignRight="@+id/spouse_layout"/>
+
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/person_image_view"
@@ -107,14 +110,15 @@
     </RelativeLayout>
     
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
 
     <LinearLayout
         android:id="@+id/child_branch"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
         android:orientation="vertical">
 
         <View

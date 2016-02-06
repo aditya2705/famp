@@ -2,7 +2,6 @@ package com.alphalabz.familyapp.Fragments;
 
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -14,9 +13,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.alphalabz.familyapp.Activities.MainActivity;
@@ -43,6 +45,8 @@ import java.util.HashMap;
 public class TreeViewFragment extends Fragment {
 
     private MainActivity mainActivity;
+    private ScrollView verticalScrollView;
+    private HorizontalScrollView horizontalScrollView;
 
     private View rootView;
     private ArrayList<PersonLayout> personList;// = new ArrayList<>();
@@ -93,8 +97,6 @@ public class TreeViewFragment extends Fragment {
 
     private SharedPreferences sharedPreferences;
 
-    private ProgressDialog progressDialog;
-
     public TreeViewFragment() {
         // Required empty public constructor
 
@@ -103,8 +105,6 @@ public class TreeViewFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         sharedPreferences = getActivity().getSharedPreferences("FAMP", 0);
         membersListJsonString = sharedPreferences.getString("MEMBERS_STRING", "");
 
@@ -115,9 +115,9 @@ public class TreeViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_tree_view, container, false);
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setTitle("Loading...");
-        progressDialog.setCancelable(false);
+
+        verticalScrollView = (ScrollView) rootView.findViewById(R.id.vertical_scroll_view);
+        horizontalScrollView = (HorizontalScrollView) rootView.findViewById(R.id.horizontal_scroll_view);
 
         parentLayout = (LinearLayout) rootView.findViewById(R.id.parent_layout);
 
@@ -312,6 +312,16 @@ public class TreeViewFragment extends Fragment {
             }
 
         }
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mainActivity.progressDialog.dismiss();
+            }
+        }, 500);
+
+
+
     }
 
     public void getData() {
@@ -364,7 +374,6 @@ public class TreeViewFragment extends Fragment {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                progressDialog.show();
             }
         }
         GetDataJSON g = new GetDataJSON();
@@ -433,8 +442,6 @@ public class TreeViewFragment extends Fragment {
 
             buildPersonTree();
             bfs();
-
-            progressDialog.dismiss();
 
 
         } catch (JSONException e) {

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fab;
     private String membersListJsonString;
     private SharedPreferences sharedPreferences;
-    private ProgressDialog progressDialog;
+    public ProgressDialog progressDialog;
 
     public static Context getContext() {
         return mContext;
@@ -84,11 +85,18 @@ public class MainActivity extends AppCompatActivity {
                         if (drawerItem != null && drawerItem instanceof Nameable) {
                             String name = ((Nameable) drawerItem).getName().getText(MainActivity.this);
                             getSupportActionBar().setTitle(name);
-                            Fragment fragment;
+                            final Fragment fragment;
                             switch (i) {
                                 case 0:
+                                    progressDialog.show();
                                     fragment = new TreeViewFragment();
-                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                                    new Handler().postDelayed(new Runnable(){
+                                        @Override
+                                        public void run() {
+                                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                                        }
+                                    }, 1000);
+
                                     break;
                                 case 1:
                                     fragment = new EventsFragment();
@@ -121,9 +129,11 @@ public class MainActivity extends AppCompatActivity {
                     public void onDrawerSlide(View drawerView, float slideOffset) {
                     }
                 })
-                .withFireOnInitialOnClick(true)
+                .withFireOnInitialOnClick(false)
                 .withSavedInstance(savedInstanceState)
                 .build();
+
+        result.setSelectionAtPosition(0,true);
 
 
     }
@@ -214,6 +224,8 @@ public class MainActivity extends AppCompatActivity {
                 if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof TreeViewFragment) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TreeViewFragment()).commit();
                 }
+
+
             }
 
             @Override

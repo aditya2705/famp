@@ -222,9 +222,15 @@ public class MainActivity extends AppCompatActivity {
                 editor.apply();
 
                 if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof TreeViewFragment) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TreeViewFragment()).commit();
-                }
+                    progressDialog.show();
+                    new Handler().postDelayed(new Runnable(){
+                        @Override
+                        public void run() {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TreeViewFragment()).commit();
+                        }
+                    }, 1000);
 
+                }
 
             }
 

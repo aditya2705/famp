@@ -193,7 +193,9 @@ public class TreeViewFragment extends Fragment {
             }
         });
         personNameView.setText(rootPerson.getFirst_name());
-        //spouseNameView.setText(personList.get(membersListMap.get(rootPerson.getSpouse_id())).getFirst_name());
+
+        if(membersListMap.get(rootPerson.getSpouse_id())!=null)
+            spouseNameView.setText(personList.get(membersListMap.get(rootPerson.getSpouse_id())).getFirst_name());
 
         parentLayout.addView(rootLayout);
         rootPerson.setPersonLayout(rootLayout);
@@ -312,6 +314,8 @@ public class TreeViewFragment extends Fragment {
             }
 
         }
+
+        horizontalScrollView.scrollTo((int) (rootPerson.getPersonLayout().getRight()/2.0284f),0);
 
         new Handler().postDelayed(new Runnable() {
             @Override

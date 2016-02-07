@@ -29,6 +29,8 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 
+import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private String membersListJsonString;
     private SharedPreferences sharedPreferences;
     public ProgressDialog progressDialog;
+
 
     public static Context getContext() {
         return mContext;
@@ -62,6 +65,9 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+
 
         mContext = getApplicationContext();
 
@@ -236,6 +242,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             protected void onPreExecute() {
+                progressDialog.setTitle("Loading...");
                 progressDialog.show();
                 super.onPreExecute();
             }
@@ -243,6 +250,8 @@ public class MainActivity extends AppCompatActivity {
         GetDataJSON g = new GetDataJSON();
         g.execute();
     }
+
+
 
 
 }

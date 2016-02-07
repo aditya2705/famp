@@ -2,36 +2,53 @@ package com.alphalabz.familyapp.Fragments;
 
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alphalabz.familyapp.Activities.MainActivity;
 import com.alphalabz.familyapp.Activities.ProfileActivity;
 import com.alphalabz.familyapp.Objects.Person;
 import com.alphalabz.familyapp.Objects.PersonLayout;
 import com.alphalabz.familyapp.R;
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+
+import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
+import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -54,8 +71,10 @@ public class TreeViewFragment extends Fragment {
     private PersonLayout rootPerson;
     private int marginForChildLayout;
     private HashMap<String, Integer> membersListMap;
+    private FloatingActionsMenu menuMultipleActions;
 
     private String membersListJsonString;
+    private Bitmap familyTreeBitmap;
 
     private static final String RESULTS_FETCH_URL = "http://alpha95.net63.net/get_members_2.php";
 
@@ -115,6 +134,39 @@ public class TreeViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_tree_view, container, false);
+
+        rootView.findViewById(R.id.shadowView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(v.getVisibility() == View.VISIBLE){
+                    menuMultipleActions.collapse();
+                }
+            }
+        });
+
+        menuMultipleActions = (FloatingActionsMenu) rootView.findViewById(R.id.multiple_actions);
+        menuMultipleActions.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
+            @Override
+            public void onMenuExpanded() {
+                rootView.findViewById(R.id.shadowView).setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onMenuCollapsed() {
+                rootView.findViewById(R.id.shadowView).setVisibility(View.INVISIBLE);
+            }
+        });
+
+
+        FloatingActionButton actionButton2 = (FloatingActionButton)
+                rootView.findViewById(R.id.action_download);
+        actionButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveImage();
+                menuMultipleActions.collapse();
+            }
+        });
 
         verticalScrollView = (ScrollView) rootView.findViewById(R.id.vertical_scroll_view);
         horizontalScrollView = (HorizontalScrollView) rootView.findViewById(R.id.horizontal_scroll_view);
@@ -320,6 +372,7 @@ public class TreeViewFragment extends Fragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                generateImage();
                 mainActivity.progressDialog.dismiss();
             }
         }, 500);
@@ -482,6 +535,115 @@ public class TreeViewFragment extends Fragment {
 
         intent.putExtras(bundle);
         startActivity(intent);
+
+    }
+
+    public static Bitmap loadBitmapFromView(View v)
+    {
+        Bitmap b = Bitmap.createBitmap(v.getWidth(), v.getHeight(), Bitmap.Config.ARGB_8888);
+
+        Canvas c = new Canvas(b);
+        v.layout(0, 0, v.getLayoutParams().width/500, v.getLayoutParams().height/500);
+        v.draw(c);
+        return b;
+    }
+
+    private void generateImage()
+    {
+
+        HorizontalScrollView z = horizontalScrollView;
+        int totalHeight = z.getChildAt(0).getHeight();
+        int totalWidth = z.getChildAt(0).getWidth();
+
+       familyTreeBitmap = getBitmapFromView(parentLayout,totalHeight,totalWidth);
+
+    }
+
+    public Bitmap getBitmapFromView(View view, int totalHeight, int totalWidth) {
+
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int screenHeight = size.y;
+
+        int height = Math.min(screenHeight, totalHeight);
+        float percent = height / (float)totalHeight;
+
+        Bitmap canvasBitmap = Bitmap.createBitmap((int)(totalWidth*percent),(int)(totalHeight*percent), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(canvasBitmap);
+
+        Drawable bgDrawable = view.getBackground();
+        if (bgDrawable != null)
+            bgDrawable.draw(canvas);
+        else
+            canvas.drawColor(Color.WHITE);
+
+        canvas.save();
+        canvas.scale(percent, percent);
+        view.draw(canvas);
+        canvas.restore();
+
+        return canvasBitmap;
+    }
+
+    private void showImageDialog() {
+
+        Dialog d = new Dialog(getActivity());
+        d.setContentView(R.layout.image_dialog_layout);
+        SubsamplingScaleImageView imageView = (SubsamplingScaleImageView) d.findViewById(R.id.imageView);
+        imageView.setImage(ImageSource.bitmap(familyTreeBitmap));
+        d.show();
+
+    }
+
+
+    private void saveImage() {
+
+        class saveImageTask extends AsyncTask<String, Void, String> {
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                String result = "";
+                //Save bitmap
+                File imageDirectory = new File(Environment.getExternalStorageDirectory()+"/Family Tree/");
+                imageDirectory.mkdirs();
+                String fileName = "family_tree.jpg";
+                File myPath = new File(imageDirectory, fileName);
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(myPath);
+                    familyTreeBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                    fos.flush();
+                    fos.close();
+
+                }catch (FileNotFoundException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                Toast.makeText(getActivity(),"Family tree saved as image inside /sdcard/Family Tree/ as family_tree.jpg",Toast.LENGTH_SHORT).show();
+                mainActivity.progressDialog.dismiss();
+            }
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                mainActivity.progressDialog.setTitle("Saving Image...");
+                mainActivity.progressDialog.show();
+            }
+        }
+
+        saveImageTask g = new saveImageTask();
+        g.execute();
 
     }
 

@@ -28,11 +28,11 @@ import java.util.concurrent.Executors;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EventsFragment extends Fragment {
+public class CalendarFragment extends Fragment {
 
     MaterialCalendarView calendarView;
 
-    public EventsFragment() {
+    public CalendarFragment() {
         // Required empty public constructor
     }
 
@@ -58,11 +58,7 @@ public class EventsFragment extends Fragment {
 
         @Override
         protected List<CalendarDay> doInBackground(@NonNull Void... voids) {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.MONTH, -2);
             ArrayList<CalendarDay> dates = new ArrayList<>();
@@ -83,24 +79,7 @@ public class EventsFragment extends Fragment {
             calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
                 @Override
                 public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                    AlertDialog alertDialog = new AlertDialog.Builder(
-                            getActivity()
-                    )
-                            .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    // Delete Action
-                                }
-                            })
-                            .setNegativeButton("Back", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    // Cancel Action
-                                }
-                            })
-                            .setTitle("Events")
-                            .create();
-                    alertDialog.show();
+                    //showDialog
                 }
             });
         }

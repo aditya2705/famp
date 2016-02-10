@@ -1,0 +1,46 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/_5sdp"
+    android:paddingRight="@dimen/_5sdp"
+    android:paddingTop="@dimen/_5sdp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/md_grey_500"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="left|center_vertical"
+            android:text="Date"
+            android:padding="@dimen/_15sdp"
+            android:textSize="@dimen/_13sdp"
+            android:textColor="@color/md_white_1000"
+            android:textStyle="bold"
+            android:layout_weight="2"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_15sdp"
+            android:text="Event"
+            android:gravity="left|center_vertical"
+            android:textSize="@dimen/_13sdp"
+            android:textStyle="bold"
+            android:textColor="@color/md_white_1000"
+            android:layout_weight="4"/>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/events_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+</LinearLayout>

@@ -1,0 +1,39 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <LinearLayout
+        android:id="@+id/card_tab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.ogaclejapan.smarttablayout.SmartTabLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/month_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_50sdp"
+            android:background="@color/md_green_600"
+            app:stl_defaultTabTextColor="@color/white"
+            app:stl_defaultTabTextMinWidth="@dimen/_92sdp"
+            app:stl_indicatorAlwaysInCenter="true"
+            app:stl_dividerThickness="0dp"
+            app:stl_defaultTabTextSize="@dimen/_10sdp"
+            app:stl_indicatorColor="@color/md_green_800"
+            app:stl_indicatorCornerRadius="@dimen/_5sdp"
+            app:stl_indicatorInterpolation="smart"
+            app:stl_indicatorThickness="@dimen/_35sdp"
+            app:stl_indicatorGravity="center"
+            app:stl_underlineColor="@android:color/transparent"/>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
+    </LinearLayout>
+
+</FrameLayout>

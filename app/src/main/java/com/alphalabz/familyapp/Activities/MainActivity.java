@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -16,8 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.alphalabz.familyapp.Fragments.BlankFragment;
-import com.alphalabz.familyapp.Fragments.EventTableFragment;
-import com.alphalabz.familyapp.Fragments.EventsFragment;
+import com.alphalabz.familyapp.Fragments.CalendarFragment;
+import com.alphalabz.familyapp.Fragments.EventsTableFragment;
 import com.alphalabz.familyapp.Fragments.GalleryFragment;
 import com.alphalabz.familyapp.Fragments.SearchListFragment;
 import com.alphalabz.familyapp.Fragments.TreeViewFragment;
@@ -37,13 +38,15 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String RESULTS_FETCH_URL = "http://alpha95.net63.net/get_members_2.php";
+    private static final String RESULTS_FETCH_MEMBERS_URL = "http://alpha95.net63.net/get_members_2.php";
+    private static final String RESULTS_FETCH_EVENTS_URL = "http://alpha95.net63.net/get_events.php";
     private static Context mContext;
     private Drawer result = null;
     private FloatingActionButton fab;
-    private String membersListJsonString;
+    private String membersListJsonString, eventsListJsonString;
     public SharedPreferences sharedPreferences;
     public ProgressDialog progressDialog;
+    private float defaultElevation;
 
 
     public static Context getContext() {
@@ -63,9 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
-
+        defaultElevation = ((AppBarLayout)findViewById(R.id.app_bar_layout)).getTargetElevation();;
 
         mContext = getApplicationContext();
 
@@ -79,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
                         new PrimaryDrawerItem().withName("Home").withIcon(FontAwesome.Icon.faw_home),
                         new PrimaryDrawerItem().withName("Tree View").withIcon(FontAwesome.Icon.faw_tree),
                         new PrimaryDrawerItem().withName("All Members List").withIcon(FontAwesome.Icon.faw_list_ul),
-                        new PrimaryDrawerItem().withName("Events").withIcon(FontAwesome.Icon.faw_birthday_cake),
-                        new PrimaryDrawerItem().withName("Data Table").withIcon(FontAwesome.Icon.faw_table),
+                        new PrimaryDrawerItem().withName("Calendar").withIcon(FontAwesome.Icon.faw_table),
+                        new PrimaryDrawerItem().withName("All Events").withIcon(FontAwesome.Icon.faw_birthday_cake),
                         new PrimaryDrawerItem().withName("Gallery").withIcon(FontAwesome.Icon.faw_image)
 
                 )
@@ -113,11 +114,11 @@ public class MainActivity extends AppCompatActivity {
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
                                 case 3:
-                                    fragment = new EventsFragment();
+                                    fragment = new CalendarFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
                                 case 4:
-                                    fragment = new EventTableFragment();
+                                    fragment = new EventsTableFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
                                 case 5:
@@ -169,15 +170,15 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.refresh) {
-            getData();
+            getMembersData();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void getData() {
-        class GetDataJSON extends AsyncTask<String, Void, String> {
+    public void getMembersData() {
+        class GetMembersData extends AsyncTask<String, Void, String> {
 
             @Override
             protected String doInBackground(String... params) {
@@ -186,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                 String result = null;
                 InputStream inputStream = null;
                 try {
-                    obj = new URL(RESULTS_FETCH_URL);
+                    obj = new URL(RESULTS_FETCH_MEMBERS_URL);
                     HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
                     //add request header
@@ -242,7 +243,78 @@ public class MainActivity extends AppCompatActivity {
                 super.onPreExecute();
             }
         }
-        GetDataJSON g = new GetDataJSON();
+        GetMembersData g = new GetMembersData();
+        g.execute();
+    }
+
+
+    public void getEventsData() {
+        class GetEventsData extends AsyncTask<String, Void, String> {
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                URL obj = null;
+                String result = null;
+                InputStream inputStream = null;
+                try {
+                    obj = new URL(RESULTS_FETCH_EVENTS_URL);
+                    HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+                    //add request header
+                    con.setRequestProperty("Content-Type", "application/json");
+                    inputStream = con.getInputStream();
+                    BufferedReader reader = new BufferedReader(
+                            new InputStreamReader(inputStream, "UTF-8"), 8);
+
+                    StringBuilder sb = new StringBuilder();
+
+                    String line = null;
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line + "\n");
+                    }
+                    result = sb.toString();
+                    Log.d("RESULT", result);
+
+                } catch (Exception e) {
+                } finally {
+                    try {
+                        if (inputStream != null) inputStream.close();
+                    } catch (Exception squish) {
+                    }
+                }
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                progressDialog.dismiss();
+                eventsListJsonString = result;
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("EVENTS_STRING", membersListJsonString);
+                editor.apply();
+
+                if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof EventsTableFragment) {
+                    progressDialog.show();
+                    new Handler().postDelayed(new Runnable(){
+                        @Override
+                        public void run() {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EventsTableFragment()).commit();
+                        }
+                    }, 1000);
+
+                }
+
+            }
+
+            @Override
+            protected void onPreExecute() {
+                progressDialog.setTitle("Loading...");
+                progressDialog.show();
+                super.onPreExecute();
+            }
+        }
+        GetEventsData g = new GetEventsData();
         g.execute();
     }
 

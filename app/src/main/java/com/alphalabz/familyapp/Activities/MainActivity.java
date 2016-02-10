@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private Drawer result = null;
     private FloatingActionButton fab;
     private String membersListJsonString;
-    private SharedPreferences sharedPreferences;
+    public SharedPreferences sharedPreferences;
     public ProgressDialog progressDialog;
 
 

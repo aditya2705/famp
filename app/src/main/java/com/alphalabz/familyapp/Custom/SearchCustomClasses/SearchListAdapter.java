@@ -97,10 +97,14 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchItemViewHolder
         notifyItemMoved(fromPosition, toPosition);
     }
 
+    public SearchMemberModel getItem(int position){
+        return mModels.get(position);
+    }
+
     @NonNull
     @Override
     public String getSectionName(int position) {
-        return String.valueOf(position);
+        return mModels.get(position).getNameString().substring(0,1);
     }
 
 

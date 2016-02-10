@@ -1,19 +1,27 @@
 package com.alphalabz.familyapp.Custom.SearchCustomClasses;
 
-/**
- * Created with Android Studio
- * User: Xaver
- * Date: 24/05/15
- */
 public class SearchMemberModel {
 
-    private final String mText;
+    private String mNameString, mUniqueIDString;
 
-    public SearchMemberModel(String text) {
-        mText = text;
+    public SearchMemberModel(String mUniqueIDString, String mNameString) {
+        this.mNameString = mNameString;
+        this.mUniqueIDString = mUniqueIDString;
     }
 
-    public String getText() {
-        return mText;
+    public String getNameString() {
+        return mNameString;
+    }
+
+    public void setNameString(String mNameString) {
+        this.mNameString = mNameString;
+    }
+
+    public String getUniqueIDString() {
+        return mUniqueIDString;
+    }
+
+    public void setUniqueIDString(String mUniqueIDString) {
+        this.mUniqueIDString = mUniqueIDString;
     }
 }

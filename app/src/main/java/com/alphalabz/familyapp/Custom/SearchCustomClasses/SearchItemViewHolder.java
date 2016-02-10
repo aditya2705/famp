@@ -18,6 +18,6 @@ public class SearchItemViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(SearchMemberModel model) {
-        tvText.setText(model.getText());
+        tvText.setText(model.getNameString());
     }
 }

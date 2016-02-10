@@ -221,9 +221,11 @@ public class MonthEventFragment extends Fragment {
             String anniversary = eventArrayList.get(position).getAnniversary();
 
             if(birthday.equals("null")||birthday.equals("")){
-                holder.occasionView.setText("Anniversary:\n"+anniversary);
+                holder.occasionView.setText("Anniversary");
+                holder.detailsView.setText(anniversary);
             }else{
-                holder.occasionView.setText("Birthday:\n"+birthday);
+                holder.occasionView.setText("Birthday");
+                holder.detailsView.setText(birthday);
             }
 
 
@@ -235,12 +237,13 @@ public class MonthEventFragment extends Fragment {
         }
 
         static class ViewHolder extends RecyclerView.ViewHolder {
-            public TextView dateView, occasionView;
+            public TextView dateView, occasionView, detailsView;
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 dateView = (TextView) itemView.findViewById(R.id.date);
                 occasionView = (TextView) itemView.findViewById(R.id.occasion);
+                detailsView = (TextView) itemView.findViewById(R.id.details);
             }
         }
     }

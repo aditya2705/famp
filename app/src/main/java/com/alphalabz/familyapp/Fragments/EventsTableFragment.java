@@ -136,6 +136,7 @@ public class EventsTableFragment extends Fragment {
     public void showViews(){
 
         monthPager = (ViewPager) rootView.findViewById(R.id.viewpager);
+        //monthPager.setOffscreenPageLimit(20);
         SmartTabLayout viewPagerTab = (SmartTabLayout) rootView.findViewById(R.id.month_tabs);
 
         adapter = new MonthPagerAdapter(getChildFragmentManager());

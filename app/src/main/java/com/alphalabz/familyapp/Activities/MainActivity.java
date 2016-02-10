@@ -150,6 +150,10 @@ public class MainActivity extends AppCompatActivity {
 
         result.setSelectionAtPosition(0,true);
 
+        if(sharedPreferences.getString("MEMBERS_STRING","").equals("")||sharedPreferences.getString("EVENTS_STRING","").equals("")){
+            getMembersData();
+        }
+
     }
 
 
@@ -233,6 +237,8 @@ public class MainActivity extends AppCompatActivity {
                     }, 1000);
 
                 }
+
+                getEventsData();
 
             }
 

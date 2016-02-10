@@ -123,7 +123,9 @@ public class MonthEventFragment extends Fragment {
                         .build();
 
                 String birthday = eventsList.get(position).getBirthday();
-                float years = Float.parseFloat(eventsList.get(position).getYears());
+                String s = eventsList.get(position).getYears();
+
+                float years = Float.parseFloat(s.equals("")||s.equals("null")?"0":s);
 
                 int event;
                 if(birthday.equals("null")||birthday.equals("")){
@@ -137,6 +139,21 @@ public class MonthEventFragment extends Fragment {
                 ((TextView)dialog.getCustomView().findViewById(R.id.date)).setText(eventsList.get(position).getDate().substring(0,9));
                 ((TextView)dialog.getCustomView().findViewById(R.id.years)).setText("YEARS:\n"+Math.round(years)+"");
                 ((TextView)dialog.getCustomView().findViewById(R.id.remarks)).setText("REMARKS:\n"+eventsList.get(position).getRemarks());
+
+                String city = eventsList.get(position).getCity();
+                ((TextView)dialog.getCustomView().findViewById(R.id.city)).setText(city.equals("")||city.equals("null")?"":"CITY: "+city);
+
+                String temp = eventsList.get(position).getContact();
+                if(!temp.equals("")&&!temp.equals("null"))
+                    ((TextView)dialog.getCustomView().findViewById(R.id.contact)).setText("Contact: "+temp);
+                else
+                    ((TextView)dialog.getCustomView().findViewById(R.id.contact)).setVisibility(View.GONE);
+
+                temp = eventsList.get(position).getEmail();
+                if(!temp.equals("")&&!temp.equals("null"))
+                    ((TextView)dialog.getCustomView().findViewById(R.id.email)).setText("Email: "+temp);
+                else
+                    ((TextView)dialog.getCustomView().findViewById(R.id.email)).setVisibility(View.GONE);
 
                 dialog.show();
 

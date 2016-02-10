@@ -1,10 +1,10 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/white"
-    tools:context=".Fragments.ProfileFragment">
+    android:background="@color/white">
 
     <com.nirhart.parallaxscroll.views.ParallaxScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -599,4 +599,48 @@
         </RelativeLayout>
     </com.nirhart.parallaxscroll.views.ParallaxScrollView>
 
-</LinearLayout>
+    <View
+        android:id="@+id/shadowView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:clickable="true"
+        android:background="#99000000" />
+
+    <net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/multiple_actions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fab:fab_addButtonColorNormal="@color/md_green_600"
+        fab:fab_addButtonColorPressed="@color/md_green_800"
+        fab:fab_addButtonPlusIconColor="@color/md_white_1000"
+        fab:fab_expandDirection="up"
+        fab:fab_labelStyle="@style/menu_labels_style"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true">
+
+        <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_icon="@drawable/ic_phone_white"
+            fab:fab_colorNormal="@color/md_green_600"
+            fab:fab_title="Call This Member"
+            fab:fab_colorPressed="@color/md_green_800"/>
+
+        <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_icon="@drawable/ic_email_white"
+            fab:fab_colorNormal="@color/md_green_600"
+            fab:fab_title="Email This Member"
+            fab:fab_colorPressed="@color/md_green_800"/>
+
+    </net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu>
+
+</RelativeLayout>

@@ -22,5 +22,8 @@
     android:background="?selectableItemBackground"
     android:clickable="true"
     android:gravity="center_vertical"
+    android:textColor="@color/md_grey_600"
+    android:textStyle="bold"
+    android:textSize="@dimen/_13sdp"
     android:paddingRight="@dimen/_16sdp"
     android:paddingLeft="@dimen/_16sdp" />

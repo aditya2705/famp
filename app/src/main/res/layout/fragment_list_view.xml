@@ -9,6 +9,7 @@
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginRight="@dimen/_3sdp"
         app:fastScrollAutoHide="true"
         app:fastScrollAutoHideDelay="1500"
         app:fastScrollPopupBgColor="@color/md_green_700"

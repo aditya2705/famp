@@ -2,6 +2,7 @@ package com.alphalabz.familyapp.Fragments;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.alphalabz.familyapp.Activities.MainActivity;
+import com.alphalabz.familyapp.Activities.ProfileActivity;
 import com.alphalabz.familyapp.Custom.RecyclerItemClickListener;
 import com.alphalabz.familyapp.Custom.SearchCustomClasses.SearchListAdapter;
 import com.alphalabz.familyapp.Custom.SearchCustomClasses.SearchMemberModel;
@@ -80,6 +82,7 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
 
     private ArrayList<Person> personList = new ArrayList<>();
     private LinkedHashMap<String,String> searchableMembersStringMap = new LinkedHashMap<>();
+    private LinkedHashMap<String,Person> membersListMap = new LinkedHashMap<>();
 
     private View rootView;
 
@@ -183,6 +186,7 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
             s+= person.getFirst_name().equals("null")||person.getFirst_name().equals("")?"":person.getFirst_name()+" ";
             s+= person.getLast_name().equals("null")||person.getLast_name().equals("")?"":person.getLast_name()+" ";
             searchableMembersStringMap.put(person.getUnique_id(),s);
+            membersListMap.put(person.getUnique_id(), person);
         }
 
         searchableMembersStringMap = sortHashMapByValuesD(searchableMembersStringMap);
@@ -197,7 +201,35 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
         mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(getActivity(),"Unique_id"+mAdapter.getItem(position).getUniqueIDString(),Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(),"Unique_id"+mAdapter.getItem(position).getUniqueIDString(),Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(mainActivity, ProfileActivity.class);
+                Bundle bundle = new Bundle();
+
+                Person actualPerson = membersListMap.get(mAdapter.getItem(position).getUniqueIDString());
+                bundle.putSerializable("Actual_Person", actualPerson);
+
+                Person motherOfPerson = null, fatherOfPerson = null, spouseOfPerson = null;
+
+                if (membersListMap.get(actualPerson.getMother_id()) != null)
+                    motherOfPerson = new PersonLayout(membersListMap.get(actualPerson.getMother_id()));
+
+                if (membersListMap.get(actualPerson.getFather_id()) != null)
+                    fatherOfPerson = new PersonLayout(membersListMap.get(actualPerson.getFather_id()));
+
+
+                if (membersListMap.get(actualPerson.getSpouse_id()) != null)
+                    spouseOfPerson = new PersonLayout(membersListMap.get(actualPerson.getSpouse_id()));
+
+
+                bundle.putSerializable("Person_Mother", motherOfPerson);
+                bundle.putSerializable("Person_Father", fatherOfPerson);
+                bundle.putSerializable("Person_Spouse", spouseOfPerson);
+
+                intent.putExtras(bundle);
+                startActivity(intent);
+
+
             }
         }));
 

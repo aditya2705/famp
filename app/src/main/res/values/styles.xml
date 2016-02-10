@@ -20,6 +20,7 @@
         <item name="colorPrimary">@color/md_green_600</item>
         <item name="colorPrimaryDark">@color/md_green_700</item>
         <item name="colorAccent">@color/md_green_600</item>
+        <item name="android:textCursorDrawable">@null</item>
         <item name="android:textColorPrimary">@color/md_white_1000</item>
         <item name="android:textColorSecondary">@color/md_white_1000</item>
         <item name="android:itemTextAppearance">@style/menuItemColor</item>

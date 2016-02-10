@@ -35,8 +35,6 @@ import com.alphalabz.familyapp.Activities.ProfileActivity;
 import com.alphalabz.familyapp.Objects.Person;
 import com.alphalabz.familyapp.Objects.PersonLayout;
 import com.alphalabz.familyapp.R;
-import com.davemorrissey.labs.subscaleview.ImageSource;
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
 import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
 import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
@@ -372,7 +370,6 @@ public class TreeViewFragment extends Fragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                generateImage();
                 mainActivity.progressDialog.dismiss();
             }
         }, 500);
@@ -566,7 +563,7 @@ public class TreeViewFragment extends Fragment {
         display.getSize(size);
         int screenHeight = size.y;
 
-        int height = Math.min(screenHeight, totalHeight);
+        int height = (int) Math.min(screenHeight/1.1, totalHeight);
         float percent = height / (float)totalHeight;
 
         Bitmap canvasBitmap = Bitmap.createBitmap((int)(totalWidth*percent),(int)(totalHeight*percent), Bitmap.Config.ARGB_8888);
@@ -586,18 +583,10 @@ public class TreeViewFragment extends Fragment {
         return canvasBitmap;
     }
 
-    private void showImageDialog() {
-
-        Dialog d = new Dialog(getActivity());
-        d.setContentView(R.layout.image_dialog_layout);
-        SubsamplingScaleImageView imageView = (SubsamplingScaleImageView) d.findViewById(R.id.imageView);
-        imageView.setImage(ImageSource.bitmap(familyTreeBitmap));
-        d.show();
-
-    }
-
 
     private void saveImage() {
+
+        generateImage();
 
         class saveImageTask extends AsyncTask<String, Void, String> {
 

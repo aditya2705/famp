@@ -3,7 +3,6 @@ package com.alphalabz.familyapp.Activities;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,10 +15,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.afollestad.materialdialogs.MaterialDialog;
+import com.alphalabz.familyapp.Fragments.BlankFragment;
 import com.alphalabz.familyapp.Fragments.EventTableFragment;
 import com.alphalabz.familyapp.Fragments.EventsFragment;
 import com.alphalabz.familyapp.Fragments.GalleryFragment;
+import com.alphalabz.familyapp.Fragments.SearchListFragment;
 import com.alphalabz.familyapp.Fragments.TreeViewFragment;
 import com.alphalabz.familyapp.R;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
@@ -28,8 +28,6 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
-
-import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -79,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
                 .withActionBarDrawerToggleAnimated(true)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName("Home").withIcon(FontAwesome.Icon.faw_home),
+                        new PrimaryDrawerItem().withName("Tree View").withIcon(FontAwesome.Icon.faw_tree),
+                        new PrimaryDrawerItem().withName("All Members List").withIcon(FontAwesome.Icon.faw_list_ul),
                         new PrimaryDrawerItem().withName("Events").withIcon(FontAwesome.Icon.faw_birthday_cake),
                         new PrimaryDrawerItem().withName("Data Table").withIcon(FontAwesome.Icon.faw_table),
                         new PrimaryDrawerItem().withName("Gallery").withIcon(FontAwesome.Icon.faw_image)
@@ -94,6 +94,10 @@ public class MainActivity extends AppCompatActivity {
                             final Fragment fragment;
                             switch (i) {
                                 case 0:
+                                    fragment = new BlankFragment();
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                                    break;
+                                case 1:
                                     progressDialog.show();
                                     fragment = new TreeViewFragment();
                                     new Handler().postDelayed(new Runnable(){
@@ -104,15 +108,19 @@ public class MainActivity extends AppCompatActivity {
                                     }, 1000);
 
                                     break;
-                                case 1:
-                                    fragment = new EventsFragment();
-                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
-                                    break;
                                 case 2:
-                                    fragment = new EventTableFragment();
+                                    fragment = new SearchListFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
                                 case 3:
+                                    fragment = new EventsFragment();
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                                    break;
+                                case 4:
+                                    fragment = new EventTableFragment();
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                                    break;
+                                case 5:
                                     fragment = new GalleryFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
@@ -141,27 +149,14 @@ public class MainActivity extends AppCompatActivity {
 
         result.setSelectionAtPosition(0,true);
 
-
     }
 
-    public void showDialog(String title, String content, final String agree) {
-        MaterialDialog dialog = new MaterialDialog.Builder(new MainActivity())
-                .title(title)
-                .items("Xyz Birthday")
-                .positiveText(agree)
-                .titleColor(Color.BLACK)
-                .contentColor(Color.BLACK) // notice no 'res' postfix for literal color
-                .dividerColorRes(R.color.md_red_600)
-                .backgroundColorRes(R.color.md_white_1000)
-                .positiveColorRes(R.color.md_green_500)
-                .build();
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        menu.findItem(R.id.search).setVisible(false);
         return true;
     }
 

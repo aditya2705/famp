@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -18,7 +19,47 @@ import com.alphalabz.familyapp.R;
 import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
 import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 public class ProfileActivity extends AppCompatActivity {
+
+    private static final String TAG_RESULTS = "result";
+    private static final String TAG_ID = "unique_id";
+    private static final String TAG_GEN = "gen";
+    private static final String TAG_TITLE = "title";
+    private static final String TAG_FIRST_NAME = "first_name";
+    private static final String TAG_MIDDLE_NAME = "middle_name";
+    private static final String TAG_LAST_NAME = "last_name";
+    private static final String TAG_NICK_NAME = "nick_name";
+    private static final String TAG_GENDER = "gender";
+    private static final String TAG_IN_LAW = "in_law";
+    private static final String TAG_MOTHER_ID = "mother_id";
+    private static final String TAG_MOTHER_NAME = "mother_name";
+    private static final String TAG_FATHER_ID = "father_id";
+    private static final String TAG_FATHER_NAME = "father_name";
+    private static final String TAG_SPOUSE_ID = "spouse_id";
+    private static final String TAG_SPOUSE_NAME = "spouse_name";
+    private static final String TAG_BIRTH_DATE = "birth_date";
+    private static final String TAG_MARRIAGE_DATE = "marriage_date";
+    private static final String TAG_DEATH_DATE = "death_date";
+    private static final String TAG_MOBILE_NUMBER = "mobile_number";
+    private static final String TAG_ALTERNATE_NUMBER = "alternate_number";
+    private static final String TAG_RESIDENCE_NUMBER = "residence_number";
+    private static final String TAG_EMAIL1 = "email1";
+    private static final String TAG_EMAIL2 = "email2";
+    private static final String TAG_ADDRESS_1 = "address_1";
+    private static final String TAG_ADDRESS_2 = "address_2";
+    private static final String TAG_CITY = "city";
+    private static final String TAG_STATE_COUNTRY = "state_country";
+    private static final String TAG_PINCODE = "pincode";
+    private static final String TAG_DESIGNATION = "designation";
+    private static final String TAG_COMPANY = "company";
+    private static final String TAG_INDUSTRY_SPECIAL = "industry_special";
+    private static final String TAG_IMAGE_URL = "image_url";
 
     private Person actualPerson, motherOfPerson, fatherOfPerson, spouseOfPerson;
     private String temp;
@@ -288,7 +329,115 @@ public class ProfileActivity extends AppCompatActivity {
         if (k == 3)
             findViewById(R.id.professional_card_layout).setVisibility(View.GONE);
 
-        k = 0;
+
+        checkAndAddChildren();
+
+
+
+
+    }
+
+    private void checkAndAddChildren() {
+
+        ArrayList<Person> childrenList = new ArrayList<>();
+        JSONArray membersJsonArray=null;
+
+        String membersString = getSharedPreferences("FAMP", 0).getString("MEMBERS_STRING","");
+        JSONObject jsonObj = null;
+        try {
+            jsonObj = new JSONObject(membersString);
+
+            membersJsonArray = jsonObj.getJSONArray(TAG_RESULTS);
+
+            for (int i = 0; i < membersJsonArray.length(); i++) {
+                JSONObject c = membersJsonArray.getJSONObject(i);
+
+                String unique_id,generation,title,first_name,middle_name,last_name,nick_name
+                        ,gender,in_law,mother_id,mother_name,father_id,father_name,spouse_id,spouse_name,birth_date,marriage_date,death_date,
+                        mobile_number,alternate_number,residence_number,email1,email2,address_1,address_2,city,state_country,pincode
+                        ,designation,company,industry_special,image_url;
+
+
+                unique_id = c.getString(TAG_ID);
+                generation = c.getString(TAG_GEN);
+                title = c.getString(TAG_TITLE);
+                first_name = c.getString(TAG_FIRST_NAME);
+                middle_name = c.getString(TAG_MIDDLE_NAME);
+                last_name = c.getString(TAG_LAST_NAME);
+                nick_name = c.getString(TAG_NICK_NAME);
+                gender = c.getString(TAG_GENDER);
+                in_law = c.getString(TAG_IN_LAW);
+                mother_id = c.getString(TAG_MOTHER_ID);
+                mother_name = c.getString(TAG_MOTHER_NAME);
+                father_id = c.getString(TAG_FATHER_ID);
+                father_name = c.getString(TAG_FATHER_NAME);
+                spouse_id = c.getString(TAG_SPOUSE_ID);
+                spouse_name = c.getString(TAG_SPOUSE_NAME);
+                birth_date = c.getString(TAG_BIRTH_DATE);
+                marriage_date = c.getString(TAG_MARRIAGE_DATE);
+                death_date = c.getString(TAG_DEATH_DATE);
+                mobile_number = c.getString(TAG_MOBILE_NUMBER);
+                alternate_number = c.getString(TAG_ALTERNATE_NUMBER);
+                residence_number = c.getString(TAG_RESIDENCE_NUMBER);
+                email1 = c.getString(TAG_EMAIL1);
+                email2 = c.getString(TAG_EMAIL2);
+                address_1 = c.getString(TAG_ADDRESS_1);
+                address_2 = c.getString(TAG_ADDRESS_2);
+                city = c.getString(TAG_CITY);
+                state_country = c.getString(TAG_STATE_COUNTRY);
+                pincode = c.getString(TAG_PINCODE);
+                designation = c.getString(TAG_DESIGNATION);
+                company = c.getString(TAG_COMPANY);
+                industry_special = c.getString(TAG_INDUSTRY_SPECIAL);
+                image_url = c.getString(TAG_IMAGE_URL);
+
+                if(actualPerson.getGender().equals("M")){
+
+                    if(actualPerson.getUnique_id().equals(father_id)){
+                        Person person = new Person(unique_id, generation, title, first_name, middle_name, last_name, nick_name,
+                                gender, in_law, mother_id, mother_name, father_id, father_name, spouse_id,
+                                spouse_name, birth_date, marriage_date, death_date, mobile_number, alternate_number,
+                                residence_number, email1, email2, address_1, address_2, city, state_country, pincode,
+                                designation, company, industry_special, image_url, -1);
+
+                        childrenList.add(person);
+                    }
+
+                }else{
+
+                    if(actualPerson.getUnique_id().equals(mother_id)){
+                        Person person = new Person(unique_id, generation, title, first_name, middle_name, last_name, nick_name,
+                                gender, in_law, mother_id, mother_name, father_id, father_name, spouse_id,
+                                spouse_name, birth_date, marriage_date, death_date, mobile_number, alternate_number,
+                                residence_number, email1, email2, address_1, address_2, city, state_country, pincode,
+                                designation, company, industry_special, image_url, -1);
+
+                        childrenList.add(person);
+                    }
+
+                }
+
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        for(int i=0;i<childrenList.size();i++) {
+            View childView = View.inflate(this, R.layout.profile_child_layout, null);
+            ((TextView)childView.findViewById(R.id.child_name)).setText(childrenList.get(i).getFirst_name()+" "+childrenList.get(i).getLast_name());
+            if(i%2==0){
+                ((LinearLayout)findViewById(R.id.vertical_layout_even)).addView(childView);
+            }else{
+                ((LinearLayout)findViewById(R.id.vertical_layout_odd)).addView(childView);
+            }
+        }
+
+        if(childrenList.size()==0){
+            findViewById(R.id.children_details_card).setVisibility(View.GONE);
+        }
+
 
 
     }

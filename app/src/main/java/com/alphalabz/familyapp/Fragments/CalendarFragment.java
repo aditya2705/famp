@@ -1,13 +1,11 @@
 package com.alphalabz.familyapp.Fragments;
 
 
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +40,7 @@ public class CalendarFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View v = inflater.inflate(R.layout.fragment_events, container, false);
+        View v = inflater.inflate(R.layout.fragment_calendar_events, container, false);
         calendarView = (MaterialCalendarView) v.findViewById(R.id.calendarView);
         calendarView.setFirstDayOfWeek(Calendar.MONDAY);
 

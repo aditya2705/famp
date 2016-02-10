@@ -1,22 +1,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <com.nirhart.parallaxscroll.views.ParallaxScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:parallax_factor="1.9">
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:background="@color/white"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/white">
 
             <ImageView
                 android:id="@+id/header_imageview"
@@ -42,9 +40,9 @@
                     android:id="@+id/profile_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_5sdp"
                     android:text="Name"
                     android:textSize="@dimen/_20sdp"
-                    android:layout_marginBottom="@dimen/_5sdp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -52,8 +50,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_4sdp"
-                    android:text="Gender : Male"
                     android:gravity="center"
+                    android:text="Gender : Male"
                     android:textColor="@color/profile_font" />
 
                 <TextView
@@ -61,8 +59,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_4sdp"
-                    android:text="Birth Date : 27th May 1995"
                     android:gravity="center"
+                    android:text="Birth Date : 27th May 1995"
                     android:textColor="@color/profile_font" />
 
                 <TextView
@@ -70,10 +68,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_4sdp"
-                    android:text="Marriage : 17th March 2020"
                     android:gravity="center"
-                    android:visibility="visible"
-                    android:textColor="@color/profile_font" />
+                    android:text="Marriage : 17th March 2020"
+                    android:textColor="@color/profile_font"
+                    android:visibility="visible" />
 
 
                 <TextView
@@ -81,10 +79,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_4sdp"
-                    android:text="Demise : 27th May 2070"
                     android:gravity="center"
-                    android:visibility="visible"
-                    android:textColor="@color/profile_font" />
+                    android:text="Demise : 27th May 2070"
+                    android:textColor="@color/profile_font"
+                    android:visibility="visible" />
 
 
             </LinearLayout>
@@ -104,13 +102,13 @@
                     android:orientation="vertical">
 
                     <android.support.v7.widget.CardView
-                        android:background="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_16sdp"
                         android:layout_marginLeft="@dimen/_16sdp"
                         android:layout_marginRight="@dimen/_16sdp"
-                        android:layout_marginTop="@dimen/_16sdp">
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:background="@color/white">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -123,9 +121,9 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:gravity="center"
                                 android:padding="@dimen/_8sdp"
                                 android:text="Personal Details"
-                                android:gravity="center"
                                 android:textColor="@color/half_black"
                                 android:textStyle="bold" />
 
@@ -148,9 +146,9 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
+                                        android:text="Aditya"
                                         android:textColor="@color/half_black"
                                         android:textSize="@dimen/_15sdp"
-                                        android:text="Aditya"
                                         android:textStyle="bold" />
                                 </LinearLayout>
 
@@ -166,9 +164,9 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
+                                        android:text="Rathi"
                                         android:textColor="@color/half_black"
                                         android:textSize="@dimen/_15sdp"
-                                        android:text="Rathi"
                                         android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
@@ -190,8 +188,8 @@
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:text="First Name"
                                         android:gravity="center"
+                                        android:text="First Name"
                                         android:textColor="@color/half_black"
                                         android:textSize="@dimen/_12sdp" />
                                 </LinearLayout>
@@ -206,8 +204,8 @@
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:text="Last Name"
                                         android:gravity="center"
+                                        android:text="Last Name"
                                         android:textColor="@color/half_black"
                                         android:textSize="@dimen/_12sdp" />
                                 </LinearLayout>
@@ -232,9 +230,9 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
+                                        android:text="Sunilkumar"
                                         android:textColor="@color/half_black"
                                         android:textSize="@dimen/_15sdp"
-                                        android:text="Sunilkumar"
                                         android:textStyle="bold" />
                                 </LinearLayout>
 
@@ -250,9 +248,9 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
+                                        android:text="Shubhada"
                                         android:textColor="@color/half_black"
                                         android:textSize="@dimen/_15sdp"
-                                        android:text="Shubhada"
                                         android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
@@ -275,8 +273,8 @@
                                         android:id="@+id/father_text"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:text="Father's Name"
                                         android:gravity="center"
+                                        android:text="Father's Name"
                                         android:textColor="@color/half_black"
                                         android:textSize="@dimen/_12sdp" />
                                 </LinearLayout>
@@ -292,8 +290,8 @@
                                         android:id="@+id/mother_text"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:text="Mother's Name"
                                         android:gravity="center"
+                                        android:text="Mother's Name"
                                         android:textColor="@color/half_black"
                                         android:textSize="@dimen/_12sdp" />
                                 </LinearLayout>
@@ -318,9 +316,9 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
+                                        android:text="Aveena"
                                         android:textColor="@color/half_black"
                                         android:textSize="@dimen/_15sdp"
-                                        android:text="Aveena"
                                         android:textStyle="bold" />
                                 </LinearLayout>
 
@@ -345,8 +343,8 @@
                                         android:id="@+id/spouse_text"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:text="Spouse's Name"
                                         android:gravity="center"
+                                        android:text="Spouse's Name"
                                         android:textColor="@color/half_black"
                                         android:textSize="@dimen/_12sdp" />
                                 </LinearLayout>
@@ -357,13 +355,13 @@
                     </android.support.v7.widget.CardView>
 
                     <android.support.v7.widget.CardView
-                        android:id="@+id/contact_details_card"
+                        android:id="@+id/children_details_card"
                         android:layout_width="match_parent"
-                        android:background="@color/white"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_16sdp"
                         android:layout_marginLeft="@dimen/_16sdp"
-                        android:layout_marginRight="@dimen/_16sdp">
+                        android:layout_marginRight="@dimen/_16sdp"
+                        android:background="@color/white">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -375,9 +373,67 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:padding="@dimen/_8sdp"
+                                android:text="Children Details"
+                                android:textColor="@color/half_black"
+                                android:textStyle="bold" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center">
+
+                                <LinearLayout
+                                    android:id="@+id/vertical_layout_even"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center_horizontal"
+                                    android:orientation="vertical">
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/vertical_layout_odd"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center_horizontal"
+                                    android:orientation="vertical">
+
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/contact_details_card"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_16sdp"
+                        android:layout_marginLeft="@dimen/_16sdp"
+                        android:layout_marginRight="@dimen/_16sdp"
+                        android:background="@color/white">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:orientation="vertical"
+                            android:padding="@dimen/_14sdp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
                                 android:padding="@dimen/_8sdp"
                                 android:text="Contact Details"
-                                android:gravity="center"
                                 android:textColor="@color/half_black"
                                 android:textStyle="bold" />
 
@@ -498,9 +554,9 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:gravity="center"
                                 android:padding="@dimen/_8sdp"
                                 android:text="Professional Details"
-                                android:gravity="center"
                                 android:textColor="@color/half_black"
                                 android:textStyle="bold" />
 
@@ -594,7 +650,7 @@
                 android:layout_above="@+id/informations_container"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="@dimen/_minus20sdp"
-                android:src="@drawable/profile"/>
+                android:src="@drawable/profile" />
 
         </RelativeLayout>
     </com.nirhart.parallaxscroll.views.ParallaxScrollView>
@@ -603,43 +659,43 @@
         android:id="@+id/shadowView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
+        android:background="#99000000"
         android:clickable="true"
-        android:background="#99000000" />
+        android:visibility="gone" />
 
     <net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/multiple_actions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         fab:fab_addButtonColorNormal="@color/md_green_600"
         fab:fab_addButtonColorPressed="@color/md_green_800"
         fab:fab_addButtonPlusIconColor="@color/md_white_1000"
         fab:fab_expandDirection="up"
-        fab:fab_labelStyle="@style/menu_labels_style"
-        android:layout_marginBottom="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true">
+        fab:fab_labelStyle="@style/menu_labels_style">
 
         <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
             android:id="@+id/action_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fab:fab_icon="@drawable/ic_phone_white"
             fab:fab_colorNormal="@color/md_green_600"
-            fab:fab_title="Call This Member"
-            fab:fab_colorPressed="@color/md_green_800"/>
+            fab:fab_colorPressed="@color/md_green_800"
+            fab:fab_icon="@drawable/ic_phone_white"
+            fab:fab_title="Call This Member" />
 
         <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
             android:id="@+id/action_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fab:fab_icon="@drawable/ic_email_white"
             fab:fab_colorNormal="@color/md_green_600"
-            fab:fab_title="Email This Member"
-            fab:fab_colorPressed="@color/md_green_800"/>
+            fab:fab_colorPressed="@color/md_green_800"
+            fab:fab_icon="@drawable/ic_email_white"
+            fab:fab_title="Email This Member" />
 
     </net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu>
 

@@ -297,7 +297,7 @@ public class MainActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 eventsListJsonString = result;
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("EVENTS_STRING", membersListJsonString);
+                editor.putString("EVENTS_STRING", eventsListJsonString);
                 editor.apply();
 
                 if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof EventsTableFragment) {

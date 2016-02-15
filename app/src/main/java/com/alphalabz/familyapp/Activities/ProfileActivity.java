@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,12 +13,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 import com.alphalabz.familyapp.Objects.Person;
 import com.alphalabz.familyapp.R;
-
-import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
-import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,7 +63,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     private Person actualPerson, motherOfPerson, fatherOfPerson, spouseOfPerson;
     private String temp;
-    private FloatingActionsMenu menuMultipleActions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,69 +80,11 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         int k = 0;
-
-        FloatingActionButton actionButton1 = (FloatingActionButton)
-                findViewById(R.id.action_phone);
-        if (!actualPerson.getMobile_number().equals("") && !actualPerson.getMobile_number().equals("null")) {
-            actionButton1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    phoneIntent();
-                    menuMultipleActions.collapse();
-                }
-            });
-        } else {
-            actionButton1.setVisibility(View.GONE);
-            ++k;
-        }
-
-        FloatingActionButton actionButton2 = (FloatingActionButton)
-                findViewById(R.id.action_email);
-        if (!actualPerson.getEmail1().equals("") && !actualPerson.getEmail1().equals("null")) {
-            actionButton2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    emailIntent();
-                    menuMultipleActions.collapse();
-                }
-            });
-        } else {
-            actionButton2.setVisibility(View.GONE);
-            ++k;
-        }
-
-
-        menuMultipleActions = (FloatingActionsMenu) findViewById(R.id.multiple_actions);
-        findViewById(R.id.shadowView).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (v.getVisibility() == View.VISIBLE) {
-                    menuMultipleActions.collapse();
-                }
-            }
-        });
-        menuMultipleActions.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
-            @Override
-            public void onMenuExpanded() {
-                findViewById(R.id.shadowView).setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onMenuCollapsed() {
-                findViewById(R.id.shadowView).setVisibility(View.INVISIBLE);
-            }
-        });
-
-        if (k == 2)
-            menuMultipleActions.setVisibility(View.GONE);
-
-
-        k = 0;
         ImageView userIcon = (ImageView) findViewById(R.id.user_icon);
         userIcon.setImageResource(R.drawable.profile);
 
         TextView nameT = (TextView) findViewById(R.id.profile_name);
-        String newName = ((actualPerson.getTitle().equals("null") || actualPerson.getTitle().equals("")) ? "" : (actualPerson.getTitle() + " ")) + actualPerson.getFirst_name() + " " + actualPerson.getLast_name();
+        String newName = ((actualPerson.getTitle().equals("null") || actualPerson.getTitle().equals("")) ? "" : (actualPerson.getTitle() + " ")) + actualPerson.getFirst_name() + (actualPerson.getMiddle_name().equals("null")?"":" "+actualPerson.getMiddle_name()) +" " + actualPerson.getLast_name();
         nameT.setText(newName);
 
         TextView firstNameT = (TextView) findViewById(R.id.profile_firstname);
@@ -154,7 +95,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         TextView fatherNameT = (TextView) findViewById(R.id.profile_fathername);
         if (fatherOfPerson != null) {
-            temp = fatherOfPerson.getFirst_name();
+            temp = fatherOfPerson.getFirst_name()+(fatherOfPerson.getMiddle_name().equals("null")?"":" "+fatherOfPerson.getMiddle_name());
             if (!temp.equals(""))
                 fatherNameT.setText(temp);
             else {
@@ -176,7 +117,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         TextView motherNameT = (TextView) findViewById(R.id.profile_mothername);
         if (motherOfPerson != null) {
-            temp = motherOfPerson.getFirst_name();
+            temp = motherOfPerson.getFirst_name()+(motherOfPerson.getMiddle_name().equals("null")?"":" "+motherOfPerson.getMiddle_name());;
             if (!temp.equals(""))
                 motherNameT.setText(temp);
             else {
@@ -198,7 +139,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         TextView spouseNameT = (TextView) findViewById(R.id.profile_spousename);
         if (spouseOfPerson != null) {
-            temp = spouseOfPerson.getFirst_name();
+            temp = spouseOfPerson.getFirst_name()+(spouseOfPerson.getMiddle_name().equals("null")?"":" "+spouseOfPerson.getMiddle_name());;
             if (!temp.equals(""))
                 spouseNameT.setText(temp);
             else {
@@ -252,29 +193,83 @@ public class ProfileActivity extends AppCompatActivity {
 
         k = 0;
 
-        TextView emailT = (TextView) findViewById(R.id.profile_email);
+
+
+        TextView email1T = (TextView) findViewById(R.id.profile_email1);
         temp = !actualPerson.getEmail1().equals("null") ? actualPerson.getEmail1() : "-";
-        if (!temp.equals("-"))
-            emailT.setText(temp);
+        if (!temp.equals("-")) {
+            email1T.setText(temp);
+            findViewById(R.id.email1_click_layout).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    emailIntent(actualPerson.getEmail1());
+                }
+            });
+        }
         else {
-            findViewById(R.id.email_layout).setVisibility(View.GONE);
+            findViewById(R.id.email_layout1).setVisibility(View.GONE);
             ++k;
         }
 
-        TextView mobileT = (TextView) findViewById(R.id.profile_mobile);
-        temp = !actualPerson.getMobile_number().equals("null") ? actualPerson.getMobile_number() : "-";
-        temp += !actualPerson.getAlternate_number().equals("null") ? " | " + actualPerson.getMobile_number() : "";
-        if (!temp.equals("-"))
-            mobileT.setText(temp);
+        TextView email2T = (TextView) findViewById(R.id.profile_email2);
+        temp = !actualPerson.getEmail2().equals("null") ? actualPerson.getEmail2() : "-";
+        if (!temp.equals("-")) {
+            email2T.setText(temp);
+            findViewById(R.id.email2_click_layout).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    emailIntent(actualPerson.getEmail2());
+                }
+            });
+        }
         else {
-            findViewById(R.id.mobile_layout).setVisibility(View.GONE);
+            findViewById(R.id.email_layout2).setVisibility(View.GONE);
+            ++k;
+        }
+
+        TextView mobile1T = (TextView) findViewById(R.id.profile_mobile1);
+        temp = !actualPerson.getMobile_number().equals("null") ? actualPerson.getMobile_number() : "-";
+        if (!temp.equals("-")) {
+            mobile1T.setText(temp);
+            findViewById(R.id.mobile1_click_layout).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    phoneIntent(actualPerson.getMobile_number());
+                }
+            });
+        }
+        else {
+            findViewById(R.id.mobile1_layout).setVisibility(View.GONE);
+            ++k;
+        }
+
+        TextView mobile2T = (TextView) findViewById(R.id.profile_mobile2);
+        temp = !actualPerson.getAlternate_number().equals("null") ? actualPerson.getAlternate_number() : "-";
+        if (!temp.equals("-")) {
+            mobile2T.setText(temp);
+            findViewById(R.id.mobile2_click_layout).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    phoneIntent(actualPerson.getAlternate_number());
+                }
+            });
+        }
+        else {
+            findViewById(R.id.mobile2_layout).setVisibility(View.GONE);
             ++k;
         }
 
         TextView residenceT = (TextView) findViewById(R.id.profile_residence_number);
         temp = !actualPerson.getResidence_number().equals("null") ? actualPerson.getResidence_number() : "-";
-        if (!temp.equals("-"))
+        if (!temp.equals("-")) {
             residenceT.setText(temp);
+            findViewById(R.id.residence_number_click_layout).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    phoneIntent(actualPerson.getResidence_number());
+                }
+            });
+        }
         else {
             findViewById(R.id.residence_layout).setVisibility(View.GONE);
             ++k;
@@ -293,7 +288,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
 
-        if (k == 4)
+        if (k == 6)
             findViewById(R.id.contact_details_card).setVisibility(View.GONE);
 
         k = 0;
@@ -393,7 +388,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                 if(actualPerson.getGender().equals("M")){
 
-                    if(actualPerson.getUnique_id().equals(father_id)){
+                    if(actualPerson.getUnique_id().equals(father_id)&&!in_law.equals("Y")){
                         Person person = new Person(unique_id, generation, title, first_name, middle_name, last_name, nick_name,
                                 gender, in_law, mother_id, mother_name, father_id, father_name, spouse_id,
                                 spouse_name, birth_date, marriage_date, death_date, mobile_number, alternate_number,
@@ -405,7 +400,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                 }else{
 
-                    if(actualPerson.getUnique_id().equals(mother_id)){
+                    if(actualPerson.getUnique_id().equals(mother_id)&&!in_law.equals("Y")){
                         Person person = new Person(unique_id, generation, title, first_name, middle_name, last_name, nick_name,
                                 gender, in_law, mother_id, mother_name, father_id, father_name, spouse_id,
                                 spouse_name, birth_date, marriage_date, death_date, mobile_number, alternate_number,
@@ -426,13 +421,16 @@ public class ProfileActivity extends AppCompatActivity {
 
         for(int i=0;i<childrenList.size();i++) {
             View childView = View.inflate(this, R.layout.profile_child_layout, null);
-            ((TextView)childView.findViewById(R.id.child_name)).setText(childrenList.get(i).getFirst_name()+" "+childrenList.get(i).getLast_name());
+            ((TextView)childView.findViewById(R.id.child_name)).setText(childrenList.get(i).getFirst_name()+(childrenList.get(i).getMiddle_name().equals("null")?"":" "+childrenList.get(i).getMiddle_name())+" "+childrenList.get(i).getLast_name());
             if(i%2==0){
                 ((LinearLayout)findViewById(R.id.vertical_layout_even)).addView(childView);
             }else{
                 ((LinearLayout)findViewById(R.id.vertical_layout_odd)).addView(childView);
             }
         }
+
+        if(childrenList.size()<=1)
+            findViewById(R.id.vertical_layout_odd).setVisibility(View.GONE);
 
         if(childrenList.size()==0){
             findViewById(R.id.children_details_card).setVisibility(View.GONE);
@@ -442,30 +440,78 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    private void emailIntent() {
+    private void emailIntent(final String emailString) {
 
-        Intent email = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"+actualPerson.getEmail1()));
-        email.putExtra(Intent.EXTRA_SUBJECT, "Your subject here");
-        email.putExtra(Intent.EXTRA_TEXT, "");
-        startActivity(email);
+        new MaterialDialog.Builder(this)
+                .theme(Theme.LIGHT)
+                .title("EMAIL")
+                .icon(getResources().getDrawable(R.drawable.ic_email))
+                .content("Draft an email to "+emailString+" ?")
+                .negativeText("NO")
+                .positiveText("YES")
+                .positiveColor(getResources().getColor(R.color.md_green_700))
+                .titleColor(getResources().getColor(R.color.md_green_700))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        Intent email = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"+emailString));
+                        email.putExtra(Intent.EXTRA_SUBJECT, "Your subject here");
+                        email.putExtra(Intent.EXTRA_TEXT, "");
+                        startActivity(email);
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .build()
+                .show();
+
+
 
     }
 
-    private void phoneIntent() {
+    private void phoneIntent(final String phone) {
 
-        Intent phoneCallIntent;
-        phoneCallIntent = new Intent(Intent.ACTION_CALL);
-        phoneCallIntent.setData(Uri.parse("tel:" + actualPerson.getMobile_number()));
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        startActivity(phoneCallIntent);
+        new MaterialDialog.Builder(this)
+                .theme(Theme.LIGHT)
+                .title("CALL")
+                .icon(getResources().getDrawable(R.drawable.ic_contact_phone))
+                .content("Call on "+phone+" ?")
+                .positiveText("YES")
+                .negativeText("NO")
+                .positiveColor(getResources().getColor(R.color.md_green_700))
+                .titleColor(getResources().getColor(R.color.md_green_700))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        Intent phoneCallIntent;
+                        phoneCallIntent = new Intent(Intent.ACTION_CALL);
+                        phoneCallIntent.setData(Uri.parse("tel:" + phone));
+                        if (ActivityCompat.checkSelfPermission(ProfileActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                            // TODO: Consider calling
+                            //    ActivityCompat#requestPermissions
+                            // here to request the missing permissions, and then overriding
+                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                            //                                          int[] grantResults)
+                            // to handle the case where the user grants the permission. See the documentation
+                            // for ActivityCompat#requestPermissions for more details.
+                            return;
+                        }
+                        startActivity(phoneCallIntent);
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .build()
+                .show();
+
+
     }
 }

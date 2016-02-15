@@ -11,7 +11,7 @@
             android:gravity="center"
             android:text="Avantika"
             android:textColor="@color/half_black"
-            android:textSize="@dimen/_15sdp"
+            android:textSize="@dimen/_14sdp"
             android:textStyle="bold" />
 
         <TextView
@@ -20,6 +20,6 @@
             android:gravity="center"
             android:text="Child's Name"
             android:textColor="@color/half_black"
-            android:textSize="@dimen/_12sdp" />
+            android:textSize="@dimen/_10sdp" />
 
 </LinearLayout>

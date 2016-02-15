@@ -42,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_5sdp"
                     android:text="Name"
-                    android:textSize="@dimen/_20sdp"
+                    android:textSize="@dimen/_18sdp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -51,6 +51,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_4sdp"
                     android:gravity="center"
+                    android:textSize="@dimen/_12sdp"
                     android:text="Gender : Male"
                     android:textColor="@color/profile_font" />
 
@@ -61,6 +62,7 @@
                     android:layout_marginTop="@dimen/_4sdp"
                     android:gravity="center"
                     android:text="Birth Date : 27th May 1995"
+                    android:textSize="@dimen/_12sdp"
                     android:textColor="@color/profile_font" />
 
                 <TextView
@@ -70,6 +72,7 @@
                     android:layout_marginTop="@dimen/_4sdp"
                     android:gravity="center"
                     android:text="Marriage : 17th March 2020"
+                    android:textSize="@dimen/_12sdp"
                     android:textColor="@color/profile_font"
                     android:visibility="visible" />
 
@@ -81,6 +84,7 @@
                     android:layout_marginTop="@dimen/_4sdp"
                     android:gravity="center"
                     android:text="Demise : 27th May 2070"
+                    android:textSize="@dimen/_12sdp"
                     android:textColor="@color/profile_font"
                     android:visibility="visible" />
 
@@ -124,6 +128,7 @@
                                 android:gravity="center"
                                 android:padding="@dimen/_8sdp"
                                 android:text="Personal Details"
+                                android:textSize="@dimen/_12sdp"
                                 android:textColor="@color/half_black"
                                 android:textStyle="bold" />
 
@@ -148,7 +153,7 @@
                                         android:gravity="center"
                                         android:text="Aditya"
                                         android:textColor="@color/half_black"
-                                        android:textSize="@dimen/_15sdp"
+                                        android:textSize="@dimen/_14sdp"
                                         android:textStyle="bold" />
                                 </LinearLayout>
 
@@ -166,7 +171,7 @@
                                         android:gravity="center"
                                         android:text="Rathi"
                                         android:textColor="@color/half_black"
-                                        android:textSize="@dimen/_15sdp"
+                                        android:textSize="@dimen/_14sdp"
                                         android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
@@ -191,7 +196,7 @@
                                         android:gravity="center"
                                         android:text="First Name"
                                         android:textColor="@color/half_black"
-                                        android:textSize="@dimen/_12sdp" />
+                                        android:textSize="@dimen/_11sdp" />
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -207,7 +212,7 @@
                                         android:gravity="center"
                                         android:text="Last Name"
                                         android:textColor="@color/half_black"
-                                        android:textSize="@dimen/_12sdp" />
+                                        android:textSize="@dimen/_11sdp" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -232,7 +237,7 @@
                                         android:gravity="center"
                                         android:text="Sunilkumar"
                                         android:textColor="@color/half_black"
-                                        android:textSize="@dimen/_15sdp"
+                                        android:textSize="@dimen/_14sdp"
                                         android:textStyle="bold" />
                                 </LinearLayout>
 
@@ -250,7 +255,7 @@
                                         android:gravity="center"
                                         android:text="Shubhada"
                                         android:textColor="@color/half_black"
-                                        android:textSize="@dimen/_15sdp"
+                                        android:textSize="@dimen/_14sdp"
                                         android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
@@ -276,7 +281,7 @@
                                         android:gravity="center"
                                         android:text="Father's Name"
                                         android:textColor="@color/half_black"
-                                        android:textSize="@dimen/_12sdp" />
+                                        android:textSize="@dimen/_11sdp" />
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -293,7 +298,7 @@
                                         android:gravity="center"
                                         android:text="Mother's Name"
                                         android:textColor="@color/half_black"
-                                        android:textSize="@dimen/_12sdp" />
+                                        android:textSize="@dimen/_11sdp" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -316,9 +321,9 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
-                                        android:text="Aveena"
+                                        android:text="Avi"
                                         android:textColor="@color/half_black"
-                                        android:textSize="@dimen/_15sdp"
+                                        android:textSize="@dimen/_14sdp"
                                         android:textStyle="bold" />
                                 </LinearLayout>
 
@@ -346,7 +351,7 @@
                                         android:gravity="center"
                                         android:text="Spouse's Name"
                                         android:textColor="@color/half_black"
-                                        android:textSize="@dimen/_12sdp" />
+                                        android:textSize="@dimen/_11sdp" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -376,6 +381,7 @@
                                 android:gravity="center"
                                 android:padding="@dimen/_8sdp"
                                 android:text="Children Details"
+                                android:textSize="@dimen/_12sdp"
                                 android:textColor="@color/half_black"
                                 android:textStyle="bold" />
 
@@ -434,52 +440,190 @@
                                 android:gravity="center"
                                 android:padding="@dimen/_8sdp"
                                 android:text="Contact Details"
+                                android:textSize="@dimen/_12sdp"
                                 android:textColor="@color/half_black"
                                 android:textStyle="bold" />
 
                             <LinearLayout
-                                android:id="@+id/email_layout"
+                                android:id="@+id/email_layout1"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
 
                                 <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="@dimen/_13sdp"
-                                    android:text="Email"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginRight="@dimen/_6sdp"
+                                    android:layout_weight="1"
+                                    android:text="Email:"
+                                    android:textSize="@dimen/_10sdp"
                                     android:textColor="@color/half_black" />
 
-
-                                <TextView
-                                    android:id="@+id/profile_email"
-                                    android:layout_width="match_parent"
+                                <LinearLayout
+                                    android:id="@+id/email1_click_layout"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="2.5"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/half_black" />
+                                    android:gravity="center_vertical">
+
+                                    <TextView
+                                        android:id="@+id/profile_email1"
+                                        android:layout_width="@dimen/_150sdp"
+                                        android:textSize="@dimen/_10sdp"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_vertical"
+                                        android:text="adityarathi95@gmail.com"
+                                        android:singleLine="true"
+                                        android:textColor="@color/half_black" />
+
+                                    <ImageView
+                                        android:id="@+id/image_email1"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center_vertical"
+                                        android:adjustViewBounds="true"
+                                        android:src="@drawable/ic_email"/>
+
+                                </LinearLayout>
 
                             </LinearLayout>
 
                             <LinearLayout
-                                android:id="@+id/mobile_layout"
+                                android:id="@+id/email_layout2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_3sdp"
                                 android:orientation="horizontal">
 
 
                                 <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="@dimen/_13sdp"
-                                    android:text="Mobile"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginRight="@dimen/_6sdp"
+                                    android:layout_weight="1"
+                                    android:text="Alternate:"
+                                    android:textSize="@dimen/_10sdp"
                                     android:textColor="@color/half_black" />
+
+                                <LinearLayout
+                                    android:id="@+id/email2_click_layout"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="2.5"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical">
+
+                                    <TextView
+                                        android:id="@+id/profile_email2"
+                                        android:layout_width="@dimen/_150sdp"
+                                        android:textSize="@dimen/_10sdp"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_vertical"
+                                        android:text="adityarathi95@gmail.com"
+                                        android:singleLine="true"
+                                        android:textColor="@color/half_black" />
+
+                                    <ImageView
+                                        android:id="@+id/image_email2"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center_vertical"
+                                        android:adjustViewBounds="true"
+                                        android:src="@drawable/ic_email"/>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/mobile1_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_15sdp"
+                                android:orientation="horizontal">
 
 
                                 <TextView
-                                    android:id="@+id/profile_mobile"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginRight="@dimen/_6sdp"
+                                    android:text="Mobile:"
+                                    android:textSize="@dimen/_10sdp"
                                     android:textColor="@color/half_black" />
+
+
+                                <LinearLayout
+                                    android:id="@+id/mobile1_click_layout"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="2.5"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical">
+
+                                    <TextView
+                                        android:id="@+id/profile_mobile1"
+                                        android:layout_width="@dimen/_120sdp"
+                                        android:textSize="@dimen/_10sdp"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_vertical"
+                                        android:text="8237877257"
+                                        android:textColor="@color/half_black" />
+
+                                    <ImageView
+                                        android:id="@+id/image_mobile1"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center_vertical"
+                                        android:adjustViewBounds="true"
+                                        android:src="@drawable/ic_contact_phone"/>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/mobile2_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_3sdp"
+                                android:orientation="horizontal">
+
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginRight="@dimen/_6sdp"
+                                    android:text="Alternate:"
+                                    android:textSize="@dimen/_10sdp"
+                                    android:textColor="@color/half_black" />
+
+
+                                <LinearLayout
+                                    android:id="@+id/mobile2_click_layout"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="2.5"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical">
+
+                                    <TextView
+                                        android:id="@+id/profile_mobile2"
+                                        android:layout_width="@dimen/_120sdp"
+                                        android:textSize="@dimen/_10sdp"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_vertical"
+                                        android:text="2532472621"
+                                        android:textColor="@color/half_black" />
+
+                                    <ImageView
+                                        android:id="@+id/image_mobile2"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center_vertical"
+                                        android:adjustViewBounds="true"
+                                        android:src="@drawable/ic_contact_phone"/>
+
+                                </LinearLayout>
 
                             </LinearLayout>
 
@@ -487,23 +631,45 @@
                                 android:id="@+id/residence_layout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_10sdp"
+                                android:layout_marginTop="@dimen/_3sdp"
                                 android:orientation="horizontal">
 
 
                                 <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="match_parent"
                                     android:layout_marginRight="@dimen/_6sdp"
-                                    android:text="Residence: "
+                                    android:text="Residence:"
+                                    android:textSize="@dimen/_10sdp"
                                     android:textColor="@color/half_black" />
 
 
-                                <TextView
-                                    android:id="@+id/profile_residence_number"
-                                    android:layout_width="match_parent"
+                                <LinearLayout
+                                    android:id="@+id/residence_number_click_layout"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="2.5"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/half_black" />
+                                    android:gravity="center_vertical">
+
+                                    <TextView
+                                        android:id="@+id/profile_residence_number"
+                                        android:layout_width="@dimen/_120sdp"
+                                        android:textSize="@dimen/_10sdp"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_vertical"
+                                        android:text="2532472621"
+                                        android:textColor="@color/half_black" />
+
+                                    <ImageView
+                                        android:id="@+id/image_residence"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center_vertical"
+                                        android:adjustViewBounds="true"
+                                        android:src="@drawable/ic_contact_phone"/>
+
+                                </LinearLayout>
 
                             </LinearLayout>
 
@@ -512,22 +678,27 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_10sdp"
-                                android:layout_marginTop="@dimen/_10sdp"
+                                android:layout_marginTop="@dimen/_15sdp"
                                 android:orientation="horizontal">
 
 
                                 <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="match_parent"
                                     android:layout_marginRight="@dimen/_6sdp"
                                     android:text="Address"
+                                    android:textSize="@dimen/_10sdp"
                                     android:textColor="@color/half_black" />
 
 
                                 <TextView
                                     android:id="@+id/profile_address"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="2.5"
+                                    android:textSize="@dimen/_10sdp"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center_vertical"
                                     android:textColor="@color/half_black" />
 
                             </LinearLayout>
@@ -556,6 +727,7 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:padding="@dimen/_8sdp"
+                                android:textSize="@dimen/_12sdp"
                                 android:text="Professional Details"
                                 android:textColor="@color/half_black"
                                 android:textStyle="bold" />
@@ -568,17 +740,22 @@
 
 
                                 <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="@dimen/_13sdp"
-                                    android:text="Designation"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginRight="@dimen/_6sdp"
+                                    android:text="Designation:"
+                                    android:textSize="@dimen/_10sdp"
                                     android:textColor="@color/half_black" />
 
 
                                 <TextView
                                     android:id="@+id/profile_designation"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="2.5"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center_vertical"
+                                    android:textSize="@dimen/_10sdp"
                                     android:textColor="@color/half_black" />
 
                             </LinearLayout>
@@ -592,17 +769,22 @@
 
 
                                 <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="@dimen/_15sdp"
-                                    android:text="Company"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginRight="@dimen/_6sdp"
+                                    android:text="Company:"
+                                    android:textSize="@dimen/_10sdp"
                                     android:textColor="@color/half_black" />
 
 
                                 <TextView
                                     android:id="@+id/profile_company"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="2.5"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center_vertical"
+                                    android:textSize="@dimen/_10sdp"
                                     android:textColor="@color/half_black" />
 
                             </LinearLayout>
@@ -617,17 +799,22 @@
 
 
                                 <TextView
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
                                     android:layout_height="wrap_content"
                                     android:layout_marginRight="@dimen/_6sdp"
-                                    android:text="Industry / Specialization :"
+                                    android:text="Industry / Specialization:"
+                                    android:textSize="@dimen/_10sdp"
                                     android:textColor="@color/half_black" />
 
 
                                 <TextView
                                     android:id="@+id/profile_ind_special"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="2.5"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center_vertical"
+                                    android:textSize="@dimen/_10sdp"
                                     android:textColor="@color/half_black" />
 
                             </LinearLayout>
@@ -654,49 +841,5 @@
 
         </RelativeLayout>
     </com.nirhart.parallaxscroll.views.ParallaxScrollView>
-
-    <View
-        android:id="@+id/shadowView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#99000000"
-        android:clickable="true"
-        android:visibility="gone" />
-
-    <net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu
-        android:id="@+id/multiple_actions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        fab:fab_addButtonColorNormal="@color/md_green_600"
-        fab:fab_addButtonColorPressed="@color/md_green_800"
-        fab:fab_addButtonPlusIconColor="@color/md_white_1000"
-        fab:fab_expandDirection="up"
-        fab:fab_labelStyle="@style/menu_labels_style">
-
-        <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
-            android:id="@+id/action_phone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/md_green_600"
-            fab:fab_colorPressed="@color/md_green_800"
-            fab:fab_icon="@drawable/ic_phone_white"
-            fab:fab_title="Call This Member" />
-
-        <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
-            android:id="@+id/action_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/md_green_600"
-            fab:fab_colorPressed="@color/md_green_800"
-            fab:fab_icon="@drawable/ic_email_white"
-            fab:fab_title="Email This Member" />
-
-    </net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu>
 
 </RelativeLayout>

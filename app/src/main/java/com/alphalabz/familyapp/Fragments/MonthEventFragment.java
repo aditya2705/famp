@@ -28,7 +28,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -97,7 +106,7 @@ public class MonthEventFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_month_event, container, false);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.events_list_view);
 
-        showList();
+
 
         return rootView;
     }
@@ -106,6 +115,9 @@ public class MonthEventFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        showList();
+
         adapter = new RecyclerAdapter(eventsList);
         mRecyclerView.setAdapter(adapter);
 
@@ -167,6 +179,8 @@ public class MonthEventFragment extends Fragment {
             JSONObject jsonObj = new JSONObject(eventsListJsonString);
             eventsJsonArray = jsonObj.getJSONArray(TAG_RESULTS);
 
+            LinkedHashMap<Event, String> dateStringMap = new LinkedHashMap<>();
+
             for (int i = 0; i < eventsJsonArray.length(); i++) {
                 JSONObject c = eventsJsonArray.getJSONObject(i);
 
@@ -188,17 +202,62 @@ public class MonthEventFragment extends Fragment {
                     s = date.substring(3,6);
 
                 if(monthStrings[month].equals(s)){
-                    Event event = new Event(event_id,date,birthday,anniversary,remarks,years,city,contact,email);
-                    eventsList.add(event);
-                }
 
+                    Event event = new Event(event_id,date,birthday,anniversary,remarks,years,city,contact,email);
+                    dateStringMap.put(event,date.substring(0,3)+String.format("%02d",(month+1)));
+                }
             }
+
+            dateStringMap = sortHashMapByValuesD(dateStringMap);
+            eventsList = new ArrayList<>(dateStringMap.keySet());
 
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+    }
+
+    public LinkedHashMap sortHashMapByValuesD(HashMap passedMap) {
+        List mapKeys = new ArrayList(passedMap.keySet());
+        List mapValues = new ArrayList(passedMap.values());
+
+        Collections.sort(mapValues, new Comparator<String>() {
+            DateFormat f = new SimpleDateFormat("dd-MM");
+            @Override
+            public int compare(String o1, String o2) {
+                try {
+                    return f.parse(o1).compareTo(f.parse(o2));
+                } catch (ParseException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            }
+        });
+
+
+        LinkedHashMap sortedMap = new LinkedHashMap();
+
+        Iterator valueIt = mapValues.iterator();
+        while (valueIt.hasNext()) {
+            Object val = valueIt.next();
+            Iterator keyIt = mapKeys.iterator();
+
+            while (keyIt.hasNext()) {
+                Object key = keyIt.next();
+                String comp1 = passedMap.get(key).toString();
+                String comp2 = val.toString();
+
+                if (comp1.equals(comp2)){
+                    passedMap.remove(key);
+                    mapKeys.remove(key);
+                    sortedMap.put(key, val);
+                    break;
+                }
+
+            }
+
+        }
+        return sortedMap;
     }
 
     private static class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>{

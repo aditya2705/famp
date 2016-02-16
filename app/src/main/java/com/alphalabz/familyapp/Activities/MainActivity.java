@@ -1,14 +1,21 @@
 package com.alphalabz.familyapp.Activities;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -22,10 +29,12 @@ import com.alphalabz.familyapp.Fragments.EventsTableFragment;
 import com.alphalabz.familyapp.Fragments.GalleryFragment;
 import com.alphalabz.familyapp.Fragments.SearchListFragment;
 import com.alphalabz.familyapp.Fragments.TreeViewFragment;
+import com.alphalabz.familyapp.NotificationPublisher;
 import com.alphalabz.familyapp.R;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.icons.MaterialDrawerFont;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
@@ -35,6 +44,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -152,6 +162,8 @@ public class MainActivity extends AppCompatActivity {
 
         if(sharedPreferences.getString("MEMBERS_STRING","").equals("")||sharedPreferences.getString("EVENTS_STRING","").equals("")){
             getMembersData();
+        }else{
+            scheduleNotifications();
         }
 
     }
@@ -300,6 +312,8 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString("EVENTS_STRING", eventsListJsonString);
                 editor.apply();
 
+                scheduleNotifications();
+
                 if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof EventsTableFragment) {
                     progressDialog.show();
                     new Handler().postDelayed(new Runnable(){
@@ -324,6 +338,48 @@ public class MainActivity extends AppCompatActivity {
         g.execute();
     }
 
+    private void scheduleNotifications() {
+
+        for(int i=0;i<3;i++) {
+
+            int delay = 10000+i;
+
+            Intent myIntent = new Intent(this, NotificationActivity.class);
+            myIntent.putExtra("Number",i+1);
+            PendingIntent goToDifferentPendingIntent = PendingIntent.getActivity(
+                    this,
+                    i,
+                    myIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                    .setContentTitle("Scheduled Notification "+(i+1))
+                    .setContentText("My content "+(i+1))
+                    .setContentIntent(goToDifferentPendingIntent)
+                    .setSmallIcon(R.drawable.ic_email);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                builder.setPriority(Notification.PRIORITY_HIGH);
+            }
+
+            if (Build.VERSION.SDK_INT >= 21)
+                builder.setVibrate(new long[0]);
+
+            Notification notification = builder.build();
+            notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+            Intent notificationIntent = new Intent(this, NotificationPublisher.class);
+            notificationIntent.setAction("com.alphalabz.familyapp" + i);
+            notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, i+1);
+            notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+            PendingIntent broadcastIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            long futureInMillis = SystemClock.elapsedRealtime() + delay;
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, broadcastIntent);
+
+
+        }
+    }
 
 
 

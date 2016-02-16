@@ -184,6 +184,7 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
         for (Person person : personList) {
             String s = "";
             s+= person.getFirst_name().equals("null")||person.getFirst_name().equals("")?"":person.getFirst_name()+" ";
+            s+= person.getMiddle_name().equals("null")||person.getMiddle_name().equals("")?"":person.getMiddle_name()+" ";
             s+= person.getLast_name().equals("null")||person.getLast_name().equals("")?"":person.getLast_name()+" ";
             searchableMembersStringMap.put(person.getUnique_id(),s);
             membersListMap.put(person.getUnique_id(), person);

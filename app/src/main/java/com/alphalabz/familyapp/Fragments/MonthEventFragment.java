@@ -1,7 +1,9 @@
 package com.alphalabz.familyapp.Fragments;
 
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +26,8 @@ import com.afollestad.materialdialogs.Theme;
 import com.alphalabz.familyapp.Custom.RecyclerItemClickListener;
 import com.alphalabz.familyapp.Objects.Event;
 import com.alphalabz.familyapp.R;
+import com.mikepenz.fontawesome_typeface_library.FontAwesome;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,12 +37,16 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -118,7 +127,7 @@ public class MonthEventFragment extends Fragment {
 
         showList();
 
-        adapter = new RecyclerAdapter(eventsList);
+        adapter = new RecyclerAdapter(getActivity(),eventsList);
         mRecyclerView.setAdapter(adapter);
 
         mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
@@ -148,9 +157,32 @@ public class MonthEventFragment extends Fragment {
 
                 ((TextView)dialog.getCustomView().findViewById(R.id.event_type)).setText(event==1?"Anniversary":"Birthday");
                 ((TextView)dialog.getCustomView().findViewById(R.id.members_concerned)).setText(event==1?eventsList.get(position).getAnniversary():eventsList.get(position).getBirthday());
-                ((TextView)dialog.getCustomView().findViewById(R.id.date)).setText(eventsList.get(position).getDate().substring(0,9));
-                ((TextView)dialog.getCustomView().findViewById(R.id.years)).setText("YEARS:\n"+Math.round(years)+"");
-                ((TextView)dialog.getCustomView().findViewById(R.id.remarks)).setText("REMARKS:\n"+eventsList.get(position).getRemarks());
+
+                String dateString = eventsList.get(position).getDate();
+
+                ((TextView)dialog.getCustomView().findViewById(R.id.date)).setText(dateString.substring(0,9));
+
+                SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+                int year = Integer.parseInt(yearFormat.format(Date.parse(dateString)));
+
+                SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+                int day = Integer.parseInt(dayFormat.format(Date.parse(dateString)));
+
+                SimpleDateFormat monthFormat = new SimpleDateFormat("mm");
+                int month = Integer.parseInt(monthFormat.format(Date.parse(dateString)));
+
+
+                Calendar a = new GregorianCalendar(year,month,day);
+                Calendar b = Calendar.getInstance();
+                int y1 = b.get(Calendar.YEAR);
+                int y2 = a.get(Calendar.YEAR);
+                int diff = y1-y2;
+                if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) ||
+                        (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DATE) > b.get(Calendar.DATE))) {
+                    diff--;
+                }
+
+                ((TextView)dialog.getCustomView().findViewById(R.id.years)).setText("YEARS:\n"+diff);
 
                 String city = eventsList.get(position).getCity();
                 ((TextView)dialog.getCustomView().findViewById(R.id.city)).setText(city.equals("")||city.equals("null")?"":"CITY: "+city);
@@ -204,7 +236,7 @@ public class MonthEventFragment extends Fragment {
                 if(monthStrings[month].equals(s)){
 
                     Event event = new Event(event_id,date,birthday,anniversary,remarks,years,city,contact,email);
-                    dateStringMap.put(event,date.substring(0,3)+String.format("%02d",(month+1)));
+                    dateStringMap.put(event,date.substring(0,6));
                 }
             }
 
@@ -223,7 +255,7 @@ public class MonthEventFragment extends Fragment {
         List mapValues = new ArrayList(passedMap.values());
 
         Collections.sort(mapValues, new Comparator<String>() {
-            DateFormat f = new SimpleDateFormat("dd-MM");
+            DateFormat f = new SimpleDateFormat("dd-MMM");
             @Override
             public int compare(String o1, String o2) {
                 try {
@@ -263,8 +295,10 @@ public class MonthEventFragment extends Fragment {
     private static class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>{
 
         private ArrayList<Event> eventArrayList;
+        private Context context;
 
-        public RecyclerAdapter(ArrayList<Event> eventArrayList){
+        public RecyclerAdapter(Context context,ArrayList<Event> eventArrayList){
+            this.context = context;
             this.eventArrayList = eventArrayList;
         }
 
@@ -280,10 +314,16 @@ public class MonthEventFragment extends Fragment {
             String anniversary = eventArrayList.get(position).getAnniversary();
 
             if(birthday.equals("null")||birthday.equals("")){
-                holder.occasionView.setText("Anniversary");
+                holder.occasionView.setImageDrawable(new IconicsDrawable(context)
+                        .icon(FontAwesome.Icon.faw_heart)
+                        .color(context.getResources().getColor(R.color.md_grey_700))
+                        .sizeDp(15));
                 holder.detailsView.setText(anniversary);
             }else{
-                holder.occasionView.setText("Birthday");
+                holder.occasionView.setImageDrawable(new IconicsDrawable(context)
+                        .icon(FontAwesome.Icon.faw_birthday_cake)
+                        .color(context.getResources().getColor(R.color.md_grey_700))
+                        .sizeDp(15));
                 holder.detailsView.setText(birthday);
             }
 
@@ -296,12 +336,13 @@ public class MonthEventFragment extends Fragment {
         }
 
         static class ViewHolder extends RecyclerView.ViewHolder {
-            public TextView dateView, occasionView, detailsView;
+            public TextView dateView, detailsView;
+            public ImageView occasionView;
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 dateView = (TextView) itemView.findViewById(R.id.date);
-                occasionView = (TextView) itemView.findViewById(R.id.occasion);
+                occasionView = (ImageView) itemView.findViewById(R.id.occasion);
                 detailsView = (TextView) itemView.findViewById(R.id.details);
             }
         }

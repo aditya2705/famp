@@ -25,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -192,9 +193,31 @@ public class CalendarFragment extends Fragment {
 
                     ((TextView)dialog.getCustomView().findViewById(R.id.event_type)).setText(event==1?"Anniversary":"Birthday");
                     ((TextView)dialog.getCustomView().findViewById(R.id.members_concerned)).setText(event==1?eventsList.get(position).getAnniversary():eventsList.get(position).getBirthday());
-                    ((TextView)dialog.getCustomView().findViewById(R.id.date)).setText(eventsList.get(position).getDate().substring(0,9));
-                    ((TextView)dialog.getCustomView().findViewById(R.id.years)).setText("YEARS:\n"+Math.round(years)+"");
-                    ((TextView)dialog.getCustomView().findViewById(R.id.remarks)).setText("REMARKS:\n"+eventsList.get(position).getRemarks());
+                    String dateString = eventsList.get(position).getDate();
+
+                    ((TextView)dialog.getCustomView().findViewById(R.id.date)).setText(dateString.substring(0,9));
+
+                    SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+                    int year = Integer.parseInt(yearFormat.format(Date.parse(dateString)));
+
+                    SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+                    int day = Integer.parseInt(dayFormat.format(Date.parse(dateString)));
+
+                    SimpleDateFormat monthFormat = new SimpleDateFormat("mm");
+                    int month = Integer.parseInt(monthFormat.format(Date.parse(dateString)));
+
+
+                    Calendar a = new GregorianCalendar(year,month,day);
+                    Calendar b = Calendar.getInstance();
+                    int y1 = b.get(Calendar.YEAR);
+                    int y2 = a.get(Calendar.YEAR);
+                    int diff = y1-y2;
+                    if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) ||
+                            (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DATE) > b.get(Calendar.DATE))) {
+                        diff--;
+                    }
+
+                    ((TextView)dialog.getCustomView().findViewById(R.id.years)).setText("YEARS:\n"+diff);
 
                     String city = eventsList.get(position).getCity();
                     ((TextView)dialog.getCustomView().findViewById(R.id.city)).setText(city.equals("")||city.equals("null")?"":"CITY: "+city);

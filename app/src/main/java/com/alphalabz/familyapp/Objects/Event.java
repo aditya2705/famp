@@ -1,9 +1,11 @@
 package com.alphalabz.familyapp.Objects;
 
+import java.io.Serializable;
+
 /**
  * Created by Aditya Rathi on 10-Feb-16.
  */
-public class Event {
+public class Event implements Serializable {
 
     private String event_id,date,birthday,anniversary,remarks,years,city,contact,email;
 

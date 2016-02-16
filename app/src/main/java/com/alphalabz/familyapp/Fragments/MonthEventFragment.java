@@ -137,91 +137,95 @@ public class MonthEventFragment extends Fragment {
 
         mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, final int position) {
+            public void onItemClick(View view, int position) {
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                        .theme(Theme.LIGHT)
-                        .title("Event")
-                        .titleColor(getResources().getColor(R.color.md_green_700))
-                        .customView(R.layout.dialog_event_details, true)
-                        .positiveText("OK")
-                        .positiveColor(getResources().getColor(R.color.md_green_700))
-                        .build();
-
-                String birthday = eventsList.get(position).getBirthday();
-                String s = eventsList.get(position).getYears();
-
-                float years = Float.parseFloat(s.equals("")||s.equals("null")?"0":s);
-
-                int event;
-                if(birthday.equals("null")||birthday.equals("")){
-                    event = 1;
-                }else{
-                    event = 0;
-                }
-
-                ((TextView)dialog.getCustomView().findViewById(R.id.event_type)).setText(event==1?"Anniversary":"Birthday");
-                ((TextView)dialog.getCustomView().findViewById(R.id.members_concerned)).setText(event==1?eventsList.get(position).getAnniversary():eventsList.get(position).getBirthday());
-
-                String dateString = eventsList.get(position).getDate();
-
-                ((TextView)dialog.getCustomView().findViewById(R.id.date)).setText(dateString.substring(0,9));
-
-                SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
-                int year = Integer.parseInt(yearFormat.format(Date.parse(dateString)));
-
-                SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
-                int day = Integer.parseInt(dayFormat.format(Date.parse(dateString)));
-
-                SimpleDateFormat monthFormat = new SimpleDateFormat("mm");
-                int month = Integer.parseInt(monthFormat.format(Date.parse(dateString)));
-
-
-                Calendar a = new GregorianCalendar(year,month,day);
-                Calendar b = Calendar.getInstance();
-                int y1 = b.get(Calendar.YEAR);
-                int y2 = a.get(Calendar.YEAR);
-                int diff = y1-y2;
-                if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) ||
-                        (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DATE) > b.get(Calendar.DATE))) {
-                    diff--;
-                }
-
-                ((TextView)dialog.getCustomView().findViewById(R.id.years)).setText("YEARS:\n"+diff);
-
-                String city = eventsList.get(position).getCity();
-                ((TextView)dialog.getCustomView().findViewById(R.id.city)).setText(city.equals("")||city.equals("null")?"":"CITY: "+city);
-
-                (dialog.getCustomView().findViewById(R.id.contact_click_layout)).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        phoneIntent(eventsList.get(position).getContact());
-                    }
-                });
-
-                String temp = eventsList.get(position).getContact();
-                if(!temp.equals("")&&!temp.equals("null"))
-                    ((TextView)dialog.getCustomView().findViewById(R.id.contact)).setText("Contact: "+temp);
-                else
-                    (dialog.getCustomView().findViewById(R.id.contact_click_layout)).setVisibility(View.GONE);
-
-                (dialog.getCustomView().findViewById(R.id.email_click_layout)).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        emailIntent(eventsList.get(position).getEmail());
-                    }
-                });
-
-                temp = eventsList.get(position).getEmail();
-                if(!temp.equals("")&&!temp.equals("null"))
-                    ((TextView)dialog.getCustomView().findViewById(R.id.email)).setText("Email: "+temp);
-                else
-                    (dialog.getCustomView().findViewById(R.id.email_click_layout)).setVisibility(View.GONE);
-
-                dialog.show();
+                showEventDialog(position);
 
             }
         }));
+    }
+
+    private void showEventDialog(final int position) {
+
+        String birthday = eventsList.get(position).getBirthday();
+
+        int event;
+        if(birthday.equals("null")||birthday.equals("")){
+            event = 1;
+        }else{
+            event = 0;
+        }
+
+        final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                .theme(Theme.LIGHT)
+                .title("Event")
+                .icon(getResources().getDrawable(event==1?R.drawable.ic_love:R.drawable.ic_cake))
+                .titleColor(getResources().getColor(R.color.md_green_700))
+                .customView(R.layout.dialog_event_details, true)
+                .positiveText("OK")
+                .positiveColor(getResources().getColor(R.color.md_green_700))
+                .build();
+
+
+        ((TextView)dialog.getCustomView().findViewById(R.id.event_type)).setText(event==1?"Anniversary":"Birthday");
+        ((TextView)dialog.getCustomView().findViewById(R.id.members_concerned)).setText(event==1?eventsList.get(position).getAnniversary():eventsList.get(position).getBirthday());
+
+        String dateString = eventsList.get(position).getDate();
+
+        ((TextView)dialog.getCustomView().findViewById(R.id.date)).setText(dateString.substring(0,9));
+
+        SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+        int year = Integer.parseInt(yearFormat.format(Date.parse(dateString)));
+
+        SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+        int day = Integer.parseInt(dayFormat.format(Date.parse(dateString)));
+
+        SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+        int month = Integer.parseInt(monthFormat.format(Date.parse(dateString)));
+
+
+        Calendar a = new GregorianCalendar(year,month-1,day);
+        Calendar b = Calendar.getInstance();
+        int y1 = b.get(Calendar.YEAR);
+        int y2 = a.get(Calendar.YEAR);
+        int diff = y1-y2;
+        if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) ||
+                (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DAY_OF_MONTH) > b.get(Calendar.DAY_OF_MONTH))) {
+            diff--;
+        }
+
+        ((TextView)dialog.getCustomView().findViewById(R.id.years)).setText("YEARS: "+diff);
+
+        String city = eventsList.get(position).getCity();
+        ((TextView)dialog.getCustomView().findViewById(R.id.city)).setText(city.equals("")||city.equals("null")?"":"CITY: "+city);
+
+        (dialog.getCustomView().findViewById(R.id.contact_click_layout)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                phoneIntent(eventsList.get(position).getContact());
+            }
+        });
+
+        String temp = eventsList.get(position).getContact();
+        if(!temp.equals("")&&!temp.equals("null"))
+            ((TextView)dialog.getCustomView().findViewById(R.id.contact)).setText("Contact: "+temp);
+        else
+            (dialog.getCustomView().findViewById(R.id.contact_click_layout)).setVisibility(View.GONE);
+
+        (dialog.getCustomView().findViewById(R.id.email_click_layout)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                emailIntent(eventsList.get(position).getEmail());
+            }
+        });
+
+        temp = eventsList.get(position).getEmail();
+        if(!temp.equals("")&&!temp.equals("null"))
+            ((TextView)dialog.getCustomView().findViewById(R.id.email)).setText("Email: "+temp);
+        else
+            (dialog.getCustomView().findViewById(R.id.email_click_layout)).setVisibility(View.GONE);
+
+        dialog.show();
     }
 
     protected void showList() {
@@ -438,7 +442,6 @@ public class MonthEventFragment extends Fragment {
                 })
                 .build()
                 .show();
-
 
     }
 

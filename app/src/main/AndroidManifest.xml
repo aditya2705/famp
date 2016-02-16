@@ -46,9 +46,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.ProfileActivity" />
-        <activity android:name=".Activities.NotificationActivity"/>
 
-        <receiver android:name=".NotificationPublisher" />
+        <receiver android:name=".NotificationPublisher" android:enabled="true">
+            <intent-filter> <action android:name="NOTIFICATION_SERVICE" /></intent-filter>
+        </receiver>
 
     </application>
 

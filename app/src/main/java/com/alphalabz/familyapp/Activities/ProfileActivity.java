@@ -86,7 +86,7 @@ public class ProfileActivity extends AppCompatActivity {
         TextView nameT = (TextView) findViewById(R.id.profile_name);
         String newName = ((actualPerson.getTitle().equals("null") || actualPerson.getTitle().equals("")) ? "" : (actualPerson.getTitle() + " ")) +
                 actualPerson.getFirst_name() + (actualPerson.getMiddle_name().equals("null")?"":" "+actualPerson.getMiddle_name())
-                +" " + actualPerson.getLast_name() + (actualPerson.getNick_name().equals("null")?"":" ( "+actualPerson.getMiddle_name()+" )");
+                +" " + actualPerson.getLast_name() + (actualPerson.getNick_name().equals("null")?"":" ( "+actualPerson.getNick_name()+" )");
         nameT.setText(newName);
 
         TextView firstNameT = (TextView) findViewById(R.id.profile_firstname);

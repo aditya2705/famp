@@ -176,19 +176,7 @@ public class CalendarFragment extends Fragment {
 
                     final int position = calendarDays.indexOf(date);
 
-                    MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                            .theme(Theme.LIGHT)
-                            .title("Event")
-                            .titleColor(getResources().getColor(R.color.md_green_700))
-                            .customView(R.layout.dialog_event_details, true)
-                            .positiveText("OK")
-                            .positiveColor(getResources().getColor(R.color.md_green_700))
-                            .build();
-
                     String birthday = eventsList.get(position).getBirthday();
-                    String s = eventsList.get(position).getYears();
-
-                    float years = Float.parseFloat(s.equals("")||s.equals("null")?"0":s);
 
                     int event;
                     if(birthday.equals("null")||birthday.equals("")){
@@ -196,6 +184,17 @@ public class CalendarFragment extends Fragment {
                     }else{
                         event = 0;
                     }
+
+                    MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                            .theme(Theme.LIGHT)
+                            .title("Event")
+                            .icon(getResources().getDrawable(event==1?R.drawable.ic_love:R.drawable.ic_cake))
+                            .titleColor(getResources().getColor(R.color.md_green_700))
+                            .customView(R.layout.dialog_event_details, true)
+                            .positiveText("OK")
+                            .positiveColor(getResources().getColor(R.color.md_green_700))
+                            .build();
+
 
                     ((TextView)dialog.getCustomView().findViewById(R.id.event_type)).setText(event==1?"Anniversary":"Birthday");
                     ((TextView)dialog.getCustomView().findViewById(R.id.members_concerned)).setText(event==1?eventsList.get(position).getAnniversary():eventsList.get(position).getBirthday());
@@ -209,21 +208,21 @@ public class CalendarFragment extends Fragment {
                     SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
                     int day = Integer.parseInt(dayFormat.format(Date.parse(dateString)));
 
-                    SimpleDateFormat monthFormat = new SimpleDateFormat("mm");
+                    SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
                     int month = Integer.parseInt(monthFormat.format(Date.parse(dateString)));
 
 
-                    Calendar a = new GregorianCalendar(year,month,day);
+                    Calendar a = new GregorianCalendar(year,month-1,day);
                     Calendar b = Calendar.getInstance();
                     int y1 = b.get(Calendar.YEAR);
                     int y2 = a.get(Calendar.YEAR);
                     int diff = y1-y2;
                     if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) ||
-                            (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DATE) > b.get(Calendar.DATE))) {
+                            (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DAY_OF_MONTH) > b.get(Calendar.DAY_OF_MONTH))) {
                         diff--;
                     }
 
-                    ((TextView)dialog.getCustomView().findViewById(R.id.years)).setText("YEARS:\n"+diff);
+                    ((TextView)dialog.getCustomView().findViewById(R.id.years)).setText("YEARS: "+diff);
 
                     String city = eventsList.get(position).getCity();
                     ((TextView)dialog.getCustomView().findViewById(R.id.city)).setText(city.equals("")||city.equals("null")?"":"CITY: "+city);

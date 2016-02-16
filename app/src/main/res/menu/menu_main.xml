@@ -10,7 +10,7 @@
         app:showAsAction="collapseActionView|ifRoom" />
 
     <item android:id="@+id/refresh"
-        android:title="Refresh"
+        android:title="Refresh Data"
         android:icon="@drawable/ic_autorenew_white"
         app:showAsAction="ifRoom" />
 

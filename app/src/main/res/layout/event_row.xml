@@ -18,7 +18,7 @@
             android:textSize="@dimen/_11sdp"
             android:textColor="@color/md_grey_700"
             android:background="@drawable/border_face"
-            android:layout_weight="1.7"/>
+            android:layout_weight="1.6"/>
 
         <ImageView
             android:id="@+id/occasion"

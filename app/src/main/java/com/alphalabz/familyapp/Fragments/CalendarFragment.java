@@ -1,17 +1,23 @@
 package com.alphalabz.familyapp.Fragments;
 
 
+import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.alphalabz.familyapp.Custom.EventDecorator;
@@ -168,7 +174,7 @@ public class CalendarFragment extends Fragment {
                 @Override
                 public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
-                    int position = calendarDays.indexOf(date);
+                    final int position = calendarDays.indexOf(date);
 
                     MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                             .theme(Theme.LIGHT)
@@ -222,17 +228,31 @@ public class CalendarFragment extends Fragment {
                     String city = eventsList.get(position).getCity();
                     ((TextView)dialog.getCustomView().findViewById(R.id.city)).setText(city.equals("")||city.equals("null")?"":"CITY: "+city);
 
+                    (dialog.getCustomView().findViewById(R.id.contact_click_layout)).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            phoneIntent(eventsList.get(position).getContact());
+                        }
+                    });
+
                     String temp = eventsList.get(position).getContact();
                     if(!temp.equals("")&&!temp.equals("null"))
                         ((TextView)dialog.getCustomView().findViewById(R.id.contact)).setText("Contact: "+temp);
                     else
-                        ((TextView)dialog.getCustomView().findViewById(R.id.contact)).setVisibility(View.GONE);
+                        (dialog.getCustomView().findViewById(R.id.contact_click_layout)).setVisibility(View.GONE);
+
+                    (dialog.getCustomView().findViewById(R.id.email_click_layout)).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            emailIntent(eventsList.get(position).getEmail());
+                        }
+                    });
 
                     temp = eventsList.get(position).getEmail();
                     if(!temp.equals("")&&!temp.equals("null"))
                         ((TextView)dialog.getCustomView().findViewById(R.id.email)).setText("Email: "+temp);
                     else
-                        ((TextView)dialog.getCustomView().findViewById(R.id.email)).setVisibility(View.GONE);
+                        (dialog.getCustomView().findViewById(R.id.email_click_layout)).setVisibility(View.GONE);
 
                     dialog.show();
 
@@ -241,4 +261,81 @@ public class CalendarFragment extends Fragment {
             });
         }
     }
+
+
+    private void emailIntent(final String emailString) {
+
+        new MaterialDialog.Builder(getActivity())
+                .theme(Theme.LIGHT)
+                .title("EMAIL")
+                .icon(getResources().getDrawable(R.drawable.ic_email))
+                .content("Draft an email to "+emailString+" ?")
+                .negativeText("NO")
+                .positiveText("YES")
+                .positiveColor(getResources().getColor(R.color.md_green_700))
+                .titleColor(getResources().getColor(R.color.md_green_700))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        Intent email = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"+emailString));
+                        email.putExtra(Intent.EXTRA_SUBJECT, "Your subject here");
+                        email.putExtra(Intent.EXTRA_TEXT, "");
+                        startActivity(email);
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .build()
+                .show();
+
+
+
+    }
+
+    private void phoneIntent(final String phone) {
+
+        new MaterialDialog.Builder(getActivity())
+                .theme(Theme.LIGHT)
+                .title("CALL")
+                .icon(getResources().getDrawable(R.drawable.ic_contact_phone))
+                .content("Call on "+phone+" ?")
+                .positiveText("YES")
+                .negativeText("NO")
+                .positiveColor(getResources().getColor(R.color.md_green_700))
+                .titleColor(getResources().getColor(R.color.md_green_700))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        Intent phoneCallIntent;
+                        phoneCallIntent = new Intent(Intent.ACTION_CALL);
+                        phoneCallIntent.setData(Uri.parse("tel:" + phone));
+                        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                            // TODO: Consider calling
+                            //    ActivityCompat#requestPermissions
+                            // here to request the missing permissions, and then overriding
+                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                            //                                          int[] grantResults)
+                            // to handle the case where the user grants the permission. See the documentation
+                            // for ActivityCompat#requestPermissions for more details.
+                            return;
+                        }
+                        startActivity(phoneCallIntent);
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .build()
+                .show();
+
+
+    }
+
 }

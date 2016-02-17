@@ -149,11 +149,13 @@
                                     <TextView
                                         android:id="@+id/profile_firstname"
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
+                                        android:layout_height="match_parent"
                                         android:gravity="center"
                                         android:text="Aditya"
                                         android:textColor="@color/half_black"
                                         android:textSize="@dimen/_14sdp"
+                                        android:paddingLeft="@dimen/_10sdp"
+                                        android:paddingRight="@dimen/_10sdp"
                                         android:textStyle="bold" />
                                 </LinearLayout>
 
@@ -167,11 +169,13 @@
                                     <TextView
                                         android:id="@+id/profile_familyname"
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
+                                        android:layout_height="match_parent"
                                         android:gravity="center"
                                         android:text="Rathi"
                                         android:textColor="@color/half_black"
                                         android:textSize="@dimen/_14sdp"
+                                        android:paddingLeft="@dimen/_10sdp"
+                                        android:paddingRight="@dimen/_10sdp"
                                         android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
@@ -192,10 +196,12 @@
 
                                     <TextView
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
+                                        android:layout_height="match_parent"
                                         android:gravity="center"
                                         android:text="First Name"
                                         android:textColor="@color/half_black"
+                                        android:paddingLeft="@dimen/_10sdp"
+                                        android:paddingRight="@dimen/_10sdp"
                                         android:textSize="@dimen/_11sdp" />
                                 </LinearLayout>
 
@@ -208,10 +214,12 @@
 
                                     <TextView
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
+                                        android:layout_height="match_parent"
                                         android:gravity="center"
                                         android:text="Last Name"
                                         android:textColor="@color/half_black"
+                                        android:paddingLeft="@dimen/_10sdp"
+                                        android:paddingRight="@dimen/_10sdp"
                                         android:textSize="@dimen/_11sdp" />
                                 </LinearLayout>
                             </LinearLayout>
@@ -233,11 +241,13 @@
                                     <TextView
                                         android:id="@+id/profile_fathername"
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
+                                        android:layout_height="match_parent"
                                         android:gravity="center"
                                         android:text="Sunilkumar"
                                         android:textColor="@color/half_black"
                                         android:textSize="@dimen/_14sdp"
+                                        android:paddingLeft="@dimen/_10sdp"
+                                        android:paddingRight="@dimen/_10sdp"
                                         android:textStyle="bold" />
                                 </LinearLayout>
 
@@ -251,11 +261,13 @@
                                     <TextView
                                         android:id="@+id/profile_mothername"
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
+                                        android:layout_height="match_parent"
                                         android:gravity="center"
                                         android:text="Shubhada"
                                         android:textColor="@color/half_black"
                                         android:textSize="@dimen/_14sdp"
+                                        android:paddingLeft="@dimen/_10sdp"
+                                        android:paddingRight="@dimen/_10sdp"
                                         android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
@@ -277,10 +289,12 @@
                                     <TextView
                                         android:id="@+id/father_text"
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
+                                        android:layout_height="match_parent"
                                         android:gravity="center"
                                         android:text="Father's Name"
                                         android:textColor="@color/half_black"
+                                        android:paddingLeft="@dimen/_10sdp"
+                                        android:paddingRight="@dimen/_10sdp"
                                         android:textSize="@dimen/_11sdp" />
                                 </LinearLayout>
 
@@ -294,10 +308,12 @@
                                     <TextView
                                         android:id="@+id/mother_text"
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
+                                        android:layout_height="match_parent"
                                         android:gravity="center"
                                         android:text="Mother's Name"
                                         android:textColor="@color/half_black"
+                                        android:paddingLeft="@dimen/_10sdp"
+                                        android:paddingRight="@dimen/_10sdp"
                                         android:textSize="@dimen/_11sdp" />
                                 </LinearLayout>
                             </LinearLayout>
@@ -324,6 +340,8 @@
                                         android:text="Avi"
                                         android:textColor="@color/half_black"
                                         android:textSize="@dimen/_14sdp"
+                                        android:paddingLeft="@dimen/_10sdp"
+                                        android:paddingRight="@dimen/_10sdp"
                                         android:textStyle="bold" />
                                 </LinearLayout>
 
@@ -351,6 +369,8 @@
                                         android:gravity="center"
                                         android:text="Spouse's Name"
                                         android:textColor="@color/half_black"
+                                        android:paddingLeft="@dimen/_10sdp"
+                                        android:paddingRight="@dimen/_10sdp"
                                         android:textSize="@dimen/_11sdp" />
                                 </LinearLayout>
                             </LinearLayout>
@@ -397,6 +417,8 @@
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
                                     android:gravity="center_horizontal"
+                                    android:paddingLeft="@dimen/_5sdp"
+                                    android:paddingRight="@dimen/_5sdp"
                                     android:orientation="vertical">
 
                                 </LinearLayout>
@@ -407,6 +429,8 @@
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
                                     android:gravity="center_horizontal"
+                                    android:paddingLeft="@dimen/_5sdp"
+                                    android:paddingRight="@dimen/_5sdp"
                                     android:orientation="vertical">
 
                                 </LinearLayout>

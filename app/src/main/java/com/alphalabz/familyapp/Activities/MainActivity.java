@@ -73,12 +73,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String RESULTS_FETCH_EVENTS_URL = "http://alpha95.net63.net/get_events.php";
     private static Context mContext;
     private Drawer result = null;
-    private FloatingActionButton fab;
     private String membersListJsonString, eventsListJsonString;
     public SharedPreferences sharedPreferences;
     public ProgressDialog progressDialog;
-    private float defaultElevation;
-
 
     private static final String TAG_RESULTS = "result";
     private static final String TAG_ID = "events_id";
@@ -120,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        defaultElevation = ((AppBarLayout)findViewById(R.id.app_bar_layout)).getTargetElevation();;
 
         mContext = getApplicationContext();
 
@@ -133,9 +129,9 @@ public class MainActivity extends AppCompatActivity {
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName("Home").withIcon(FontAwesome.Icon.faw_home),
                         new PrimaryDrawerItem().withName("Tree View").withIcon(FontAwesome.Icon.faw_tree),
-                        new PrimaryDrawerItem().withName("All Members List").withIcon(FontAwesome.Icon.faw_list_ul),
+                        new PrimaryDrawerItem().withName("Members List").withIcon(FontAwesome.Icon.faw_list_ul),
                         new PrimaryDrawerItem().withName("Calendar").withIcon(FontAwesome.Icon.faw_table),
-                        new PrimaryDrawerItem().withName("All Events").withIcon(FontAwesome.Icon.faw_birthday_cake),
+                        new PrimaryDrawerItem().withName("Events").withIcon(FontAwesome.Icon.faw_birthday_cake),
                         new PrimaryDrawerItem().withName("Gallery").withIcon(FontAwesome.Icon.faw_image)
 
                 )

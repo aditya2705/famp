@@ -2,7 +2,6 @@ package com.alphalabz.familyapp.Fragments;
 
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -14,7 +13,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -219,13 +217,13 @@ public class TreeViewFragment extends Fragment {
         personNameView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openProfileFragment(rootPerson);
+                openProfileActivity(rootPerson);
             }
         });
         personImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openProfileFragment(rootPerson);
+                openProfileActivity(rootPerson);
             }
         });
         TextView spouseNameView = (TextView) rootLayout.findViewById(R.id.spouse_name);
@@ -233,13 +231,13 @@ public class TreeViewFragment extends Fragment {
         spouseNameView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openProfileFragment(personList.get(membersListMap.get(rootPerson.getSpouse_id())));
+                openProfileActivity(personList.get(membersListMap.get(rootPerson.getSpouse_id())));
             }
         });
         spouseImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openProfileFragment(personList.get(membersListMap.get(rootPerson.getSpouse_id())));
+                openProfileActivity(personList.get(membersListMap.get(rootPerson.getSpouse_id())));
             }
         });
         personNameView.setText(rootPerson.getFirst_name());
@@ -263,13 +261,13 @@ public class TreeViewFragment extends Fragment {
                 personNameView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        openProfileFragment(c);
+                        openProfileActivity(c);
                     }
                 });
                 personImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        openProfileFragment(c);
+                        openProfileActivity(c);
                     }
                 });
                 personNameView.setText(c.getFirst_name());
@@ -286,13 +284,13 @@ public class TreeViewFragment extends Fragment {
                     spouseNameView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            openProfileFragment(personList.get(membersListMap.get(c.getSpouse_id())));
+                            openProfileActivity(personList.get(membersListMap.get(c.getSpouse_id())));
                         }
                     });
                     spouseImageView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            openProfileFragment(personList.get(membersListMap.get(c.getSpouse_id())));
+                            openProfileActivity(personList.get(membersListMap.get(c.getSpouse_id())));
                         }
                     });
                     personNameView.setText(c.getFirst_name());
@@ -505,7 +503,7 @@ public class TreeViewFragment extends Fragment {
     }
 
 
-    public void openProfileFragment(PersonLayout person) {
+    public void openProfileActivity(PersonLayout person) {
 
         Intent intent = new Intent(mainActivity, ProfileActivity.class);
         Bundle bundle = new Bundle();

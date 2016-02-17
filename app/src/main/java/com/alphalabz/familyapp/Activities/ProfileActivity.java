@@ -63,6 +63,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private Person actualPerson, motherOfPerson, fatherOfPerson, spouseOfPerson;
     private String temp;
+    private boolean isInLaw = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +79,12 @@ public class ProfileActivity extends AppCompatActivity {
         fatherOfPerson = (Person) bundle.getSerializable("Person_Father");
         spouseOfPerson = (Person) bundle.getSerializable("Person_Spouse");
 
+        isInLaw = actualPerson.getIn_law().equals("Y")?true:false;
+
+        if(isInLaw){
+            ((TextView)findViewById(R.id.father_text)).setText("Father In Law's Name");
+            ((TextView)findViewById(R.id.mother_text)).setText("Mother In Law's Name");
+        }
 
         int k = 0;
         ImageView userIcon = (ImageView) findViewById(R.id.user_icon);
@@ -97,7 +104,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         TextView fatherNameT = (TextView) findViewById(R.id.profile_fathername);
         if (fatherOfPerson != null) {
-            temp = fatherOfPerson.getFirst_name()+(fatherOfPerson.getMiddle_name().equals("null")?"":" "+fatherOfPerson.getMiddle_name());
+            temp = (fatherOfPerson.getTitle().equals("null")?"":" "+fatherOfPerson.getTitle()+" ")+fatherOfPerson.getFirst_name()+(fatherOfPerson.getMiddle_name().equals("null")?"":" "+fatherOfPerson.getMiddle_name());
             if (!temp.equals(""))
                 fatherNameT.setText(temp);
             else {
@@ -119,7 +126,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         TextView motherNameT = (TextView) findViewById(R.id.profile_mothername);
         if (motherOfPerson != null) {
-            temp = motherOfPerson.getFirst_name()+(motherOfPerson.getMiddle_name().equals("null")?"":" "+motherOfPerson.getMiddle_name());;
+            temp = (motherOfPerson.getTitle().equals("null")?"":" "+motherOfPerson.getTitle()+" ")+motherOfPerson.getFirst_name()+(motherOfPerson.getMiddle_name().equals("null")?"":" "+motherOfPerson.getMiddle_name());
             if (!temp.equals(""))
                 motherNameT.setText(temp);
             else {
@@ -141,7 +148,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         TextView spouseNameT = (TextView) findViewById(R.id.profile_spousename);
         if (spouseOfPerson != null) {
-            temp = spouseOfPerson.getFirst_name()+(spouseOfPerson.getMiddle_name().equals("null")?"":" "+spouseOfPerson.getMiddle_name());;
+            temp = (spouseOfPerson.getTitle().equals("null")?"":" "+spouseOfPerson.getTitle()+" ")+spouseOfPerson.getFirst_name()+(spouseOfPerson.getMiddle_name().equals("null")?"":" "+spouseOfPerson.getMiddle_name());;
             if (!temp.equals(""))
                 spouseNameT.setText(temp);
             else {
@@ -187,9 +194,16 @@ public class ProfileActivity extends AppCompatActivity {
 
         TextView deathdateT = (TextView) findViewById(R.id.profile_deathdate);
         temp = actualPerson.getDeath_date();
+        if (temp.length() >= 10) {
 
-        if (temp.length() >= 10)
-            deathdateT.setText("Death Date: " + temp.substring(0, 10));
+            String t1 = actualPerson.getBirth_date();
+            if(t1.length() >= 10)
+                deathdateT.setText(t1.substring(0, 9)+" - "+temp.substring(0,9));
+            else
+                deathdateT.setText("Demise: "+temp.substring(0,9));
+            birthdateT.setVisibility(View.GONE);
+            marriagedateT.setVisibility(View.GONE);
+        }
         else
             deathdateT.setVisibility(View.GONE);
 

@@ -42,6 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_5sdp"
                     android:text="Name"
+                    android:gravity="center_horizontal"
                     android:textSize="@dimen/_18sdp"
                     android:textStyle="bold" />
 

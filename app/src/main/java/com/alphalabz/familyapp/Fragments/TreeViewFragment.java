@@ -12,7 +12,6 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -50,7 +49,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,7 +65,7 @@ public class TreeViewFragment extends Fragment {
     private LinearLayout parentLayout;
     private PersonLayout rootPerson;
     private int marginForChildLayout;
-    private HashMap<String, Integer> membersListMap;
+    private LinkedHashMap<String, PersonLayout> membersListMap;
     private FloatingActionsMenu menuMultipleActions;
 
     private String membersListJsonString;
@@ -179,201 +178,6 @@ public class TreeViewFragment extends Fragment {
             showList();
 
         return rootView;
-    }
-
-    public void buildPersonTree() {
-        parentLayout.removeAllViews();
-
-        membersListMap = new HashMap<>();
-        for (int i = 0; i < personList.size(); i++) {
-            PersonLayout p = personList.get(i);
-            membersListMap.put(p.getUnique_id(), i);
-        }
-        for (int i = 0; i < personList.size(); i++) {
-            PersonLayout p = personList.get(i);
-            String fatherID = p.getFather_id();
-            if (membersListMap.containsKey(fatherID)) {
-                int pos = membersListMap.get(fatherID);
-                personList.get(pos).addChild(p);
-            } else {
-                if (!p.getIn_law().equals("Y")&&i<=2)
-                    rootPerson = p;
-            }
-        }
-
-    }
-
-    private RelativeLayout getNodeLayout() {
-        return (RelativeLayout) LayoutInflater.from(getContext()).inflate(R.layout.new_node_layout, null, false);
-    }
-
-    public void bfs() {
-        ArrayList<PersonLayout> Q = new ArrayList<>();
-        Q.add(rootPerson);
-        rootPerson.setTreeLevel(0);
-        RelativeLayout rootLayout = getNodeLayout();
-        TextView personNameView = (TextView) rootLayout.findViewById(R.id.person_name);
-        ImageView personImageView = (ImageView) rootLayout.findViewById(R.id.person_image_view);
-        personNameView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openProfileActivity(rootPerson);
-            }
-        });
-        personImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openProfileActivity(rootPerson);
-            }
-        });
-        TextView spouseNameView = (TextView) rootLayout.findViewById(R.id.spouse_name);
-        ImageView spouseImageView = (ImageView) rootLayout.findViewById(R.id.spouse_image_view);
-        spouseNameView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openProfileActivity(personList.get(membersListMap.get(rootPerson.getSpouse_id())));
-            }
-        });
-        spouseImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openProfileActivity(personList.get(membersListMap.get(rootPerson.getSpouse_id())));
-            }
-        });
-        personNameView.setText(rootPerson.getFirst_name());
-
-        if(membersListMap.get(rootPerson.getSpouse_id())!=null)
-            spouseNameView.setText(personList.get(membersListMap.get(rootPerson.getSpouse_id())).getFirst_name());
-
-        parentLayout.addView(rootLayout);
-        rootPerson.setPersonLayout(rootLayout);
-
-        while (!Q.isEmpty()) {
-            PersonLayout p = Q.get(0);
-            Q.remove(0);
-            LinearLayout pChildLayout = (LinearLayout) p.getPersonLayout().findViewById(R.id.childLinearLayout);
-            for (int i = 0; i < p.getChildCount(); i++) {
-                final PersonLayout c = p.getChildAt(i);
-                p.getPersonLayout().findViewById(R.id.child_branch).setVisibility(View.VISIBLE);
-                RelativeLayout newNodeLayout = getNodeLayout();
-                personNameView = (TextView) newNodeLayout.findViewById(R.id.person_name);
-                personImageView = (ImageView) newNodeLayout.findViewById(R.id.person_image_view);
-                personNameView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        openProfileActivity(c);
-                    }
-                });
-                personImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        openProfileActivity(c);
-                    }
-                });
-                personNameView.setText(c.getFirst_name());
-                spouseNameView = (TextView) newNodeLayout.findViewById(R.id.spouse_name);
-                spouseImageView = (ImageView) newNodeLayout.findViewById(R.id.spouse_image_view);
-
-
-                String s = null;
-                if (membersListMap.get(c.getSpouse_id()) != null)
-                    s = personList.get(membersListMap.get(c.getSpouse_id())).getFirst_name();
-
-                if (s != null && !s.equals("")) {
-                    spouseNameView.setText(s);
-                    spouseNameView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            openProfileActivity(personList.get(membersListMap.get(c.getSpouse_id())));
-                        }
-                    });
-                    spouseImageView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            openProfileActivity(personList.get(membersListMap.get(c.getSpouse_id())));
-                        }
-                    });
-                    personNameView.setText(c.getFirst_name());
-                } else {
-                    newNodeLayout.findViewById(R.id.spouse_layout).setVisibility(View.INVISIBLE);
-                    newNodeLayout.findViewById(R.id.spouse_branch).setVisibility(View.INVISIBLE);
-                }
-
-                newNodeLayout.findViewById(R.id.child_branch).setVisibility(View.INVISIBLE);
-
-                c.setPersonLayout(newNodeLayout);
-                pChildLayout.addView(c.getPersonLayout());
-
-                c.setTreeLevel(p.getTreeLevel() + 1);
-                Q.add(c);
-                Log.d("Child", c.getFirst_name());
-                Log.d("Child", "" + pChildLayout.getChildCount());
-
-
-            }
-
-        }
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                bfsBranchFix();
-            }
-        }, 100);
-        //bfsBranchFix();
-    }
-
-    public void bfsBranchFix() {
-        ArrayList<PersonLayout> Q = new ArrayList<>();
-        Q.add(rootPerson);
-        rootPerson.setTreeLevel(0);
-
-
-        while (!Q.isEmpty()) {
-            PersonLayout p = Q.get(0);
-            Q.remove(0);
-
-            RelativeLayout layout = p.getPersonLayout();
-            View branch = layout.findViewById(R.id.branch_image);
-            // R pChildLayout = (LinearLayout)p.getPersonLayout().findViewById(R.id.childLinearLayout);
-            int first = 0, last = p.getChildCount() - 1;
-            if (first <= last) {
-
-                int marginLeft = p.getChildAt(first).getPersonLayout().getWidth() / 2;
-                int marginRight = p.getChildAt(last).getPersonLayout().getWidth() / 2;
-
-                Log.d("Margins", +marginLeft + " " + marginRight);
-
-
-                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) branch.getLayoutParams();
-                // params.setMargins(0,marginForChildLayout,marginRight,0);
-                params.leftMargin = marginLeft;
-                params.rightMargin = marginRight;
-                branch.setLayoutParams(params);
-
-            }
-
-            for (int i = 0; i < p.getChildCount(); i++) {
-                PersonLayout c = p.getChildAt(i);
-                Q.add(c);
-                // Log.d("Child",c.getFirstName());
-                // Log.d("Child","" + pChildLayout.getChildCount());
-
-            }
-
-        }
-
-        horizontalScrollView.scrollTo((int) (rootPerson.getPersonLayout().getRight()/2.0284f),0);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mainActivity.progressDialog.dismiss();
-            }
-        }, 500);
-
-
-
     }
 
     public void getData() {
@@ -493,7 +297,6 @@ public class TreeViewFragment extends Fragment {
 
 
             buildPersonTree();
-            bfs();
 
 
         } catch (JSONException e) {
@@ -514,14 +317,14 @@ public class TreeViewFragment extends Fragment {
         Person motherOfPerson = null, fatherOfPerson = null, spouseOfPerson = null;
 
         if (membersListMap.get(person.getMother_id()) != null)
-            motherOfPerson = new PersonLayout(personList.get(membersListMap.get(person.getMother_id())));
+            motherOfPerson = new PersonLayout(membersListMap.get(person.getMother_id()));
 
         if (membersListMap.get(person.getFather_id()) != null)
-            fatherOfPerson = new PersonLayout(personList.get(membersListMap.get(person.getFather_id())));
+            fatherOfPerson = new PersonLayout(membersListMap.get(person.getFather_id()));
 
 
         if (membersListMap.get(person.getSpouse_id()) != null)
-            spouseOfPerson = new PersonLayout(personList.get(membersListMap.get(person.getSpouse_id())));
+            spouseOfPerson = new PersonLayout(membersListMap.get(person.getSpouse_id()));
 
 
         bundle.putSerializable("Person_Mother", motherOfPerson);
@@ -640,4 +443,336 @@ public class TreeViewFragment extends Fragment {
         super.onAttach(activity);
         mainActivity = (MainActivity) activity;
     }
+
+
+    private RelativeLayout getNodeLayout(final PersonLayout person) {
+
+        RelativeLayout nodeLayout;
+
+        nodeLayout = (RelativeLayout) LayoutInflater.from(getContext()).inflate(R.layout.node_layout, null, false);
+
+        TextView personNameView = (TextView) nodeLayout.findViewById(R.id.person_name);
+        ImageView personImageView = (ImageView) nodeLayout.findViewById(R.id.person_image_view);
+        TextView spouseNameView = (TextView) nodeLayout.findViewById(R.id.spouse_name);
+        ImageView spouseImageView = (ImageView) nodeLayout.findViewById(R.id.spouse_image_view);
+
+        personNameView.setText(person.getFirst_name());
+
+        personNameView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openProfileActivity(person);
+            }
+        });
+        personImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openProfileActivity(person);
+            }
+        });
+        personNameView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                openChildrenLayouts(person);
+                return true;
+            }
+        });
+        personImageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                openChildrenLayouts(person);
+                return true;
+            }
+        });
+
+
+        String s = null;
+        if (membersListMap.get(person.getSpouse_id()) != null)
+            s = membersListMap.get(person.getSpouse_id()).getFirst_name();
+
+        if (s != null && !s.equals("")) {
+            spouseNameView.setText(s);
+            spouseNameView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    openProfileActivity(membersListMap.get(person.getSpouse_id()));
+
+                }
+            });
+            spouseImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    openProfileActivity(membersListMap.get(person.getSpouse_id()));
+
+                }
+            });
+            spouseNameView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    openChildrenLayouts(person);
+                    return true;
+                }
+            });
+            spouseImageView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    openChildrenLayouts(person);
+                    return true;
+                }
+            });
+
+
+        } else {
+            nodeLayout.findViewById(R.id.spouse_layout).setVisibility(View.INVISIBLE);
+        }
+
+        return nodeLayout;
+
+    }
+
+    private void openChildrenLayouts(PersonLayout person) {
+
+        LinearLayout pChildLayout = (LinearLayout) person.getPersonLayout().findViewById(R.id.childLinearLayout);
+        if(person.getChildCount()>0)
+            person.getPersonLayout().findViewById(R.id.bottom_branch_connect).setVisibility(View.VISIBLE);
+
+        if(!person.isChildrenOpened()){
+
+            for(int i=0;i<person.getChildCount();i++){
+
+                PersonLayout child = person.getChildren().get(i);
+                RelativeLayout childLayout = getNodeLayout(child);
+
+                if(i==0){
+                    childLayout.findViewById(R.id.left_branch).setVisibility(View.INVISIBLE);
+                }
+                if(i==person.getChildCount()-1){
+                    childLayout.findViewById(R.id.right_branch).setVisibility(View.INVISIBLE);
+                }
+
+                childLayout.findViewById(R.id.bottom_branch_connect).setVisibility(View.INVISIBLE);
+
+                child.setPersonLayout(childLayout);
+
+                pChildLayout.addView(childLayout);
+
+            }
+
+        }
+        person.setChildrenOpened(true);
+
+    }
+
+
+    public void buildPersonTree() {
+        parentLayout.removeAllViews();
+
+        membersListMap = new LinkedHashMap<>();
+        for (int i = 0; i < personList.size(); i++) {
+            membersListMap.put(personList.get(i).getUnique_id(), personList.get(i));
+        }
+        for (int i = 0; i < personList.size(); i++) {
+            PersonLayout p = personList.get(i);
+            String parentID = null;
+
+            if(membersListMap.get(p.getFather_id())!=null&&!membersListMap.get(p.getFather_id()).getIn_law().equals("Y"))
+                parentID = p.getFather_id();
+            else if(membersListMap.get(p.getMother_id())!=null&&!membersListMap.get(p.getMother_id()).getIn_law().equals("Y"))
+                parentID = p.getMother_id();
+
+            if (parentID!=null&&!p.getIn_law().equals("Y")) {
+                membersListMap.get(parentID).addChild(p);
+            } else {
+                if (!p.getIn_law().equals("Y")&&i<=1)
+                    rootPerson = p;
+            }
+        }
+
+        RelativeLayout rootLayout = getNodeLayout(rootPerson);
+        rootLayout.findViewById(R.id.left_branch).setVisibility(View.INVISIBLE);
+        rootLayout.findViewById(R.id.right_branch).setVisibility(View.INVISIBLE);
+        rootLayout.findViewById(R.id.bottom_branch_connect).setVisibility(View.INVISIBLE);
+        rootLayout.findViewById(R.id.parent_branch).setVisibility(View.GONE);
+
+        parentLayout.addView(rootLayout);
+        rootPerson.setPersonLayout(rootLayout);
+
+        mainActivity.progressDialog.dismiss();
+
+    }
+
+//bfs and branch fix bfs
+/*
+
+    public void bfs() {
+        ArrayList<PersonLayout> Q = new ArrayList<>();
+        Q.add(rootPerson);
+        rootPerson.setTreeLevel(0);
+        RelativeLayout rootLayout = getNodeLayout(rootPerson);
+        TextView personNameView = (TextView) rootLayout.findViewById(R.id.person_name);
+        ImageView personImageView = (ImageView) rootLayout.findViewById(R.id.person_image_view);
+        personNameView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openProfileActivity(rootPerson);
+            }
+        });
+        personImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openProfileActivity(rootPerson);
+            }
+        });
+        TextView spouseNameView = (TextView) rootLayout.findViewById(R.id.spouse_name);
+        ImageView spouseImageView = (ImageView) rootLayout.findViewById(R.id.spouse_image_view);
+        spouseNameView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openProfileActivity(personList.get(membersListMap.get(rootPerson.getSpouse_id())));
+            }
+        });
+        spouseImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openProfileActivity(personList.get(membersListMap.get(rootPerson.getSpouse_id())));
+            }
+        });
+        personNameView.setText(rootPerson.getFirst_name());
+
+        if(membersListMap.get(rootPerson.getSpouse_id())!=null)
+            spouseNameView.setText(personList.get(membersListMap.get(rootPerson.getSpouse_id())).getFirst_name());
+
+        parentLayout.addView(rootLayout);
+        rootPerson.setPersonLayout(rootLayout);
+
+        while (!Q.isEmpty()) {
+            PersonLayout p = Q.get(0);
+            Q.remove(0);
+            LinearLayout pChildLayout = (LinearLayout) p.getPersonLayout().findViewById(R.id.childLinearLayout);
+            for (int i = 0; i < p.getChildCount(); i++) {
+                final PersonLayout c = p.getChildAt(i);
+                p.getPersonLayout().findViewById(R.id.child_branch).setVisibility(View.VISIBLE);
+                RelativeLayout newNodeLayout = getNodeLayout(p);
+                personNameView = (TextView) newNodeLayout.findViewById(R.id.person_name);
+                personImageView = (ImageView) newNodeLayout.findViewById(R.id.person_image_view);
+                personNameView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openProfileActivity(c);
+                    }
+                });
+                personImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openProfileActivity(c);
+                    }
+                });
+                personNameView.setText(c.getFirst_name());
+                spouseNameView = (TextView) newNodeLayout.findViewById(R.id.spouse_name);
+                spouseImageView = (ImageView) newNodeLayout.findViewById(R.id.spouse_image_view);
+
+
+                String s = null;
+                if (membersListMap.get(c.getSpouse_id()) != null)
+                    s = personList.get(membersListMap.get(c.getSpouse_id())).getFirst_name();
+
+                if (s != null && !s.equals("")) {
+                    spouseNameView.setText(s);
+                    spouseNameView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openProfileActivity(personList.get(membersListMap.get(c.getSpouse_id())));
+                        }
+                    });
+                    spouseImageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openProfileActivity(personList.get(membersListMap.get(c.getSpouse_id())));
+                        }
+                    });
+                    personNameView.setText(c.getFirst_name());
+                } else {
+                    newNodeLayout.findViewById(R.id.spouse_layout).setVisibility(View.INVISIBLE);
+                    newNodeLayout.findViewById(R.id.spouse_branch).setVisibility(View.INVISIBLE);
+                }
+
+                newNodeLayout.findViewById(R.id.child_branch).setVisibility(View.INVISIBLE);
+
+                c.setPersonLayout(newNodeLayout);
+                pChildLayout.addView(c.getPersonLayout());
+
+                c.setTreeLevel(p.getTreeLevel() + 1);
+                Q.add(c);
+                Log.d("Child", c.getFirst_name());
+                Log.d("Child", "" + pChildLayout.getChildCount());
+
+
+            }
+
+        }
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                bfsBranchFix();
+            }
+        }, 100);
+        //bfsBranchFix();
+    }
+
+    public void bfsBranchFix() {
+        ArrayList<PersonLayout> Q = new ArrayList<>();
+        Q.add(rootPerson);
+        rootPerson.setTreeLevel(0);
+
+
+        while (!Q.isEmpty()) {
+            PersonLayout p = Q.get(0);
+            Q.remove(0);
+
+            RelativeLayout layout = p.getPersonLayout();
+            View branch = layout.findViewById(R.id.branch_image);
+            // R pChildLayout = (LinearLayout)p.getPersonLayout().findViewById(R.id.childLinearLayout);
+            int first = 0, last = p.getChildCount() - 1;
+            if (first <= last) {
+
+                int marginLeft = p.getChildAt(first).getPersonLayout().getWidth() / 2;
+                int marginRight = p.getChildAt(last).getPersonLayout().getWidth() / 2;
+
+                Log.d("Margins", +marginLeft + " " + marginRight);
+
+
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) branch.getLayoutParams();
+                // params.setMargins(0,marginForChildLayout,marginRight,0);
+                params.leftMargin = marginLeft;
+                params.rightMargin = marginRight;
+                branch.setLayoutParams(params);
+
+            }
+
+            for (int i = 0; i < p.getChildCount(); i++) {
+                PersonLayout c = p.getChildAt(i);
+                Q.add(c);
+                // Log.d("Child",c.getFirstName());
+                // Log.d("Child","" + pChildLayout.getChildCount());
+
+            }
+
+        }
+
+        horizontalScrollView.scrollTo((int) (rootPerson.getPersonLayout().getRight()/2.0284f),0);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mainActivity.progressDialog.dismiss();
+            }
+        }, 500);
+
+
+
+    }
+    */
 }

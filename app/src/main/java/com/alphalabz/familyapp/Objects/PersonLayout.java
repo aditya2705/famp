@@ -11,6 +11,7 @@ public class PersonLayout extends Person{
 
     private ArrayList<PersonLayout> children = new ArrayList<>();
     private LinearLayout childrenLayout = null;
+    private boolean childrenOpened = false;
 
     public PersonLayout(String unique_id, String generation, String title, String first_name,
                         String middle_name, String last_name, String nick_name, String gender,
@@ -92,4 +93,13 @@ public class PersonLayout extends Person{
         return null;
 
     }
+
+    public boolean isChildrenOpened() {
+        return childrenOpened;
+    }
+
+    public void setChildrenOpened(boolean childrenOpened) {
+        this.childrenOpened = childrenOpened;
+    }
 }
+

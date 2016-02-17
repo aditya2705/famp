@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
                                         public void run() {
                                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                         }
-                                    }, 1000);
+                                    }, 300);
 
                                     break;
                                 case 2:

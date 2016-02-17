@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -34,7 +35,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
-import com.alphalabz.familyapp.Fragments.BlankFragment;
+import com.alphalabz.familyapp.Fragments.SplashImageFragment;
 import com.alphalabz.familyapp.Fragments.CalendarFragment;
 import com.alphalabz.familyapp.Fragments.EventsTableFragment;
 import com.alphalabz.familyapp.Fragments.GalleryFragment;
@@ -148,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
                             final Fragment fragment;
                             switch (i) {
                                 case 0:
-                                    fragment = new BlankFragment();
+                                    fragment = new SplashImageFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
                                 case 1:
@@ -211,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
             if (membersListJsonString.equals("") ||eventsListJsonString.equals("")) {
                 getMembersData();
             }else{
-                if(newDay!=Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) {
+                if(newDay!=Calendar.getInstance().get(Calendar.DAY_OF_YEAR)) {
                     progressDialog.show();
                     generateEventList();
                     scheduleNotifications();
@@ -444,7 +445,7 @@ public class MainActivity extends AppCompatActivity {
     private void scheduleNotifications() {
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("NEW_DAY",Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+        editor.putInt("NEW_DAY",Calendar.getInstance().get(Calendar.DAY_OF_YEAR));
         editor.apply();
 
         ArrayList<Event> eventArrayList = new ArrayList<>(eventIDMap.values());
@@ -493,11 +494,14 @@ public class MainActivity extends AppCompatActivity {
                     myIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
+            Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                     .setContentTitle(event==1?"Anniversary of "+currentEvent.getAnniversary():"Birthday of "+currentEvent.getBirthday())
                     .setContentText("Date: "+dateString.substring(0,9)+ " Years: " +diff)
                     .setContentIntent(goToDifferentPendingIntent)
-                    .setSmallIcon(event==1?R.drawable.ic_love:R.drawable.ic_cake);
+                    .setSmallIcon(event==1?R.drawable.ic_love:R.drawable.ic_cake)
+                    .setSound(alarmSound);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 builder.setPriority(Notification.PRIORITY_HIGH);

@@ -12,10 +12,10 @@ import com.alphalabz.familyapp.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BlankFragment extends Fragment {
+public class SplashImageFragment extends Fragment {
 
 
-    public BlankFragment() {
+    public SplashImageFragment() {
         // Required empty public constructor
     }
 

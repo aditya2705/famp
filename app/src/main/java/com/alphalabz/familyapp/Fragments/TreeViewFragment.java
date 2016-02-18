@@ -1,6 +1,7 @@
 package com.alphalabz.familyapp.Fragments;
 
 
+import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -539,9 +541,10 @@ public class TreeViewFragment extends Fragment {
 
     }
 
-    private void openChildrenLayouts(PersonLayout person) {
+    private void openChildrenLayouts(final PersonLayout person) {
 
         LinearLayout pChildLayout = (LinearLayout) person.getPersonLayout().findViewById(R.id.childLinearLayout);
+
         if(person.getChildCount()>0)
             person.getPersonLayout().findViewById(R.id.bottom_branch_connect).setVisibility(View.VISIBLE);
 
@@ -568,6 +571,7 @@ public class TreeViewFragment extends Fragment {
             }
 
         }
+
         person.setChildrenOpened(true);
 
     }
@@ -575,6 +579,7 @@ public class TreeViewFragment extends Fragment {
 
     public void buildPersonTree() {
         parentLayout.removeAllViews();
+
 
         membersListMap = new LinkedHashMap<>();
         for (int i = 0; i < personList.size(); i++) {
@@ -606,7 +611,20 @@ public class TreeViewFragment extends Fragment {
         parentLayout.addView(rootLayout);
         rootPerson.setPersonLayout(rootLayout);
 
-        mainActivity.progressDialog.dismiss();
+        rootLayout.findViewById(R.id.person_image_view).performLongClick();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                horizontalScrollView.scrollTo((int) (rootPerson.getPersonLayout().getWidth()/2),0);
+                mainActivity.progressDialog.dismiss();
+            }
+        }, 300);
+
+
+
+
+
 
     }
 

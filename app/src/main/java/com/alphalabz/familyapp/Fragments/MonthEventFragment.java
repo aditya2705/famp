@@ -148,22 +148,30 @@ public class MonthEventFragment extends Fragment {
     private void showEventDialog(final int position) {
 
         String birthday = eventsList.get(position).getBirthday();
+        String marriage = eventsList.get(position).getAnniversary();
 
-        int event;
-        if(birthday.equals("null")||birthday.equals("")){
-            event = 1;
-        }else{
+        int event, titleColor;
+        if(!birthday.equals("null")&&!birthday.equals("")){
             event = 0;
+            titleColor = R.color.birthday;
+        }else{
+            if(!marriage.equals("null")&&!marriage.equals("")) {
+                event = 1;
+                titleColor = R.color.marriage;
+            }else{
+                event = 2;
+                titleColor = R.color.death;
+            }
         }
 
         final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                 .theme(Theme.LIGHT)
                 .title("Event")
                 .icon(getResources().getDrawable(event==1?R.drawable.ic_love:R.drawable.ic_cake))
-                .titleColor(getResources().getColor(R.color.md_green_700))
+                .titleColor(getResources().getColor(titleColor))
                 .customView(R.layout.dialog_event_details, true)
                 .positiveText("OK")
-                .positiveColor(getResources().getColor(R.color.md_green_700))
+                .positiveColor(getResources().getColor(titleColor))
                 .build();
 
 
@@ -334,20 +342,29 @@ public class MonthEventFragment extends Fragment {
         public void onBindViewHolder(ViewHolder holder, int position) {
             holder.dateView.setText(eventArrayList.get(position).getDate().substring(0,10));
             String birthday = eventArrayList.get(position).getBirthday();
-            String anniversary = eventArrayList.get(position).getAnniversary();
+            String marriage = eventArrayList.get(position).getAnniversary();
+            String deathAnniversary = eventArrayList.get(position).getAnniversary();
 
-            if(birthday.equals("null")||birthday.equals("")){
-                holder.occasionView.setImageDrawable(new IconicsDrawable(context)
-                        .icon(FontAwesome.Icon.faw_heart)
-                        .color(context.getResources().getColor(R.color.md_grey_700))
-                        .sizeDp(15));
-                holder.detailsView.setText(anniversary);
-            }else{
+            if(!birthday.equals("null")&&!birthday.equals("")){
                 holder.occasionView.setImageDrawable(new IconicsDrawable(context)
                         .icon(FontAwesome.Icon.faw_birthday_cake)
-                        .color(context.getResources().getColor(R.color.md_grey_700))
+                        .color(context.getResources().getColor(R.color.birthday))
                         .sizeDp(15));
                 holder.detailsView.setText(birthday);
+            }else{
+                if(!marriage.equals("null")&&!marriage.equals("")) {
+                    holder.occasionView.setImageDrawable(new IconicsDrawable(context)
+                            .icon(FontAwesome.Icon.faw_heart)
+                            .color(context.getResources().getColor(R.color.marriage))
+                            .sizeDp(15));
+                    holder.detailsView.setText(marriage);
+                }else{
+                    holder.occasionView.setImageDrawable(new IconicsDrawable(context)
+                            .icon(FontAwesome.Icon.faw_star)
+                            .color(context.getResources().getColor(R.color.death))
+                            .sizeDp(15));
+                    holder.detailsView.setText(deathAnniversary);
+                }
             }
 
 

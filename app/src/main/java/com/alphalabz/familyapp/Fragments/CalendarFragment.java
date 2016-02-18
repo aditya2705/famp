@@ -72,8 +72,6 @@ public class CalendarFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     private ArrayList<Event> eventsList = new ArrayList<>();
 
-    private String[] monthStrings={"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
-
     public CalendarFragment() {
         // Required empty public constructor
     }
@@ -208,22 +206,30 @@ public class CalendarFragment extends Fragment {
                                     final Event curEvent = eventsList.get(indexList.get(which));
 
                                     String birthday = curEvent.getBirthday();
+                                    String marriage = curEvent.getAnniversary();
 
-                                    int event;
-                                    if(birthday.equals("null")||birthday.equals("")){
-                                        event = 1;
-                                    }else{
+                                    int event, titleColor;
+                                    if(!birthday.equals("null")&&!birthday.equals("")){
                                         event = 0;
+                                        titleColor = R.color.birthday;
+                                    }else{
+                                        if(!marriage.equals("null")&&!marriage.equals("")) {
+                                            event = 1;
+                                            titleColor = R.color.marriage;
+                                        }else{
+                                            event = 2;
+                                            titleColor = R.color.death;
+                                        }
                                     }
 
                                     final MaterialDialog eventDialog = new MaterialDialog.Builder(getActivity())
                                             .theme(Theme.LIGHT)
                                             .title("Event")
                                             .icon(getResources().getDrawable(event==1?R.drawable.ic_love:R.drawable.ic_cake))
-                                            .titleColor(getResources().getColor(R.color.md_green_700))
+                                            .titleColor(getResources().getColor(titleColor))
                                             .customView(R.layout.dialog_event_details, true)
                                             .positiveText("OK")
-                                            .positiveColor(getResources().getColor(R.color.md_green_700))
+                                            .positiveColor(getResources().getColor(titleColor))
                                             .build();
 
 

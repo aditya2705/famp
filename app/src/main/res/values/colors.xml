@@ -329,5 +329,10 @@
     <color name="app_primary_semi_transparent">#77ee602d</color>
 
 
+    <color name="marriage">#FBD4B4</color>
+    <color name="birthday">#C4BD97</color>
+    <color name="death">#B6DDE7</color>
+
+
 
 </resources>

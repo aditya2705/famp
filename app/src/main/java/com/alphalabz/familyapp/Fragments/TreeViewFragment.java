@@ -616,14 +616,10 @@ public class TreeViewFragment extends Fragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                horizontalScrollView.scrollTo((int) (rootPerson.getPersonLayout().getWidth()/2),0);
+                horizontalScrollView.scrollTo((int) (rootPerson.getPersonLayout().getWidth()/2.4f),0);
                 mainActivity.progressDialog.dismiss();
             }
         }, 300);
-
-
-
-
 
 
     }

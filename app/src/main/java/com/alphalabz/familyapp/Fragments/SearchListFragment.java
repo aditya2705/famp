@@ -239,11 +239,12 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
-        final MenuItem item = menu.findItem(R.id.search);
-        MenuItem menuItem = menu.findItem(R.id.refresh);
-        menuItem.setVisible(false);
-        item.setVisible(true);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        MenuItem searchMenuItem = menu.findItem(R.id.search);
+        searchMenuItem.setVisible(true);
+        MenuItem refreshMenuItem = menu.findItem(R.id.refresh);
+        refreshMenuItem.setVisible(false);
+
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
         searchView.setOnQueryTextListener(this);
     }
 

@@ -11,6 +11,8 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/fastscroll" />
+            <option value="$PROJECT_DIR$/galleryscrollview" />
+            <option value="$PROJECT_DIR$/infinitepager" />
           </set>
         </option>
         <option name="myModules">
@@ -18,6 +20,8 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/fastscroll" />
+            <option value="$PROJECT_DIR$/galleryscrollview" />
+            <option value="$PROJECT_DIR$/infinitepager" />
           </set>
         </option>
       </GradleProjectSettings>

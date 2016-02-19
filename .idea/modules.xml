@@ -5,6 +5,8 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/famp.iml" filepath="$PROJECT_DIR$/famp.iml" />
       <module fileurl="file://$PROJECT_DIR$/fastscroll/fastscroll.iml" filepath="$PROJECT_DIR$/fastscroll/fastscroll.iml" />
+      <module fileurl="file://$PROJECT_DIR$/galleryscrollview/galleryscrollview.iml" filepath="$PROJECT_DIR$/galleryscrollview/galleryscrollview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/infinitepager/infinitepager.iml" filepath="$PROJECT_DIR$/infinitepager/infinitepager.iml" />
     </modules>
   </component>
 </project>

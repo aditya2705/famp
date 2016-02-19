@@ -2,6 +2,7 @@ package com.alphalabz.familyapp.Custom.SearchCustomClasses;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alphalabz.familyapp.R;
@@ -9,15 +10,18 @@ import com.alphalabz.familyapp.R;
 
 public class SearchItemViewHolder extends RecyclerView.ViewHolder {
 
-    private final TextView tvText;
+    private final TextView profileNameText;
+    private final ImageView profileImage;
 
     public SearchItemViewHolder(View itemView) {
         super(itemView);
 
-        tvText = (TextView) itemView.findViewById(R.id.text);
+        profileNameText = (TextView) itemView.findViewById(R.id.text);
+        profileImage = (ImageView) itemView.findViewById(R.id.profile_image);
     }
 
     public void bind(SearchMemberModel model) {
-        tvText.setText(model.getNameString());
+        profileNameText.setText(model.getNameString());
+        profileImage.setImageResource(R.drawable.profile);
     }
 }

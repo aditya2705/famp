@@ -17,19 +17,36 @@
             android:layout_width="match_parent" android:layout_height="wrap_content"
             android:gravity="center_horizontal">
 
-            <LinearLayout
-                android:id="@+id/parent_layout"
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="@dimen/_minus20sdp"
-                android:layout_marginLeft="@dimen/_minus20sdp"
-                android:paddingRight="@dimen/_20sdp"
-                android:paddingBottom="@dimen/_20sdp"
-                android:paddingTop="@dimen/_20sdp"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-            </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/parent_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/_minus20sdp"
+                    android:layout_marginLeft="@dimen/_minus20sdp"
+                    android:paddingRight="@dimen/_20sdp"
+                    android:paddingBottom="@dimen/_20sdp"
+                    android:paddingTop="@dimen/_20sdp"
+                    android:orientation="vertical"/>
+
+                <TextView
+                    android:id="@+id/root_prompt"
+                    android:layout_width="@dimen/_80sdp"
+                    android:layout_height="wrap_content"
+                    android:text="Root Member"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/_20sdp"
+                    android:layout_toRightOf="@+id/parent_layout"
+                    android:layout_marginTop="@dimen/_40sdp"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:textColor="@color/md_grey_800"/>
+
+
+            </RelativeLayout>
 
         </HorizontalScrollView>
 
@@ -60,6 +77,15 @@
         android:layout_alignParentBottom="true">
 
         <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_reset_tree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_icon="@drawable/ic_reset"
+            fab:fab_colorNormal="@color/md_green_600"
+            fab:fab_title="Reset Tree"
+            fab:fab_colorPressed="@color/md_green_800"/>
+
+        <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
             android:id="@+id/action_download"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -69,8 +95,6 @@
             fab:fab_colorPressed="@color/md_green_800"/>
 
     </net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu>
-
-
 
 
 

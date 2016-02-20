@@ -4,10 +4,10 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -79,11 +79,11 @@ public class ProfileActivity extends AppCompatActivity {
         fatherOfPerson = (Person) bundle.getSerializable("Person_Father");
         spouseOfPerson = (Person) bundle.getSerializable("Person_Spouse");
 
-        isInLaw = actualPerson.getIn_law().equals("Y")?true:false;
+        isInLaw = actualPerson.getIn_law().equals("Y") ? true : false;
 
-        if(isInLaw){
-            ((TextView)findViewById(R.id.father_text)).setText("Father In Law's Name");
-            ((TextView)findViewById(R.id.mother_text)).setText("Mother In Law's Name");
+        if (isInLaw) {
+            ((TextView) findViewById(R.id.father_text)).setText("Father In Law's Name");
+            ((TextView) findViewById(R.id.mother_text)).setText("Mother In Law's Name");
         }
 
         int k = 0;
@@ -92,8 +92,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         TextView nameT = (TextView) findViewById(R.id.profile_name);
         String newName = ((actualPerson.getTitle().equals("null") || actualPerson.getTitle().equals("")) ? "" : (actualPerson.getTitle() + " ")) +
-                actualPerson.getFirst_name() + (actualPerson.getMiddle_name().equals("null")?"":" "+actualPerson.getMiddle_name())
-                +" " + actualPerson.getLast_name() + (actualPerson.getNick_name().equals("null")?"":" ( "+actualPerson.getNick_name()+" )");
+                actualPerson.getFirst_name() + (actualPerson.getMiddle_name().equals("null") ? "" : " " + actualPerson.getMiddle_name())
+                + " " + actualPerson.getLast_name() + (actualPerson.getNick_name().equals("null") ? "" : " ( " + actualPerson.getNick_name() + " )");
         nameT.setText(newName);
 
         TextView firstNameT = (TextView) findViewById(R.id.profile_firstname);
@@ -104,7 +104,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         TextView fatherNameT = (TextView) findViewById(R.id.profile_fathername);
         if (fatherOfPerson != null) {
-            temp = (fatherOfPerson.getTitle().equals("null")?"":" "+fatherOfPerson.getTitle()+" ")+fatherOfPerson.getFirst_name()+(fatherOfPerson.getMiddle_name().equals("null")?"":" "+fatherOfPerson.getMiddle_name());
+            temp = (fatherOfPerson.getTitle().equals("null") ? "" : " " + fatherOfPerson.getTitle() + " ") + fatherOfPerson.getFirst_name() + (fatherOfPerson.getMiddle_name().equals("null") ? "" : " " + fatherOfPerson.getMiddle_name());
             if (!temp.equals(""))
                 fatherNameT.setText(temp);
             else {
@@ -126,7 +126,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         TextView motherNameT = (TextView) findViewById(R.id.profile_mothername);
         if (motherOfPerson != null) {
-            temp = (motherOfPerson.getTitle().equals("null")?"":" "+motherOfPerson.getTitle()+" ")+motherOfPerson.getFirst_name()+(motherOfPerson.getMiddle_name().equals("null")?"":" "+motherOfPerson.getMiddle_name());
+            temp = (motherOfPerson.getTitle().equals("null") ? "" : " " + motherOfPerson.getTitle() + " ") + motherOfPerson.getFirst_name() + (motherOfPerson.getMiddle_name().equals("null") ? "" : " " + motherOfPerson.getMiddle_name());
             if (!temp.equals(""))
                 motherNameT.setText(temp);
             else {
@@ -148,7 +148,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         TextView spouseNameT = (TextView) findViewById(R.id.profile_spousename);
         if (spouseOfPerson != null) {
-            temp = (spouseOfPerson.getTitle().equals("null")?"":" "+spouseOfPerson.getTitle()+" ")+spouseOfPerson.getFirst_name()+(spouseOfPerson.getMiddle_name().equals("null")?"":" "+spouseOfPerson.getMiddle_name());;
+            temp = (spouseOfPerson.getTitle().equals("null") ? "" : " " + spouseOfPerson.getTitle() + " ") + spouseOfPerson.getFirst_name() + (spouseOfPerson.getMiddle_name().equals("null") ? "" : " " + spouseOfPerson.getMiddle_name());
+            ;
             if (!temp.equals(""))
                 spouseNameT.setText(temp);
             else {
@@ -197,18 +198,16 @@ public class ProfileActivity extends AppCompatActivity {
         if (temp.length() >= 10) {
 
             String t1 = actualPerson.getBirth_date();
-            if(t1.length() >= 10)
-                deathdateT.setText(t1.substring(0, 9)+" - "+temp.substring(0,9));
+            if (t1.length() >= 10)
+                deathdateT.setText(t1.substring(0, 9) + " - " + temp.substring(0, 9));
             else
-                deathdateT.setText("Demise: "+temp.substring(0,9));
+                deathdateT.setText("Demise: " + temp.substring(0, 9));
             birthdateT.setVisibility(View.GONE);
             marriagedateT.setVisibility(View.GONE);
-        }
-        else
+        } else
             deathdateT.setVisibility(View.GONE);
 
         k = 0;
-
 
 
         TextView email1T = (TextView) findViewById(R.id.profile_email1);
@@ -221,8 +220,7 @@ public class ProfileActivity extends AppCompatActivity {
                     emailIntent(actualPerson.getEmail1());
                 }
             });
-        }
-        else {
+        } else {
             findViewById(R.id.email_layout1).setVisibility(View.GONE);
             ++k;
         }
@@ -237,8 +235,7 @@ public class ProfileActivity extends AppCompatActivity {
                     emailIntent(actualPerson.getEmail2());
                 }
             });
-        }
-        else {
+        } else {
             findViewById(R.id.email_layout2).setVisibility(View.GONE);
             ++k;
         }
@@ -253,8 +250,7 @@ public class ProfileActivity extends AppCompatActivity {
                     phoneIntent(actualPerson.getMobile_number());
                 }
             });
-        }
-        else {
+        } else {
             findViewById(R.id.mobile1_layout).setVisibility(View.GONE);
             ++k;
         }
@@ -269,8 +265,7 @@ public class ProfileActivity extends AppCompatActivity {
                     phoneIntent(actualPerson.getAlternate_number());
                 }
             });
-        }
-        else {
+        } else {
             findViewById(R.id.mobile2_layout).setVisibility(View.GONE);
             ++k;
         }
@@ -285,8 +280,7 @@ public class ProfileActivity extends AppCompatActivity {
                     phoneIntent(actualPerson.getResidence_number());
                 }
             });
-        }
-        else {
+        } else {
             findViewById(R.id.residence_layout).setVisibility(View.GONE);
             ++k;
         }
@@ -344,16 +338,14 @@ public class ProfileActivity extends AppCompatActivity {
         checkAndAddChildren();
 
 
-
-
     }
 
     private void checkAndAddChildren() {
 
         ArrayList<Person> childrenList = new ArrayList<>();
-        JSONArray membersJsonArray=null;
+        JSONArray membersJsonArray = null;
 
-        String membersString = getSharedPreferences("FAMP", 0).getString("MEMBERS_STRING","");
+        String membersString = getSharedPreferences("FAMP", 0).getString("MEMBERS_STRING", "");
         JSONObject jsonObj = null;
         try {
             jsonObj = new JSONObject(membersString);
@@ -363,10 +355,8 @@ public class ProfileActivity extends AppCompatActivity {
             for (int i = 0; i < membersJsonArray.length(); i++) {
                 JSONObject c = membersJsonArray.getJSONObject(i);
 
-                String unique_id,generation,title,first_name,middle_name,last_name,nick_name
-                        ,gender,in_law,mother_id,mother_name,father_id,father_name,spouse_id,spouse_name,birth_date,marriage_date,death_date,
-                        mobile_number,alternate_number,residence_number,email1,email2,address_1,address_2,city,state_country,pincode
-                        ,designation,company,industry_special,image_url;
+                String unique_id, generation, title, first_name, middle_name, last_name, nick_name, gender, in_law, mother_id, mother_name, father_id, father_name, spouse_id, spouse_name, birth_date, marriage_date, death_date,
+                        mobile_number, alternate_number, residence_number, email1, email2, address_1, address_2, city, state_country, pincode, designation, company, industry_special, image_url;
 
 
                 unique_id = c.getString(TAG_ID);
@@ -402,9 +392,9 @@ public class ProfileActivity extends AppCompatActivity {
                 industry_special = c.getString(TAG_INDUSTRY_SPECIAL);
                 image_url = c.getString(TAG_IMAGE_URL);
 
-                if(actualPerson.getGender().equals("M")){
+                if (actualPerson.getGender().equals("M")) {
 
-                    if(actualPerson.getUnique_id().equals(father_id)&&!in_law.equals("Y")){
+                    if (actualPerson.getUnique_id().equals(father_id) && !in_law.equals("Y")) {
                         Person person = new Person(unique_id, generation, title, first_name, middle_name, last_name, nick_name,
                                 gender, in_law, mother_id, mother_name, father_id, father_name, spouse_id,
                                 spouse_name, birth_date, marriage_date, death_date, mobile_number, alternate_number,
@@ -414,9 +404,9 @@ public class ProfileActivity extends AppCompatActivity {
                         childrenList.add(person);
                     }
 
-                }else{
+                } else {
 
-                    if(actualPerson.getUnique_id().equals(mother_id)&&!in_law.equals("Y")){
+                    if (actualPerson.getUnique_id().equals(mother_id) && !in_law.equals("Y")) {
                         Person person = new Person(unique_id, generation, title, first_name, middle_name, last_name, nick_name,
                                 gender, in_law, mother_id, mother_name, father_id, father_name, spouse_id,
                                 spouse_name, birth_date, marriage_date, death_date, mobile_number, alternate_number,
@@ -435,23 +425,22 @@ public class ProfileActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        for(int i=0;i<childrenList.size();i++) {
+        for (int i = 0; i < childrenList.size(); i++) {
             View childView = View.inflate(this, R.layout.profile_child_layout, null);
-            ((TextView)childView.findViewById(R.id.child_name)).setText(childrenList.get(i).getFirst_name()+(childrenList.get(i).getMiddle_name().equals("null")?"":" "+childrenList.get(i).getMiddle_name())+" "+childrenList.get(i).getLast_name());
-            if(i%2==0){
-                ((LinearLayout)findViewById(R.id.vertical_layout_even)).addView(childView);
-            }else{
-                ((LinearLayout)findViewById(R.id.vertical_layout_odd)).addView(childView);
+            ((TextView) childView.findViewById(R.id.child_name)).setText(childrenList.get(i).getFirst_name() + (childrenList.get(i).getMiddle_name().equals("null") ? "" : " " + childrenList.get(i).getMiddle_name()) + " " + childrenList.get(i).getLast_name());
+            if (i % 2 == 0) {
+                ((LinearLayout) findViewById(R.id.vertical_layout_even)).addView(childView);
+            } else {
+                ((LinearLayout) findViewById(R.id.vertical_layout_odd)).addView(childView);
             }
         }
 
-        if(childrenList.size()<=1)
+        if (childrenList.size() <= 1)
             findViewById(R.id.vertical_layout_odd).setVisibility(View.GONE);
 
-        if(childrenList.size()==0){
+        if (childrenList.size() == 0) {
             findViewById(R.id.children_details_card).setVisibility(View.GONE);
         }
-
 
 
     }
@@ -462,7 +451,7 @@ public class ProfileActivity extends AppCompatActivity {
                 .theme(Theme.LIGHT)
                 .title("EMAIL")
                 .icon(getResources().getDrawable(R.drawable.ic_email))
-                .content("Draft an email to "+emailString+" ?")
+                .content("Draft an email to " + emailString + " ?")
                 .negativeText("NO")
                 .positiveText("YES")
                 .positiveColor(getResources().getColor(R.color.md_green_700))
@@ -470,7 +459,7 @@ public class ProfileActivity extends AppCompatActivity {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        Intent email = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"+emailString));
+                        Intent email = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + emailString));
                         email.putExtra(Intent.EXTRA_SUBJECT, "Your subject here");
                         email.putExtra(Intent.EXTRA_TEXT, "");
                         startActivity(email);
@@ -486,7 +475,6 @@ public class ProfileActivity extends AppCompatActivity {
                 .show();
 
 
-
     }
 
     private void phoneIntent(final String phone) {
@@ -495,7 +483,7 @@ public class ProfileActivity extends AppCompatActivity {
                 .theme(Theme.LIGHT)
                 .title("CALL")
                 .icon(getResources().getDrawable(R.drawable.ic_contact_phone))
-                .content("Call on "+phone+" ?")
+                .content("Call on " + phone + " ?")
                 .positiveText("YES")
                 .negativeText("NO")
                 .positiveColor(getResources().getColor(R.color.md_green_700))

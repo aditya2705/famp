@@ -1,7 +1,6 @@
 package com.alphalabz.familyapp.Fragments;
 
 
-import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,7 +12,6 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -21,6 +19,7 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,6 +28,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 import com.alphalabz.familyapp.Activities.MainActivity;
 import com.alphalabz.familyapp.Activities.ProfileActivity;
 import com.alphalabz.familyapp.Objects.Person;
@@ -44,7 +45,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -135,7 +135,7 @@ public class TreeViewFragment extends Fragment {
         rootView.findViewById(R.id.shadowView).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(v.getVisibility() == View.VISIBLE){
+                if (v.getVisibility() == View.VISIBLE) {
                     menuMultipleActions.collapse();
                 }
             }
@@ -154,6 +154,15 @@ public class TreeViewFragment extends Fragment {
             }
         });
 
+        FloatingActionButton actionButton1 = (FloatingActionButton)
+                rootView.findViewById(R.id.action_reset_tree);
+        actionButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resetTree();
+                menuMultipleActions.collapse();
+            }
+        });
 
         FloatingActionButton actionButton2 = (FloatingActionButton)
                 rootView.findViewById(R.id.action_download);
@@ -172,14 +181,23 @@ public class TreeViewFragment extends Fragment {
 
         marginForChildLayout = (int) (getResources().getDimension(R.dimen._minus15sdp));
 
-        personList = new ArrayList<>();
-
         if (membersListJsonString.equals("") || membersListJsonString == null)
             getData();
         else
-            showList();
+            generateList();
 
         return rootView;
+    }
+
+    private void resetTree() {
+
+        mainActivity.progressDialog.show();
+
+        generateList();
+        rootView.findViewById(R.id.root_prompt).setVisibility(View.VISIBLE);
+
+        mainActivity.progressDialog.dismiss();
+
     }
 
     public void getData() {
@@ -226,7 +244,7 @@ public class TreeViewFragment extends Fragment {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("MEMBERS_STRING", membersListJsonString);
                 editor.apply();
-                showList();
+                generateList();
             }
 
             @Override
@@ -238,7 +256,9 @@ public class TreeViewFragment extends Fragment {
         g.execute();
     }
 
-    protected void showList() {
+    protected void generateList() {
+
+        personList = new ArrayList<>();
 
         try {
             JSONObject jsonObj = new JSONObject(membersListJsonString);
@@ -247,10 +267,8 @@ public class TreeViewFragment extends Fragment {
             for (int i = 0; i < membersJsonArray.length(); i++) {
                 JSONObject c = membersJsonArray.getJSONObject(i);
 
-                String unique_id,generation,title,first_name,middle_name,last_name,nick_name
-                        ,gender,in_law,mother_id,mother_name,father_id,father_name,spouse_id,spouse_name,birth_date,marriage_date,death_date,
-                        mobile_number,alternate_number,residence_number,email1,email2,address_1,address_2,city,state_country,pincode
-                        ,designation,company,industry_special,image_url;
+                String unique_id, generation, title, first_name, middle_name, last_name, nick_name, gender, in_law, mother_id, mother_name, father_id, father_name, spouse_id, spouse_name, birth_date, marriage_date, death_date,
+                        mobile_number, alternate_number, residence_number, email1, email2, address_1, address_2, city, state_country, pincode, designation, company, industry_special, image_url;
 
 
                 unique_id = c.getString(TAG_ID);
@@ -338,24 +356,22 @@ public class TreeViewFragment extends Fragment {
 
     }
 
-    public static Bitmap loadBitmapFromView(View v)
-    {
+    public static Bitmap loadBitmapFromView(View v) {
         Bitmap b = Bitmap.createBitmap(v.getWidth(), v.getHeight(), Bitmap.Config.ARGB_8888);
 
         Canvas c = new Canvas(b);
-        v.layout(0, 0, v.getLayoutParams().width/500, v.getLayoutParams().height/500);
+        v.layout(0, 0, v.getLayoutParams().width / 500, v.getLayoutParams().height / 500);
         v.draw(c);
         return b;
     }
 
-    private void generateImage()
-    {
+    private void generateImage() {
 
         HorizontalScrollView z = horizontalScrollView;
         int totalHeight = z.getChildAt(0).getHeight();
         int totalWidth = z.getChildAt(0).getWidth();
 
-       familyTreeBitmap = getBitmapFromView(parentLayout,totalHeight,totalWidth);
+        familyTreeBitmap = getBitmapFromView(parentLayout, totalHeight, totalWidth);
 
     }
 
@@ -366,10 +382,10 @@ public class TreeViewFragment extends Fragment {
         display.getSize(size);
         int screenHeight = size.y;
 
-        int height = (int) Math.min(screenHeight/1.1, totalHeight);
-        float percent = height / (float)totalHeight;
+        int height = (int) Math.min(screenHeight / 1.1, totalHeight);
+        float percent = height / (float) totalHeight;
 
-        Bitmap canvasBitmap = Bitmap.createBitmap((int)(totalWidth*percent),(int)(totalHeight*percent), Bitmap.Config.ARGB_8888);
+        Bitmap canvasBitmap = Bitmap.createBitmap((int) (totalWidth * percent), (int) (totalHeight * percent), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(canvasBitmap);
 
         Drawable bgDrawable = view.getBackground();
@@ -398,7 +414,7 @@ public class TreeViewFragment extends Fragment {
 
                 String result = "";
                 //Save bitmap
-                File imageDirectory = new File(Environment.getExternalStorageDirectory()+"/Family Tree/");
+                File imageDirectory = new File(Environment.getExternalStorageDirectory() + "/Family Tree/");
                 imageDirectory.mkdirs();
                 String fileName = "family_tree.jpg";
                 File myPath = new File(imageDirectory, fileName);
@@ -409,9 +425,6 @@ public class TreeViewFragment extends Fragment {
                     fos.flush();
                     fos.close();
 
-                }catch (FileNotFoundException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -422,7 +435,7 @@ public class TreeViewFragment extends Fragment {
 
             @Override
             protected void onPostExecute(String result) {
-                Toast.makeText(getActivity(),"Family tree saved as image inside /sdcard/Family Tree/ as family_tree.jpg",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Family tree saved as image inside /sdcard/Family Tree/ as family_tree.jpg", Toast.LENGTH_SHORT).show();
                 mainActivity.progressDialog.dismiss();
             }
 
@@ -458,9 +471,9 @@ public class TreeViewFragment extends Fragment {
         TextView spouseNameView = (TextView) nodeLayout.findViewById(R.id.spouse_name);
         ImageView spouseImageView = (ImageView) nodeLayout.findViewById(R.id.spouse_image_view);
 
-        personNameView.setText((person.getTitle().equals("null")?"":person.getTitle()+" ")+person.getFirst_name()+" "
-                +(person.getMiddle_name().equals("null")?"":person.getMiddle_name()+" ")
-                +person.getLast_name());
+        personNameView.setText((person.getTitle().equals("null") ? "" : person.getTitle() + " ") +
+                person.getFirst_name() + " " + (person.getMiddle_name().equals("null") ? "" : person.getMiddle_name() + " ") +
+                person.getLast_name());
 
         personNameView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -477,14 +490,14 @@ public class TreeViewFragment extends Fragment {
         personNameView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                openChildrenLayouts(person);
+                showChildrenListDialog(person);
                 return true;
             }
         });
         personImageView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                openChildrenLayouts(person);
+                showChildrenListDialog(person);
                 return true;
             }
         });
@@ -493,10 +506,10 @@ public class TreeViewFragment extends Fragment {
         String s = null;
         if (membersListMap.get(person.getSpouse_id()) != null) {
             Person p = membersListMap.get(person.getSpouse_id());
-            
-            s = (p.getTitle().equals("null")?"":p.getTitle()+" ")+p.getFirst_name()+" "
-                    +(p.getMiddle_name().equals("null")?"":p.getMiddle_name()+" ")
-                    +p.getLast_name();
+
+            s = (p.getTitle().equals("null") ? "" : p.getTitle() + " ") + p.getFirst_name() + " "
+                    + (p.getMiddle_name().equals("null") ? "" : p.getMiddle_name() + " ")
+                    + p.getLast_name();
         }
 
         if (s != null && !s.equals("")) {
@@ -520,14 +533,14 @@ public class TreeViewFragment extends Fragment {
             spouseNameView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    openChildrenLayouts(person);
+                    showChildrenListDialog(person);
                     return true;
                 }
             });
             spouseImageView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    openChildrenLayouts(person);
+                    showChildrenListDialog(person);
                     return true;
                 }
             });
@@ -541,24 +554,25 @@ public class TreeViewFragment extends Fragment {
 
     }
 
-    private void openChildrenLayouts(final PersonLayout person) {
+    private void openAllChildrenLayouts(final PersonLayout person) {
 
         LinearLayout pChildLayout = (LinearLayout) person.getPersonLayout().findViewById(R.id.childLinearLayout);
+        pChildLayout.removeAllViews();
 
-        if(person.getChildCount()>0)
+        if (person.getChildCount() > 0)
             person.getPersonLayout().findViewById(R.id.bottom_branch_connect).setVisibility(View.VISIBLE);
 
-        if(!person.isChildrenOpened()){
+        if (!person.isChildrenOpened()) {
 
-            for(int i=0;i<person.getChildCount();i++){
+            for (int i = 0; i < person.getChildCount(); i++) {
 
                 PersonLayout child = person.getChildren().get(i);
                 RelativeLayout childLayout = getNodeLayout(child);
 
-                if(i==0){
+                if (i == 0) {
                     childLayout.findViewById(R.id.left_branch).setVisibility(View.INVISIBLE);
                 }
-                if(i==person.getChildCount()-1){
+                if (i == person.getChildCount() - 1) {
                     childLayout.findViewById(R.id.right_branch).setVisibility(View.INVISIBLE);
                 }
 
@@ -576,10 +590,38 @@ public class TreeViewFragment extends Fragment {
 
     }
 
+    private void openSpecificChildLayout(final PersonLayout person, int position) {
+
+        LinearLayout pChildLayout = (LinearLayout) person.getPersonLayout().findViewById(R.id.childLinearLayout);
+
+        if (person.getChildCount() > 0)
+            person.getPersonLayout().findViewById(R.id.bottom_branch_connect).setVisibility(View.VISIBLE);
+
+        if (!person.isChildrenOpened()) {
+
+
+                PersonLayout child = person.getChildren().get(position);
+                RelativeLayout childLayout = getNodeLayout(child);
+
+                childLayout.findViewById(R.id.left_branch).setVisibility(View.INVISIBLE);
+
+                childLayout.findViewById(R.id.right_branch).setVisibility(View.INVISIBLE);
+
+                childLayout.findViewById(R.id.bottom_branch_connect).setVisibility(View.INVISIBLE);
+
+                child.setPersonLayout(childLayout);
+
+                pChildLayout.addView(childLayout);
+
+        }
+
+        person.setChildrenOpened(true);
+
+    }
+
 
     public void buildPersonTree() {
         parentLayout.removeAllViews();
-
 
         membersListMap = new LinkedHashMap<>();
         for (int i = 0; i < personList.size(); i++) {
@@ -589,15 +631,15 @@ public class TreeViewFragment extends Fragment {
             PersonLayout p = personList.get(i);
             String parentID = null;
 
-            if(membersListMap.get(p.getFather_id())!=null&&!membersListMap.get(p.getFather_id()).getIn_law().equals("Y"))
+            if (membersListMap.get(p.getFather_id()) != null && !membersListMap.get(p.getFather_id()).getIn_law().equals("Y"))
                 parentID = p.getFather_id();
-            else if(membersListMap.get(p.getMother_id())!=null&&!membersListMap.get(p.getMother_id()).getIn_law().equals("Y"))
+            else if (membersListMap.get(p.getMother_id()) != null && !membersListMap.get(p.getMother_id()).getIn_law().equals("Y"))
                 parentID = p.getMother_id();
 
-            if (parentID!=null&&!p.getIn_law().equals("Y")) {
+            if (parentID != null && !p.getIn_law().equals("Y")) {
                 membersListMap.get(parentID).addChild(p);
             } else {
-                if (!p.getIn_law().equals("Y")&&i<=1)
+                if (!p.getIn_law().equals("Y") && i <= 1)
                     rootPerson = p;
             }
         }
@@ -611,15 +653,49 @@ public class TreeViewFragment extends Fragment {
         parentLayout.addView(rootLayout);
         rootPerson.setPersonLayout(rootLayout);
 
-        rootLayout.findViewById(R.id.person_image_view).performLongClick();
+        mainActivity.progressDialog.dismiss();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                horizontalScrollView.scrollTo((int) (rootPerson.getPersonLayout().getWidth()/2.4f),0);
-                mainActivity.progressDialog.dismiss();
+    }
+
+    public void showChildrenListDialog(final PersonLayout person){
+
+        if (person.getChildCount() > 0 && !person.isChildrenOpened()) {
+
+            final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.simple_text_view);
+
+            for (int i = 0; i < person.getChildCount(); i++) {
+
+                PersonLayout child = person.getChildren().get(i);
+                arrayAdapter.add((child.getTitle().equals("null") ? "" : child.getTitle() + " ") +
+                        child.getFirst_name() + " " + (child.getMiddle_name().equals("null") ? "" : child.getMiddle_name() + " ") +
+                        child.getLast_name());
+                
             }
-        }, 300);
+
+            arrayAdapter.add("Open All Children");
+
+            new MaterialDialog.Builder(getActivity())
+                    .theme(Theme.LIGHT)
+                    .title("Open In Tree")
+                    .adapter(arrayAdapter, new MaterialDialog.ListCallback() {
+                        @Override
+                        public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+
+                            rootView.findViewById(R.id.root_prompt).setVisibility(View.GONE);
+                            if(which==arrayAdapter.getCount()-1){
+                                openAllChildrenLayouts(person);
+
+                            }else{
+                                openSpecificChildLayout(person,which);
+                            }
+
+                            dialog.dismiss();
+
+                        }
+                    })
+                    .show();
+
+        }
 
 
     }

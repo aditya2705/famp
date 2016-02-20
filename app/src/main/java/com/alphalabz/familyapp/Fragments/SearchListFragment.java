@@ -14,7 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.alphalabz.familyapp.Activities.MainActivity;
 import com.alphalabz.familyapp.Activities.ProfileActivity;
@@ -41,7 +40,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SearchListFragment extends Fragment implements SearchView.OnQueryTextListener{
+public class SearchListFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     private MainActivity mainActivity;
     private String membersListJsonString;
@@ -81,8 +80,8 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
     private static final String TAG_IMAGE_URL = "image_url";
 
     private ArrayList<Person> personList = new ArrayList<>();
-    private LinkedHashMap<String,String> searchableMembersStringMap = new LinkedHashMap<>();
-    private LinkedHashMap<String,Person> membersListMap = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> searchableMembersStringMap = new LinkedHashMap<>();
+    private LinkedHashMap<String, Person> membersListMap = new LinkedHashMap<>();
 
     private View rootView;
 
@@ -116,7 +115,7 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
 
         mModels = new ArrayList<>();
 
-        membersListJsonString = mainActivity.sharedPreferences.getString("MEMBERS_STRING","");
+        membersListJsonString = mainActivity.sharedPreferences.getString("MEMBERS_STRING", "");
 
         JSONObject jsonObj = null;
         try {
@@ -127,10 +126,8 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
             for (int i = 0; i < membersJsonArray.length(); i++) {
                 JSONObject c = membersJsonArray.getJSONObject(i);
 
-                String unique_id,generation,title,first_name,middle_name,last_name,nick_name
-                        ,gender,in_law,mother_id,mother_name,father_id,father_name,spouse_id,spouse_name,birth_date,marriage_date,death_date,
-                        mobile_number,alternate_number,residence_number,email1,email2,address_1,address_2,city,state_country,pincode
-                        ,designation,company,industry_special,image_url;
+                String unique_id, generation, title, first_name, middle_name, last_name, nick_name, gender, in_law, mother_id, mother_name, father_id, father_name, spouse_id, spouse_name, birth_date, marriage_date, death_date,
+                        mobile_number, alternate_number, residence_number, email1, email2, address_1, address_2, city, state_country, pincode, designation, company, industry_special, image_url;
 
 
                 unique_id = c.getString(TAG_ID);
@@ -183,18 +180,18 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
 
         for (Person person : personList) {
             String s = "";
-            s+= person.getFirst_name().equals("null")||person.getFirst_name().equals("")?"":person.getFirst_name()+" ";
-            s+= person.getMiddle_name().equals("null")||person.getMiddle_name().equals("")?"":person.getMiddle_name()+" ";
-            s+= person.getLast_name().equals("null")||person.getLast_name().equals("")?"":person.getLast_name()+" ";
-            searchableMembersStringMap.put(person.getUnique_id(),s);
+            s += person.getFirst_name().equals("null") || person.getFirst_name().equals("") ? "" : person.getFirst_name() + " ";
+            s += person.getMiddle_name().equals("null") || person.getMiddle_name().equals("") ? "" : person.getMiddle_name() + " ";
+            s += person.getLast_name().equals("null") || person.getLast_name().equals("") ? "" : person.getLast_name() + " ";
+            searchableMembersStringMap.put(person.getUnique_id(), s);
             membersListMap.put(person.getUnique_id(), person);
         }
 
         searchableMembersStringMap = sortHashMapByValuesD(searchableMembersStringMap);
         final ArrayList<String> mapKeys = new ArrayList(searchableMembersStringMap.keySet());
-        int k=0;
+        int k = 0;
         for (String s : searchableMembersStringMap.values())
-            mModels.add(new SearchMemberModel(mapKeys.get(k++),s));
+            mModels.add(new SearchMemberModel(mapKeys.get(k++), s));
 
         mAdapter = new SearchListAdapter(getActivity(), mModels);
         mRecyclerView.setAdapter(mAdapter);
@@ -277,7 +274,7 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mainActivity = (MainActivity)activity;
+        mainActivity = (MainActivity) activity;
     }
 
     public LinkedHashMap sortHashMapByValuesD(HashMap passedMap) {
@@ -303,7 +300,7 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
                 String comp1 = passedMap.get(key).toString();
                 String comp2 = val.toString();
 
-                if (comp1.equals(comp2)){
+                if (comp1.equals(comp2)) {
                     passedMap.remove(key);
                     mapKeys.remove(key);
                     sortedMap.put(key, val);

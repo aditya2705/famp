@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,13 +14,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.alphalabz.familyapp.Activities.MainActivity;
 import com.alphalabz.familyapp.R;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
-
-import org.json.JSONArray;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -133,7 +129,7 @@ public class EventsTableFragment extends Fragment {
         g.execute();
     }
 
-    public void showViews(){
+    public void showViews() {
 
         monthPager = (ViewPager) rootView.findViewById(R.id.viewpager);
         //monthPager.setOffscreenPageLimit(20);
@@ -147,7 +143,7 @@ public class EventsTableFragment extends Fragment {
     }
 
     public class MonthPagerAdapter extends FragmentPagerAdapter {
-        private final String[] tab_names = {"January", "February", "March", "April", "May", "June", "July", "August","September", "October","November","December"};
+        private final String[] tab_names = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 
         private MonthPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -175,6 +171,6 @@ public class EventsTableFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mainActivity = (MainActivity)activity;
+        mainActivity = (MainActivity) activity;
     }
 }

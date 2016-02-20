@@ -59,7 +59,7 @@ public class GalleryFragment extends Fragment {
                 .addMedia(MediaInfo.mediaLoader(new DefaultImageLoader(R.drawable.gallery_1)))
                 .addMedia(MediaInfo.mediaLoader(new DefaultImageLoader(R.drawable.gallery_7)));
 
-        titleTextView.setText("Position "+1);
+        titleTextView.setText("Title " + 1);
 
         scrollGalleryView.getScrollViewPager().setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -69,7 +69,7 @@ public class GalleryFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                titleTextView.setText("Position "+(position%7+1));
+                titleTextView.setText("Title " + (position % 7 + 1));
             }
 
             @Override

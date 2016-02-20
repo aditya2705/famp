@@ -3,7 +3,6 @@ package com.alphalabz.familyapp.Objects;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 @SuppressWarnings("serial")

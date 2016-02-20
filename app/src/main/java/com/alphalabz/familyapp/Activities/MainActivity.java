@@ -18,8 +18,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
@@ -35,11 +33,11 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
-import com.alphalabz.familyapp.Fragments.SplashImageFragment;
 import com.alphalabz.familyapp.Fragments.CalendarFragment;
 import com.alphalabz.familyapp.Fragments.EventsTableFragment;
 import com.alphalabz.familyapp.Fragments.GalleryFragment;
 import com.alphalabz.familyapp.Fragments.SearchListFragment;
+import com.alphalabz.familyapp.Fragments.SplashImageFragment;
 import com.alphalabz.familyapp.Fragments.TreeViewFragment;
 import com.alphalabz.familyapp.NotificationPublisher;
 import com.alphalabz.familyapp.Objects.Event;
@@ -72,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String RESULTS_FETCH_MEMBERS_URL = "http://alpha95.net63.net/get_members_2.php";
     private static final String RESULTS_FETCH_EVENTS_URL = "http://alpha95.net63.net/get_events.php";
     private static Context mContext;
-    private Drawer result = null;
+    private Drawer drawer = null;
     private String membersListJsonString, eventsListJsonString;
     public SharedPreferences sharedPreferences;
     public ProgressDialog progressDialog;
@@ -94,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
     private int newDay = -1;
 
 
-
     public static Context getContext() {
         return mContext;
     }
@@ -107,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        notificationCall = getIntent().getBooleanExtra("Notification",false);
+        notificationCall = getIntent().getBooleanExtra("Notification", false);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Loading...");
@@ -121,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         mContext = getApplicationContext();
 
         //Create the drawer
-        result = new DrawerBuilder(this)
+        drawer = new DrawerBuilder(this)
                 //this layout have to contain child layouts
                 .withRootView(R.id.drawer_container)
                 .withToolbar(toolbar)
@@ -151,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                                 case 1:
                                     progressDialog.show();
                                     fragment = new TreeViewFragment();
-                                    new Handler().postDelayed(new Runnable(){
+                                    new Handler().postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
                                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
@@ -198,30 +195,29 @@ public class MainActivity extends AppCompatActivity {
                 .withSavedInstance(savedInstanceState)
                 .build();
 
-        result.setSelectionAtPosition(0,true);
+        drawer.setSelectionAtPosition(0, true);
 
         membersListJsonString = sharedPreferences.getString("MEMBERS_STRING", "");
         eventsListJsonString = sharedPreferences.getString("EVENTS_STRING", "");
-        newDay = sharedPreferences.getInt("NEW_DAY",-1);
-        
-        if(!notificationCall) {
-            if (membersListJsonString.equals("") ||eventsListJsonString.equals("")) {
+        newDay = sharedPreferences.getInt("NEW_DAY", -1);
+
+        if (!notificationCall) {
+            if (membersListJsonString.equals("") || eventsListJsonString.equals("")) {
                 getMembersData();
-            }else{
-                if(newDay!=Calendar.getInstance().get(Calendar.DAY_OF_YEAR)) {
+            } else {
+                if (newDay != Calendar.getInstance().get(Calendar.DAY_OF_YEAR)) {
                     progressDialog.show();
                     generateEventList();
                     scheduleNotifications();
                     progressDialog.dismiss();
                 }
             }
-        }else{
+        } else {
 
             showEventDialog((Event) getIntent().getSerializableExtra("Event"));
-            
+
         }
 
-        
 
     }
 
@@ -298,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof TreeViewFragment) {
                     progressDialog.show();
-                    new Handler().postDelayed(new Runnable(){
+                    new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TreeViewFragment()).commit();
@@ -315,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
             protected void onPreExecute() {
                 progressDialog.setTitle("Loading...");
                 progressDialog.show();
-                if(!isNetworkAvailable()) {
+                if (!isNetworkAvailable()) {
                     progressDialog.dismiss();
                     Toast.makeText(MainActivity.this, "Check Internet connection and try again", Toast.LENGTH_SHORT).show();
                 }
@@ -378,7 +374,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof EventsTableFragment) {
                     progressDialog.show();
-                    new Handler().postDelayed(new Runnable(){
+                    new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EventsTableFragment()).commit();
@@ -393,7 +389,7 @@ public class MainActivity extends AppCompatActivity {
             protected void onPreExecute() {
                 progressDialog.setTitle("Loading...");
                 progressDialog.show();
-                if(!isNetworkAvailable()) {
+                if (!isNetworkAvailable()) {
                     progressDialog.dismiss();
                     Toast.makeText(MainActivity.this, "Check Internet connection and try again", Toast.LENGTH_SHORT).show();
                 }
@@ -415,7 +411,7 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < eventsJsonArray.length(); i++) {
                 JSONObject c = eventsJsonArray.getJSONObject(i);
 
-                String event_id,date,birthday,anniversary,remarks,years,city,contact,email;
+                String event_id, date, birthday, anniversary, remarks, years, city, contact, email;
 
                 event_id = c.getString(TAG_ID);
                 date = c.getString(TAG_DATE);
@@ -427,8 +423,8 @@ public class MainActivity extends AppCompatActivity {
                 contact = c.getString(TAG_CONTACT);
                 email = c.getString(TAG_EMAIL);
 
-                Event event = new Event(event_id,date,birthday,anniversary,remarks,years,city,contact,email);
-                eventIDMap.put(event_id,event);
+                Event event = new Event(event_id, date, birthday, anniversary, remarks, years, city, contact, email);
+                eventIDMap.put(event_id, event);
 
             }
 
@@ -441,21 +437,21 @@ public class MainActivity extends AppCompatActivity {
     private void scheduleNotifications() {
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("NEW_DAY",Calendar.getInstance().get(Calendar.DAY_OF_YEAR));
+        editor.putInt("NEW_DAY", Calendar.getInstance().get(Calendar.DAY_OF_YEAR));
         editor.apply();
 
         ArrayList<Event> eventArrayList = new ArrayList<>(eventIDMap.values());
 
-        for(int i=0;i<eventArrayList.size();i++) {
-            
+        for (int i = 0; i < eventArrayList.size(); i++) {
+
             Event currentEvent = eventArrayList.get(i);
 
             String birthday = currentEvent.getBirthday();
 
             int event;
-            if(birthday.equals("null")||birthday.equals("")){
+            if (birthday.equals("null") || birthday.equals("")) {
                 event = 1;
-            }else{
+            } else {
                 event = 0;
             }
 
@@ -470,11 +466,11 @@ public class MainActivity extends AppCompatActivity {
             int month = Integer.parseInt(monthFormat.format(Date.parse(dateString)));
 
 
-            Calendar a = new GregorianCalendar(year,month-1,day);
+            Calendar a = new GregorianCalendar(year, month - 1, day);
             Calendar b = Calendar.getInstance();
             int y1 = b.get(Calendar.YEAR);
             int y2 = a.get(Calendar.YEAR);
-            int diff = y1-y2;
+            int diff = y1 - y2;
             if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) ||
                     (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DAY_OF_MONTH) > b.get(Calendar.DAY_OF_MONTH))) {
                 diff--;
@@ -482,8 +478,8 @@ public class MainActivity extends AppCompatActivity {
 
 
             Intent myIntent = new Intent(this, MainActivity.class);
-            myIntent.putExtra("Event",currentEvent);
-            myIntent.putExtra("Notification",true);
+            myIntent.putExtra("Event", currentEvent);
+            myIntent.putExtra("Notification", true);
             PendingIntent goToDifferentPendingIntent = PendingIntent.getActivity(
                     this,
                     i,
@@ -493,10 +489,10 @@ public class MainActivity extends AppCompatActivity {
             Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                    .setContentTitle(event==1?"Anniversary of "+currentEvent.getAnniversary():"Birthday of "+currentEvent.getBirthday())
-                    .setContentText("Date: "+dateString.substring(0,9)+ " Years: " +diff)
+                    .setContentTitle(event == 1 ? "Anniversary of " + currentEvent.getAnniversary() : "Birthday of " + currentEvent.getBirthday())
+                    .setContentText("Date: " + dateString.substring(0, 9) + " Years: " + diff)
                     .setContentIntent(goToDifferentPendingIntent)
-                    .setSmallIcon(event==1?R.drawable.ic_love:R.drawable.ic_cake)
+                    .setSmallIcon(event == 1 ? R.drawable.ic_love : R.drawable.ic_cake)
                     .setSound(alarmSound);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -510,11 +506,11 @@ public class MainActivity extends AppCompatActivity {
             notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
             Intent notificationIntent = new Intent(this, NotificationPublisher.class);
             notificationIntent.setAction("com.alphalabz.familyapp" + i);
-            notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, i+1);
+            notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, i + 1);
             notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
             PendingIntent broadcastIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            if(a.get(Calendar.MONTH)>=b.get(Calendar.MONTH)&&a.get(Calendar.DAY_OF_MONTH)>=b.get(Calendar.DAY_OF_MONTH)) {
+            if (a.get(Calendar.MONTH) >= b.get(Calendar.MONTH) && a.get(Calendar.DAY_OF_MONTH) >= b.get(Calendar.DAY_OF_MONTH)) {
 
                 Calendar eventDataCalendar = new GregorianCalendar(b.get(Calendar.YEAR), a.get(Calendar.MONTH), a.get(Calendar.DAY_OF_MONTH));
 
@@ -533,14 +529,14 @@ public class MainActivity extends AppCompatActivity {
         String marriage = eventObject.getAnniversary();
 
         int event, titleColor;
-        if(!birthday.equals("null")&&!birthday.equals("")){
+        if (!birthday.equals("null") && !birthday.equals("")) {
             event = 0;
             titleColor = R.color.birthday;
-        }else{
-            if(!marriage.equals("null")&&!marriage.equals("")) {
+        } else {
+            if (!marriage.equals("null") && !marriage.equals("")) {
                 event = 1;
                 titleColor = R.color.marriage;
-            }else{
+            } else {
                 event = 2;
                 titleColor = R.color.death;
             }
@@ -549,20 +545,20 @@ public class MainActivity extends AppCompatActivity {
         final MaterialDialog dialog = new MaterialDialog.Builder(MainActivity.this)
                 .theme(Theme.LIGHT)
                 .title("Event")
-                .icon(getResources().getDrawable(event==1?R.drawable.ic_love:R.drawable.ic_cake))
+                .icon(getResources().getDrawable(event == 1 ? R.drawable.ic_love : R.drawable.ic_cake))
                 .titleColor(getResources().getColor(titleColor))
                 .customView(R.layout.dialog_event_details, true)
                 .positiveText("OK")
                 .positiveColor(getResources().getColor(titleColor))
                 .build();
 
-        ((TextView)dialog.getCustomView().findViewById(R.id.event_type)).setText(event==1?"Anniversary":"Birthday");
-        ((TextView)dialog.getCustomView().findViewById(R.id.members_concerned))
-                .setText(event==1?eventObject.getAnniversary():eventObject.getBirthday());
+        ((TextView) dialog.getCustomView().findViewById(R.id.event_type)).setText(event == 1 ? "Anniversary" : "Birthday");
+        ((TextView) dialog.getCustomView().findViewById(R.id.members_concerned))
+                .setText(event == 1 ? eventObject.getAnniversary() : eventObject.getBirthday());
 
         String dateString = eventObject.getDate();
 
-        ((TextView)dialog.getCustomView().findViewById(R.id.date)).setText(dateString.substring(0,9));
+        ((TextView) dialog.getCustomView().findViewById(R.id.date)).setText(dateString.substring(0, 9));
 
         SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
         int year = Integer.parseInt(yearFormat.format(Date.parse(dateString)));
@@ -574,20 +570,20 @@ public class MainActivity extends AppCompatActivity {
         int month = Integer.parseInt(monthFormat.format(Date.parse(dateString)));
 
 
-        Calendar a = new GregorianCalendar(year,month-1,day);
+        Calendar a = new GregorianCalendar(year, month - 1, day);
         Calendar b = Calendar.getInstance();
         int y1 = b.get(Calendar.YEAR);
         int y2 = a.get(Calendar.YEAR);
-        int diff = y1-y2;
+        int diff = y1 - y2;
         if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) ||
                 (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DAY_OF_MONTH) > b.get(Calendar.DAY_OF_MONTH))) {
             diff--;
         }
 
-        ((TextView)dialog.getCustomView().findViewById(R.id.years)).setText("YEARS: "+diff);
+        ((TextView) dialog.getCustomView().findViewById(R.id.years)).setText("YEARS: " + diff);
 
         String city = eventObject.getCity();
-        ((TextView)dialog.getCustomView().findViewById(R.id.city)).setText(city.equals("")||city.equals("null")?"":"CITY: "+city);
+        ((TextView) dialog.getCustomView().findViewById(R.id.city)).setText(city.equals("") || city.equals("null") ? "" : "CITY: " + city);
 
         (dialog.getCustomView().findViewById(R.id.contact_click_layout)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -597,8 +593,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         String temp = eventObject.getContact();
-        if(!temp.equals("")&&!temp.equals("null"))
-            ((TextView)dialog.getCustomView().findViewById(R.id.contact)).setText("Contact: "+temp);
+        if (!temp.equals("") && !temp.equals("null"))
+            ((TextView) dialog.getCustomView().findViewById(R.id.contact)).setText("Contact: " + temp);
         else
             (dialog.getCustomView().findViewById(R.id.contact_click_layout)).setVisibility(View.GONE);
 
@@ -610,8 +606,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         temp = eventObject.getEmail();
-        if(!temp.equals("")&&!temp.equals("null"))
-            ((TextView)dialog.getCustomView().findViewById(R.id.email)).setText("Email: "+temp);
+        if (!temp.equals("") && !temp.equals("null"))
+            ((TextView) dialog.getCustomView().findViewById(R.id.email)).setText("Email: " + temp);
         else
             (dialog.getCustomView().findViewById(R.id.email_click_layout)).setVisibility(View.GONE);
 
@@ -624,7 +620,7 @@ public class MainActivity extends AppCompatActivity {
                 .theme(Theme.LIGHT)
                 .title("EMAIL")
                 .icon(getResources().getDrawable(R.drawable.ic_email))
-                .content("Draft an email to "+emailString+" ?")
+                .content("Draft an email to " + emailString + " ?")
                 .negativeText("NO")
                 .positiveText("YES")
                 .positiveColor(getResources().getColor(R.color.md_green_700))
@@ -632,7 +628,7 @@ public class MainActivity extends AppCompatActivity {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        Intent email = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"+emailString));
+                        Intent email = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + emailString));
                         email.putExtra(Intent.EXTRA_SUBJECT, "Your subject here");
                         email.putExtra(Intent.EXTRA_TEXT, "");
                         startActivity(email);
@@ -648,7 +644,6 @@ public class MainActivity extends AppCompatActivity {
                 .show();
 
 
-
     }
 
     private void phoneIntent(final String phone) {
@@ -657,7 +652,7 @@ public class MainActivity extends AppCompatActivity {
                 .theme(Theme.LIGHT)
                 .title("CALL")
                 .icon(getResources().getDrawable(R.drawable.ic_contact_phone))
-                .content("Call on "+phone+" ?")
+                .content("Call on " + phone + " ?")
                 .positiveText("YES")
                 .negativeText("NO")
                 .positiveColor(getResources().getColor(R.color.md_green_700))
@@ -700,6 +695,13 @@ public class MainActivity extends AppCompatActivity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+    @Override
+    public void onBackPressed() {
 
+        if(drawer.isDrawerOpen()){
+            drawer.closeDrawer();
+        }else
+            super.onBackPressed();
 
+    }
 }

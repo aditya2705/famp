@@ -2,7 +2,6 @@ package com.alphalabz.familyapp.Fragments;
 
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -13,16 +12,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -40,7 +34,6 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -115,7 +108,7 @@ public class CalendarFragment extends Fragment {
                 for (int i = 0; i < eventsJsonArray.length(); i++) {
                     JSONObject c = eventsJsonArray.getJSONObject(i);
 
-                    String event_id,date,birthday,anniversary,remarks,years,city,contact,email;
+                    String event_id, date, birthday, anniversary, remarks, years, city, contact, email;
 
                     event_id = c.getString(TAG_ID);
                     date = c.getString(TAG_DATE);
@@ -127,7 +120,7 @@ public class CalendarFragment extends Fragment {
                     contact = c.getString(TAG_CONTACT);
                     email = c.getString(TAG_EMAIL);
 
-                    if(!date.equals("null")&&!date.equals("")) {
+                    if (!date.equals("null") && !date.equals("")) {
                         Event event = new Event(event_id, date, birthday, anniversary, remarks, years, city, contact, email);
                         eventsList.add(event);
 
@@ -140,17 +133,17 @@ public class CalendarFragment extends Fragment {
                         int month = Integer.parseInt(monthFormat.format(Date.parse(date)));
 
 
-                        Calendar calendarDate = new GregorianCalendar(currentCalendar.get(Calendar.YEAR),month-1,day);
+                        Calendar calendarDate = new GregorianCalendar(currentCalendar.get(Calendar.YEAR), month - 1, day);
                         CalendarDay calendar = new CalendarDay(calendarDate);
                         calendarDatesList.add(calendar);
 
                         eventsList.add(event);
-                        calendarDate = new GregorianCalendar(currentCalendar.get(Calendar.YEAR)-1,month-1,day);
+                        calendarDate = new GregorianCalendar(currentCalendar.get(Calendar.YEAR) - 1, month - 1, day);
                         calendar = new CalendarDay(calendarDate);
                         calendarDatesList.add(calendar);
 
                         eventsList.add(event);
-                        calendarDate = new GregorianCalendar(currentCalendar.get(Calendar.YEAR)+1,month-1,day);
+                        calendarDate = new GregorianCalendar(currentCalendar.get(Calendar.YEAR) + 1, month - 1, day);
                         calendar = new CalendarDay(calendarDate);
                         calendarDatesList.add(calendar);
                     }
@@ -177,22 +170,22 @@ public class CalendarFragment extends Fragment {
 
                     final ArrayList<Integer> indexList = new ArrayList<Integer>();
                     for (int i = 0; i < calendarDays.size(); i++)
-                        if(date.equals(calendarDays.get(i)))
+                        if (date.equals(calendarDays.get(i)))
                             indexList.add(i);
 
-                    final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(),R.layout.simple_text_view);
+                    final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.simple_text_view);
 
-                    for(int i=0;i<indexList.size();i++) {
+                    for (int i = 0; i < indexList.size(); i++) {
 
                         Event curEvent = eventsList.get(indexList.get(i));
                         String birthday = curEvent.getBirthday();
                         int eventInteger;
-                        if(birthday.equals("null")||birthday.equals("")){
+                        if (birthday.equals("null") || birthday.equals("")) {
                             eventInteger = 1;
-                        }else{
+                        } else {
                             eventInteger = 0;
                         }
-                        arrayAdapter.add(eventInteger==1?"Anniversary of "+curEvent.getAnniversary():"Birthday of "+curEvent.getBirthday());
+                        arrayAdapter.add(eventInteger == 1 ? "Anniversary of " + curEvent.getAnniversary() : "Birthday of " + curEvent.getBirthday());
 
                     }
 
@@ -209,14 +202,14 @@ public class CalendarFragment extends Fragment {
                                     String marriage = curEvent.getAnniversary();
 
                                     int event, titleColor;
-                                    if(!birthday.equals("null")&&!birthday.equals("")){
+                                    if (!birthday.equals("null") && !birthday.equals("")) {
                                         event = 0;
                                         titleColor = R.color.birthday;
-                                    }else{
-                                        if(!marriage.equals("null")&&!marriage.equals("")) {
+                                    } else {
+                                        if (!marriage.equals("null") && !marriage.equals("")) {
                                             event = 1;
                                             titleColor = R.color.marriage;
-                                        }else{
+                                        } else {
                                             event = 2;
                                             titleColor = R.color.death;
                                         }
@@ -225,7 +218,7 @@ public class CalendarFragment extends Fragment {
                                     final MaterialDialog eventDialog = new MaterialDialog.Builder(getActivity())
                                             .theme(Theme.LIGHT)
                                             .title("Event")
-                                            .icon(getResources().getDrawable(event==1?R.drawable.ic_love:R.drawable.ic_cake))
+                                            .icon(getResources().getDrawable(event == 1 ? R.drawable.ic_love : R.drawable.ic_cake))
                                             .titleColor(getResources().getColor(titleColor))
                                             .customView(R.layout.dialog_event_details, true)
                                             .positiveText("OK")
@@ -233,12 +226,12 @@ public class CalendarFragment extends Fragment {
                                             .build();
 
 
-                                    ((TextView)eventDialog.getCustomView().findViewById(R.id.event_type)).setText(event==1?"Anniversary":"Birthday");
-                                    ((TextView)eventDialog.getCustomView().findViewById(R.id.members_concerned)).setText(event==1?curEvent.getAnniversary():curEvent.getBirthday());
+                                    ((TextView) eventDialog.getCustomView().findViewById(R.id.event_type)).setText(event == 1 ? "Anniversary" : "Birthday");
+                                    ((TextView) eventDialog.getCustomView().findViewById(R.id.members_concerned)).setText(event == 1 ? curEvent.getAnniversary() : curEvent.getBirthday());
 
                                     String dateString = curEvent.getDate();
 
-                                    ((TextView)eventDialog.getCustomView().findViewById(R.id.date)).setText(dateString.substring(0,9));
+                                    ((TextView) eventDialog.getCustomView().findViewById(R.id.date)).setText(dateString.substring(0, 9));
 
                                     SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
                                     int year = Integer.parseInt(yearFormat.format(Date.parse(dateString)));
@@ -250,20 +243,20 @@ public class CalendarFragment extends Fragment {
                                     int month = Integer.parseInt(monthFormat.format(Date.parse(dateString)));
 
 
-                                    Calendar a = new GregorianCalendar(year,month-1,day);
+                                    Calendar a = new GregorianCalendar(year, month - 1, day);
                                     Calendar b = Calendar.getInstance();
                                     int y1 = b.get(Calendar.YEAR);
                                     int y2 = a.get(Calendar.YEAR);
-                                    int diff = y1-y2;
+                                    int diff = y1 - y2;
                                     if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) ||
                                             (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DAY_OF_MONTH) > b.get(Calendar.DAY_OF_MONTH))) {
                                         diff--;
                                     }
 
-                                    ((TextView)eventDialog.getCustomView().findViewById(R.id.years)).setText("YEARS: "+diff);
+                                    ((TextView) eventDialog.getCustomView().findViewById(R.id.years)).setText("YEARS: " + diff);
 
                                     String city = curEvent.getCity();
-                                    ((TextView)eventDialog.getCustomView().findViewById(R.id.city)).setText(city.equals("")||city.equals("null")?"":"CITY: "+city);
+                                    ((TextView) eventDialog.getCustomView().findViewById(R.id.city)).setText(city.equals("") || city.equals("null") ? "" : "CITY: " + city);
 
                                     (eventDialog.getCustomView().findViewById(R.id.contact_click_layout)).setOnClickListener(new View.OnClickListener() {
                                         @Override
@@ -273,8 +266,8 @@ public class CalendarFragment extends Fragment {
                                     });
 
                                     String temp = curEvent.getContact();
-                                    if(!temp.equals("")&&!temp.equals("null"))
-                                        ((TextView)eventDialog.getCustomView().findViewById(R.id.contact)).setText("Contact: "+temp);
+                                    if (!temp.equals("") && !temp.equals("null"))
+                                        ((TextView) eventDialog.getCustomView().findViewById(R.id.contact)).setText("Contact: " + temp);
                                     else
                                         (eventDialog.getCustomView().findViewById(R.id.contact_click_layout)).setVisibility(View.GONE);
 
@@ -286,8 +279,8 @@ public class CalendarFragment extends Fragment {
                                     });
 
                                     temp = curEvent.getEmail();
-                                    if(!temp.equals("")&&!temp.equals("null"))
-                                        ((TextView)eventDialog.getCustomView().findViewById(R.id.email)).setText("Email: "+temp);
+                                    if (!temp.equals("") && !temp.equals("null"))
+                                        ((TextView) eventDialog.getCustomView().findViewById(R.id.email)).setText("Email: " + temp);
                                     else
                                         (eventDialog.getCustomView().findViewById(R.id.email_click_layout)).setVisibility(View.GONE);
 
@@ -310,7 +303,7 @@ public class CalendarFragment extends Fragment {
                 .theme(Theme.LIGHT)
                 .title("EMAIL")
                 .icon(getResources().getDrawable(R.drawable.ic_email))
-                .content("Draft an email to "+emailString+" ?")
+                .content("Draft an email to " + emailString + " ?")
                 .negativeText("NO")
                 .positiveText("YES")
                 .positiveColor(getResources().getColor(R.color.md_green_700))
@@ -318,7 +311,7 @@ public class CalendarFragment extends Fragment {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        Intent email = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"+emailString));
+                        Intent email = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + emailString));
                         email.putExtra(Intent.EXTRA_SUBJECT, "Your subject here");
                         email.putExtra(Intent.EXTRA_TEXT, "");
                         startActivity(email);
@@ -334,7 +327,6 @@ public class CalendarFragment extends Fragment {
                 .show();
 
 
-
     }
 
     private void phoneIntent(final String phone) {
@@ -343,7 +335,7 @@ public class CalendarFragment extends Fragment {
                 .theme(Theme.LIGHT)
                 .title("CALL")
                 .icon(getResources().getDrawable(R.drawable.ic_contact_phone))
-                .content("Call on "+phone+" ?")
+                .content("Call on " + phone + " ?")
                 .positiveText("YES")
                 .negativeText("NO")
                 .positiveColor(getResources().getColor(R.color.md_green_700))

@@ -42,12 +42,6 @@ public class ScrollGalleryView extends LinearLayout {
     // Views
     private LinearLayout thumbnailsContainer;
     private HorizontalScrollView horizontalScrollView;
-    private final ViewPager.SimpleOnPageChangeListener viewPagerChangeListener = new ViewPager.SimpleOnPageChangeListener() {
-        @Override
-        public void onPageSelected(int position) {
-            //scroll(thumbnailsContainer.getChildAt(position));
-        }
-    };
     //
     private ViewPager viewPager;
     private final OnClickListener thumbnailOnClickListener = new OnClickListener() {
@@ -182,12 +176,8 @@ public class ScrollGalleryView extends LinearLayout {
     private void initializeViewPager() {
         viewPager = (HackyViewPager) findViewById(R.id.viewPager);
         pagerAdapter = new ScreenSlidePagerAdapter(fragmentManager, mListOfMedia, zoomEnabled);
-
-
         PagerAdapter wrappedAdapter = new InfinitePagerAdapter(pagerAdapter);
         viewPager.setAdapter(wrappedAdapter);
-
-        viewPager.addOnPageChangeListener(viewPagerChangeListener);
     }
 
     private void scroll(View thumbnail) {
@@ -208,8 +198,8 @@ public class ScrollGalleryView extends LinearLayout {
         return inSampleSize;
     }
 
-    public int getCurrentPosition(){
-        return viewPager.getCurrentItem();
+    public ViewPager getScrollViewPager(){
+        return viewPager;
     }
 
 }

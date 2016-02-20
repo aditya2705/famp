@@ -1,36 +1,25 @@
 package com.alphalabz.familyapp.Fragments;
 
 
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.SearchView;
+import android.support.v4.view.ViewPager;
 import android.view.Display;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.alphalabz.familyapp.R;
 import com.veinhorn.scrollgalleryview.MediaInfo;
 import com.veinhorn.scrollgalleryview.ScrollGalleryView;
 import com.veinhorn.scrollgalleryview.loader.DefaultImageLoader;
 
-import java.util.ArrayList;
-
 public class GalleryFragment extends Fragment {
 
     private ScrollGalleryView scrollGalleryView;
+    private TextView titleTextView;
 
     private int screenWidth, screenHeight;
 
@@ -54,7 +43,9 @@ public class GalleryFragment extends Fragment {
         screenHeight = size.y;
         screenWidth = size.x;
 
-        scrollGalleryView = (ScrollGalleryView)v.findViewById(R.id.scroll_gallery_view);
+        titleTextView = (TextView) v.findViewById(R.id.title_text);
+
+        scrollGalleryView = (ScrollGalleryView) v.findViewById(R.id.scroll_gallery_view);
         scrollGalleryView
                 .setThumbnailSize(100)
                 .hideThumbnails(true)
@@ -68,12 +59,29 @@ public class GalleryFragment extends Fragment {
                 .addMedia(MediaInfo.mediaLoader(new DefaultImageLoader(R.drawable.gallery_1)))
                 .addMedia(MediaInfo.mediaLoader(new DefaultImageLoader(R.drawable.gallery_7)));
 
+        titleTextView.setText("Position "+1);
+
+        scrollGalleryView.getScrollViewPager().setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                titleTextView.setText("Position "+(position%7+1));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
 
         return v;
 
     }
-
-
 
 
 }

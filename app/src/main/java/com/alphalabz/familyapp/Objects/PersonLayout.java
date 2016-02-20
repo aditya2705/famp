@@ -9,8 +9,8 @@ import java.util.ArrayList;
 public class PersonLayout extends Person{
 
     private ArrayList<PersonLayout> children = new ArrayList<>();
-    private LinearLayout childrenLayout = null;
-    private boolean childrenOpened = false;
+    private ArrayList<RelativeLayout> childrenLayoutList = new ArrayList<>();
+    private boolean allChildrenOpened = false, layoutOpened = false;
 
     public PersonLayout(String unique_id, String generation, String title, String first_name,
                         String middle_name, String last_name, String nick_name, String gender,
@@ -42,10 +42,6 @@ public class PersonLayout extends Person{
         return children;
     }
 
-    public void setChildren(ArrayList<PersonLayout> children) {
-        this.children = children;
-    }
-
     public RelativeLayout getPersonLayout() {
         return personLayout;
     }
@@ -55,25 +51,6 @@ public class PersonLayout extends Person{
     }
 
     private RelativeLayout personLayout;
-
-
-    public LinearLayout getChildrenLayout() {
-        return childrenLayout;
-    }
-
-    public void setChildrenLayout(LinearLayout childrenLayout) {
-        this.childrenLayout = childrenLayout;
-    }
-
-    public boolean isParent(PersonLayout person)
-    {
-        return unique_id.equals(person.getFather_id());
-    }
-
-    public boolean isChild(PersonLayout person)
-    {
-        return father_id.equals(person.getUnique_id());
-    }
 
     public void addChild(PersonLayout person)
     {
@@ -85,20 +62,28 @@ public class PersonLayout extends Person{
         return children.size();
     }
 
-    public PersonLayout getChildAt(int index)
-    {
-        if(index < children.size())
-            return children.get(index);
-        return null;
-
+    public boolean areAllChildrenOpened() {
+        return allChildrenOpened;
     }
 
-    public boolean isChildrenOpened() {
-        return childrenOpened;
+    public void setAllChildrenOpened(boolean allChildrenOpened) {
+        this.allChildrenOpened = allChildrenOpened;
     }
 
-    public void setChildrenOpened(boolean childrenOpened) {
-        this.childrenOpened = childrenOpened;
+    public boolean isLayoutOpened() {
+        return layoutOpened;
+    }
+
+    public void setLayoutOpened(boolean layoutOpened) {
+        this.layoutOpened = layoutOpened;
+    }
+
+    public ArrayList<RelativeLayout> getChildrenLayoutList() {
+        return childrenLayoutList;
+    }
+
+    public void setChildrenLayoutList(ArrayList<RelativeLayout> childrenLayoutList) {
+        this.childrenLayoutList = childrenLayoutList;
     }
 }
 

@@ -554,71 +554,121 @@ public class TreeViewFragment extends Fragment {
 
     }
 
-    private void openAllChildrenLayouts(final PersonLayout person) {
+    private void openAllChildrenLayouts(final PersonLayout parent) {
 
-        LinearLayout pChildLayout = (LinearLayout) person.getPersonLayout().findViewById(R.id.childLinearLayout);
-        pChildLayout.removeAllViews();
+        LinearLayout pChildLayout = (LinearLayout) parent.getPersonLayout().findViewById(R.id.childLinearLayout);
 
-        if (person.getChildCount() > 0)
-            person.getPersonLayout().findViewById(R.id.bottom_branch_connect).setVisibility(View.VISIBLE);
+        if (parent.getChildCount() > 0)
+            parent.getPersonLayout().findViewById(R.id.bottom_branch_connect).setVisibility(View.VISIBLE);
 
-        if (!person.isChildrenOpened()) {
+        if (!parent.areAllChildrenOpened()) {
 
-            for (int i = 0; i < person.getChildCount(); i++) {
+            for (int i = 0; i < parent.getChildCount(); i++) {
 
-                PersonLayout child = person.getChildren().get(i);
-                RelativeLayout childLayout = getNodeLayout(child);
+                PersonLayout child = parent.getChildren().get(i);
 
-                if (i == 0) {
-                    childLayout.findViewById(R.id.left_branch).setVisibility(View.INVISIBLE);
+                if(!child.isLayoutOpened()) {
+
+                    RelativeLayout childLayout = getNodeLayout(child);
+
+                    if (i == 0) {
+                        childLayout.findViewById(R.id.left_branch).setVisibility(View.INVISIBLE);
+                    }
+                    if (i == parent.getChildCount() - 1) {
+                        childLayout.findViewById(R.id.right_branch).setVisibility(View.INVISIBLE);
+                    }
+
+                    childLayout.findViewById(R.id.bottom_branch_connect).setVisibility(View.INVISIBLE);
+
+                    child.setPersonLayout(childLayout);
+
+                    pChildLayout.addView(childLayout);
+
+                    parent.getChildrenLayoutList().add(childLayout);
+
                 }
-                if (i == person.getChildCount() - 1) {
-                    childLayout.findViewById(R.id.right_branch).setVisibility(View.INVISIBLE);
-                }
-
-                childLayout.findViewById(R.id.bottom_branch_connect).setVisibility(View.INVISIBLE);
-
-                child.setPersonLayout(childLayout);
-
-                pChildLayout.addView(childLayout);
 
             }
 
         }
 
-        person.setChildrenOpened(true);
+        for (int i = 0; i < parent.getChildrenLayoutList().size(); i++) {
 
-    }
+            RelativeLayout cLayout = parent.getChildrenLayoutList().get(i);
 
-    private void openSpecificChildLayout(final PersonLayout person, int position) {
-
-        LinearLayout pChildLayout = (LinearLayout) person.getPersonLayout().findViewById(R.id.childLinearLayout);
-
-        if (person.getChildCount() > 0)
-            person.getPersonLayout().findViewById(R.id.bottom_branch_connect).setVisibility(View.VISIBLE);
-
-        if (!person.isChildrenOpened()) {
-
-
-                PersonLayout child = person.getChildren().get(position);
-                RelativeLayout childLayout = getNodeLayout(child);
-
-                childLayout.findViewById(R.id.left_branch).setVisibility(View.INVISIBLE);
-
-                childLayout.findViewById(R.id.right_branch).setVisibility(View.INVISIBLE);
-
-                childLayout.findViewById(R.id.bottom_branch_connect).setVisibility(View.INVISIBLE);
-
-                child.setPersonLayout(childLayout);
-
-                pChildLayout.addView(childLayout);
+            if (i == 0) {
+                cLayout.findViewById(R.id.left_branch).setVisibility(View.INVISIBLE);
+                cLayout.findViewById(R.id.right_branch).setVisibility(View.VISIBLE);
+            }
+            else if (i == parent.getChildrenLayoutList().size() - 1) {
+                cLayout.findViewById(R.id.left_branch).setVisibility(View.VISIBLE);
+                cLayout.findViewById(R.id.right_branch).setVisibility(View.INVISIBLE);
+            } else {
+                cLayout.findViewById(R.id.left_branch).setVisibility(View.VISIBLE);
+                cLayout.findViewById(R.id.right_branch).setVisibility(View.VISIBLE);
+            }
 
         }
 
-        person.setChildrenOpened(true);
+        parent.setAllChildrenOpened(true);
 
     }
 
+    private void openSpecificChildLayout(final PersonLayout parent, String childID) {
+
+        LinearLayout pChildLayout = (LinearLayout) parent.getPersonLayout().findViewById(R.id.childLinearLayout);
+
+        parent.getPersonLayout().findViewById(R.id.bottom_branch_connect).setVisibility(View.VISIBLE);
+
+        PersonLayout child = membersListMap.get(childID);
+
+        RelativeLayout childLayout = getNodeLayout(child);
+
+        childLayout.findViewById(R.id.bottom_branch_connect).setVisibility(View.INVISIBLE);
+
+        child.setPersonLayout(childLayout);
+
+        child.setLayoutOpened(true);
+
+        pChildLayout.addView(childLayout);
+
+        parent.getChildrenLayoutList().add(childLayout);
+
+        if(parent.getChildrenLayoutList().size()>1) {
+
+            for (int i = 0; i < parent.getChildrenLayoutList().size(); i++) {
+
+                RelativeLayout cLayout = parent.getChildrenLayoutList().get(i);
+
+                if (i == 0) {
+                    cLayout.findViewById(R.id.left_branch).setVisibility(View.INVISIBLE);
+                    cLayout.findViewById(R.id.right_branch).setVisibility(View.VISIBLE);
+                }
+                else if (i == parent.getChildrenLayoutList().size() - 1) {
+                    cLayout.findViewById(R.id.left_branch).setVisibility(View.VISIBLE);
+                    cLayout.findViewById(R.id.right_branch).setVisibility(View.INVISIBLE);
+                } else {
+                    cLayout.findViewById(R.id.left_branch).setVisibility(View.VISIBLE);
+                    cLayout.findViewById(R.id.right_branch).setVisibility(View.VISIBLE);
+                }
+
+            }
+        }else {
+            childLayout.findViewById(R.id.left_branch).setVisibility(View.INVISIBLE);
+            childLayout.findViewById(R.id.right_branch).setVisibility(View.INVISIBLE);
+        }
+
+        int k = 0;
+        for(int i=0;i<parent.getChildren().size();i++){
+            PersonLayout parentChild = parent.getChildren().get(i);
+            if(parentChild.isLayoutOpened())
+                ++k;
+        }
+
+        if(k==parent.getChildren().size())
+            parent.setAllChildrenOpened(true);
+
+    }
 
     public void buildPersonTree() {
         parentLayout.removeAllViews();
@@ -659,16 +709,22 @@ public class TreeViewFragment extends Fragment {
 
     public void showChildrenListDialog(final PersonLayout person){
 
-        if (person.getChildCount() > 0 && !person.isChildrenOpened()) {
+        final ArrayList<String> childrenIDs = new ArrayList<>();
+
+        if (person.getChildCount() > 0 && !person.areAllChildrenOpened()) {
 
             final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.simple_text_view);
 
             for (int i = 0; i < person.getChildCount(); i++) {
 
                 PersonLayout child = person.getChildren().get(i);
-                arrayAdapter.add((child.getTitle().equals("null") ? "" : child.getTitle() + " ") +
-                        child.getFirst_name() + " " + (child.getMiddle_name().equals("null") ? "" : child.getMiddle_name() + " ") +
-                        child.getLast_name());
+
+                if(!child.isLayoutOpened()) {
+                    arrayAdapter.add((child.getTitle().equals("null") ? "" : child.getTitle() + " ") +
+                            child.getFirst_name() + " " + (child.getMiddle_name().equals("null") ? "" : child.getMiddle_name() + " ") +
+                            child.getLast_name());
+                    childrenIDs.add(child.getUnique_id());
+                }
                 
             }
 
@@ -686,7 +742,7 @@ public class TreeViewFragment extends Fragment {
                                 openAllChildrenLayouts(person);
 
                             }else{
-                                openSpecificChildLayout(person,which);
+                                openSpecificChildLayout(person,childrenIDs.get(which));
                             }
 
                             dialog.dismiss();

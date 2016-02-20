@@ -88,6 +88,17 @@ public class ProfileActivity extends AppCompatActivity {
 
         int k = 0;
         ImageView userIcon = (ImageView) findViewById(R.id.user_icon);
+        userIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MaterialDialog dialog = new MaterialDialog.Builder(ProfileActivity.this)
+                        .theme(Theme.LIGHT)
+                        .customView(R.layout.profile_image_view,false)
+                        .build();
+                ((ImageView)dialog.getCustomView().findViewById(R.id.image)).setImageResource(R.drawable.profile);
+                dialog.show();
+            }
+        });
         userIcon.setImageResource(R.drawable.profile);
 
         TextView nameT = (TextView) findViewById(R.id.profile_name);

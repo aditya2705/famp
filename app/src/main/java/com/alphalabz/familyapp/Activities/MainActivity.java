@@ -227,6 +227,7 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         menu.findItem(R.id.search).setVisible(false);
+        menu.findItem(R.id.grid_view).setVisible(false);
         return true;
     }
 

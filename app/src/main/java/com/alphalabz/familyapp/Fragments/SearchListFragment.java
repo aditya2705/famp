@@ -238,8 +238,8 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
 
         MenuItem searchMenuItem = menu.findItem(R.id.search);
         searchMenuItem.setVisible(true);
-        MenuItem refreshMenuItem = menu.findItem(R.id.refresh);
-        refreshMenuItem.setVisible(false);
+        menu.findItem(R.id.refresh).setVisible(false);
+        menu.findItem(R.id.grid_view).setVisible(false);
 
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
         searchView.setOnQueryTextListener(this);

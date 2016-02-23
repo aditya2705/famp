@@ -126,11 +126,19 @@ public class TreeViewFragment extends Fragment {
 
     }
 
+    private int screenHeight,screenWidth;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_tree_view, container, false);
+
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenHeight = size.y;
+        screenWidth = size.x;
 
         rootView.findViewById(R.id.shadowView).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,6 +187,8 @@ public class TreeViewFragment extends Fragment {
 
         parentLayout = (LinearLayout) rootView.findViewById(R.id.parent_layout);
 
+        parentLayout.setMinimumWidth(screenWidth);
+
         marginForChildLayout = (int) (getResources().getDimension(R.dimen._minus15sdp));
 
         if (membersListJsonString.equals("") || membersListJsonString == null)
@@ -194,7 +204,6 @@ public class TreeViewFragment extends Fragment {
         mainActivity.progressDialog.show();
 
         generateList();
-        rootView.findViewById(R.id.root_prompt).setVisibility(View.VISIBLE);
 
         mainActivity.progressDialog.dismiss();
 
@@ -737,7 +746,6 @@ public class TreeViewFragment extends Fragment {
                         @Override
                         public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
 
-                            rootView.findViewById(R.id.root_prompt).setVisibility(View.GONE);
                             if(which==arrayAdapter.getCount()-1){
                                 openAllChildrenLayouts(person);
 

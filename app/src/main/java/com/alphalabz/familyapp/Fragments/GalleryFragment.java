@@ -19,7 +19,6 @@ import com.veinhorn.scrollgalleryview.loader.DefaultImageLoader;
 public class GalleryFragment extends Fragment {
 
     private ScrollGalleryView scrollGalleryView;
-    private TextView titleTextView;
 
     private int screenWidth, screenHeight;
 
@@ -43,8 +42,6 @@ public class GalleryFragment extends Fragment {
         screenHeight = size.y;
         screenWidth = size.x;
 
-        titleTextView = (TextView) v.findViewById(R.id.title_text);
-
         scrollGalleryView = (ScrollGalleryView) v.findViewById(R.id.scroll_gallery_view);
         scrollGalleryView
                 .setThumbnailSize(100)
@@ -59,24 +56,6 @@ public class GalleryFragment extends Fragment {
                 .addMedia(MediaInfo.mediaLoader(new DefaultImageLoader(R.drawable.gallery_1)))
                 .addMedia(MediaInfo.mediaLoader(new DefaultImageLoader(R.drawable.gallery_7)));
 
-        titleTextView.setText("Title " + 1);
-
-        scrollGalleryView.getScrollViewPager().setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                titleTextView.setText("Title " + (position % 7 + 1));
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
 
 
         return v;

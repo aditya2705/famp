@@ -14,12 +14,7 @@
 
         <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/horizontal_scroll_view"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:gravity="center_horizontal">
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+            android:layout_width="match_parent" android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:id="@+id/parent_layout"
@@ -32,21 +27,6 @@
                     android:paddingBottom="@dimen/_20sdp"
                     android:paddingTop="@dimen/_20sdp"
                     android:orientation="vertical"/>
-
-                <TextView
-                    android:id="@+id/root_prompt"
-                    android:layout_width="@dimen/_80sdp"
-                    android:layout_height="wrap_content"
-                    android:text="Root Member"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/_20sdp"
-                    android:layout_toRightOf="@+id/parent_layout"
-                    android:layout_marginTop="@dimen/_40sdp"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:textColor="@color/md_grey_800"/>
-
-
-            </RelativeLayout>
 
         </HorizontalScrollView>
 

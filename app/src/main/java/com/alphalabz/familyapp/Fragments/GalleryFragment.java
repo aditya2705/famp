@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -19,28 +21,30 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.alphalabz.familyapp.Adapters.RecyclerGridAdapter;
+import com.alphalabz.familyapp.Objects.GalleryObject;
 import com.alphalabz.familyapp.R;
 import com.squareup.picasso.Picasso;
 import com.veinhorn.scrollgalleryview.MediaInfo;
 import com.veinhorn.scrollgalleryview.ScrollGalleryView;
 import com.veinhorn.scrollgalleryview.loader.DefaultImageLoader;
 
+import java.util.ArrayList;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class GalleryFragment extends Fragment {
 
-    private ScrollGalleryView scrollGalleryView;
-    private ScrollView gridScrollView;
+
 
     private int screenWidth, screenHeight;
     private boolean gridViewActive = false;
 
-    @Bind(R.id.img1) ImageView imageView1;
-    @Bind(R.id.img2) ImageView imageView2;
-    @Bind(R.id.img3) ImageView imageView3;
-    @Bind(R.id.img4) ImageView imageView4;
-    @Bind(R.id.img5) ImageView imageView5;
+    @Bind(R.id.recycler_view) RecyclerView recyclerView;
+    @Bind(R.id.scroll_gallery_view) ScrollGalleryView scrollGalleryView;
+
+    private RecyclerGridAdapter adapter;
 
     public GalleryFragment() {
         // Required empty public constructor
@@ -62,12 +66,6 @@ public class GalleryFragment extends Fragment {
         display.getSize(size);
         screenHeight = size.y;
         screenWidth = size.x;
-
-        gridScrollView = (ScrollView)v.findViewById(R.id.scroll_grid_view);
-
-
-
-        scrollGalleryView = (ScrollGalleryView) v.findViewById(R.id.scroll_gallery_view);
         scrollGalleryView
                 .setThumbnailSize(100)
                 .hideThumbnails(true)
@@ -80,6 +78,20 @@ public class GalleryFragment extends Fragment {
                 .addMedia(MediaInfo.mediaLoader(new DefaultImageLoader(R.drawable.gallery_6)))
                 .addMedia(MediaInfo.mediaLoader(new DefaultImageLoader(R.drawable.gallery_1)))
                 .addMedia(MediaInfo.mediaLoader(new DefaultImageLoader(R.drawable.gallery_7)));
+
+        ArrayList<GalleryObject> galleryObjectArrayList = new ArrayList<>();
+        galleryObjectArrayList.add(new GalleryObject(R.drawable.gallery_1));
+        galleryObjectArrayList.add(new GalleryObject(R.drawable.gallery_2));
+        galleryObjectArrayList.add(new GalleryObject(R.drawable.gallery_3));
+        galleryObjectArrayList.add(new GalleryObject(R.drawable.gallery_4));
+        galleryObjectArrayList.add(new GalleryObject(R.drawable.gallery_5));
+        galleryObjectArrayList.add(new GalleryObject(R.drawable.gallery_6));
+        galleryObjectArrayList.add(new GalleryObject(R.drawable.gallery_7));
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        adapter = new RecyclerGridAdapter(getActivity(),galleryObjectArrayList);
+        recyclerView.setVisibility(View.INVISIBLE);
 
 
 
@@ -114,27 +126,26 @@ public class GalleryFragment extends Fragment {
 
             if(gridViewActive) {
                 item.setIcon(R.drawable.ic_grid_on);
-                gridScrollView.setVisibility(View.INVISIBLE);
                 scrollGalleryView.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.INVISIBLE);
                 gridViewActive = false;
             }
             else {
                 item.setIcon(R.drawable.ic_grid_off);
-                gridScrollView.setVisibility(View.VISIBLE);
-                Picasso.with(getActivity()).load(R.drawable.gallery_1).into(imageView1);
-                Picasso.with(getActivity()).load(R.drawable.gallery_2).into(imageView2);
-                Picasso.with(getActivity()).load(R.drawable.gallery_3).into(imageView3);
-                Picasso.with(getActivity()).load(R.drawable.gallery_4).into(imageView4);
-                Picasso.with(getActivity()).load(R.drawable.gallery_5).into(imageView5);
+                switchToGridView();
                 scrollGalleryView.setVisibility(View.INVISIBLE);
+                recyclerView.setVisibility(View.VISIBLE);
                 gridViewActive = true;
             }
-
 
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void switchToGridView() {
+        recyclerView.setAdapter(adapter);
     }
 
 

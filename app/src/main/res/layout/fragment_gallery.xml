@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/md_white_1000"
@@ -10,84 +11,10 @@
         android:layout_height="match_parent"
         android:background="@color/md_grey_900"/>
 
-    <ScrollView
-        android:id="@+id/scroll_grid_view"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible">
-
-    <LinearLayout
-        android:id="@+id/grid_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/img1"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_200sdp"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:layout_margin="@dimen/_5sdp"/>
-
-        <ImageView
-            android:id="@+id/img2"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_200sdp"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:layout_margin="@dimen/_5sdp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/img3"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/_200sdp"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:layout_margin="@dimen/_5sdp"/>
-
-            <ImageView
-                android:id="@+id/img4"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/_200sdp"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:layout_margin="@dimen/_5sdp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/img5"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/_200sdp"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:layout_margin="@dimen/_5sdp"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    </ScrollView>
+        android:layout_height="match_parent"/>
 
 
 </RelativeLayout>

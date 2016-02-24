@@ -37,6 +37,7 @@ dependencies {
         transitive = true
     }
     compile project(':fastscroll')
+    compile project(':galleryscrollview')
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
     compile 'com.android.support:support-annotations:23.1.1'
@@ -53,5 +54,4 @@ dependencies {
     compile 'net.i2p.android.ext:floatingactionbutton:1.10.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.jakewharton:butterknife:7.0.1'
-    compile project(':galleryscrollview')
 }

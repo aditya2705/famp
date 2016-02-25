@@ -32,7 +32,6 @@ public class EventDecorator implements DayViewDecorator {
         view.addSpan(ds);
 
 
-
     }
 }
 

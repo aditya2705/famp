@@ -28,6 +28,9 @@
         <item name="actionMenuTextColor">@color/md_white_1000</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 
+        <item name="colorButtonNormal">@color/md_green_700</item>
+        <item name="android:colorButtonNormal">@color/md_green_700</item>
+
         <!-- MaterialDrawer specific values -->
         <item name="material_drawer_background">@color/material_drawer_background</item>
         <item name="material_drawer_primary_text">@color/material_drawer_primary_text</item>

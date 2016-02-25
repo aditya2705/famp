@@ -126,7 +126,7 @@ public class TreeViewFragment extends Fragment {
 
     }
 
-    private int screenHeight,screenWidth;
+    private int screenHeight, screenWidth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -576,7 +576,7 @@ public class TreeViewFragment extends Fragment {
 
                 PersonLayout child = parent.getChildren().get(i);
 
-                if(!child.isLayoutOpened()) {
+                if (!child.isLayoutOpened()) {
 
                     RelativeLayout childLayout = getNodeLayout(child);
 
@@ -608,8 +608,7 @@ public class TreeViewFragment extends Fragment {
             if (i == 0) {
                 cLayout.findViewById(R.id.left_branch).setVisibility(View.INVISIBLE);
                 cLayout.findViewById(R.id.right_branch).setVisibility(View.VISIBLE);
-            }
-            else if (i == parent.getChildrenLayoutList().size() - 1) {
+            } else if (i == parent.getChildrenLayoutList().size() - 1) {
                 cLayout.findViewById(R.id.left_branch).setVisibility(View.VISIBLE);
                 cLayout.findViewById(R.id.right_branch).setVisibility(View.INVISIBLE);
             } else {
@@ -643,7 +642,7 @@ public class TreeViewFragment extends Fragment {
 
         parent.getChildrenLayoutList().add(childLayout);
 
-        if(parent.getChildrenLayoutList().size()>1) {
+        if (parent.getChildrenLayoutList().size() > 1) {
 
             for (int i = 0; i < parent.getChildrenLayoutList().size(); i++) {
 
@@ -652,8 +651,7 @@ public class TreeViewFragment extends Fragment {
                 if (i == 0) {
                     cLayout.findViewById(R.id.left_branch).setVisibility(View.INVISIBLE);
                     cLayout.findViewById(R.id.right_branch).setVisibility(View.VISIBLE);
-                }
-                else if (i == parent.getChildrenLayoutList().size() - 1) {
+                } else if (i == parent.getChildrenLayoutList().size() - 1) {
                     cLayout.findViewById(R.id.left_branch).setVisibility(View.VISIBLE);
                     cLayout.findViewById(R.id.right_branch).setVisibility(View.INVISIBLE);
                 } else {
@@ -662,19 +660,19 @@ public class TreeViewFragment extends Fragment {
                 }
 
             }
-        }else {
+        } else {
             childLayout.findViewById(R.id.left_branch).setVisibility(View.INVISIBLE);
             childLayout.findViewById(R.id.right_branch).setVisibility(View.INVISIBLE);
         }
 
         int k = 0;
-        for(int i=0;i<parent.getChildren().size();i++){
+        for (int i = 0; i < parent.getChildren().size(); i++) {
             PersonLayout parentChild = parent.getChildren().get(i);
-            if(parentChild.isLayoutOpened())
+            if (parentChild.isLayoutOpened())
                 ++k;
         }
 
-        if(k==parent.getChildren().size())
+        if (k == parent.getChildren().size())
             parent.setAllChildrenOpened(true);
 
     }
@@ -716,7 +714,7 @@ public class TreeViewFragment extends Fragment {
 
     }
 
-    public void showChildrenListDialog(final PersonLayout person){
+    public void showChildrenListDialog(final PersonLayout person) {
 
         final ArrayList<String> childrenIDs = new ArrayList<>();
 
@@ -728,13 +726,13 @@ public class TreeViewFragment extends Fragment {
 
                 PersonLayout child = person.getChildren().get(i);
 
-                if(!child.isLayoutOpened()) {
+                if (!child.isLayoutOpened()) {
                     arrayAdapter.add((child.getTitle().equals("null") ? "" : child.getTitle() + " ") +
                             child.getFirst_name() + " " + (child.getMiddle_name().equals("null") ? "" : child.getMiddle_name() + " ") +
                             child.getLast_name());
                     childrenIDs.add(child.getUnique_id());
                 }
-                
+
             }
 
             arrayAdapter.add("Open All Children");
@@ -746,11 +744,11 @@ public class TreeViewFragment extends Fragment {
                         @Override
                         public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
 
-                            if(which==arrayAdapter.getCount()-1){
+                            if (which == arrayAdapter.getCount() - 1) {
                                 openAllChildrenLayouts(person);
 
-                            }else{
-                                openSpecificChildLayout(person,childrenIDs.get(which));
+                            } else {
+                                openSpecificChildLayout(person, childrenIDs.get(which));
                             }
 
                             dialog.dismiss();

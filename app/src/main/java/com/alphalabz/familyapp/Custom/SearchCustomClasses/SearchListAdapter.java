@@ -18,7 +18,7 @@ import java.util.List;
  * User: Xaver
  * Date: 24/05/15
  */
-public class SearchListAdapter extends RecyclerView.Adapter<SearchItemViewHolder> implements FastScrollRecyclerView.SectionedAdapter{
+public class SearchListAdapter extends RecyclerView.Adapter<SearchItemViewHolder> implements FastScrollRecyclerView.SectionedAdapter {
 
     private final LayoutInflater mInflater;
     private final List<SearchMemberModel> mModels;
@@ -96,14 +96,14 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchItemViewHolder
         notifyItemMoved(fromPosition, toPosition);
     }
 
-    public SearchMemberModel getItem(int position){
+    public SearchMemberModel getItem(int position) {
         return mModels.get(position);
     }
 
     @NonNull
     @Override
     public String getSectionName(int position) {
-        return mModels.get(position).getNameString().substring(0,1);
+        return mModels.get(position).getNameString().substring(0, 1);
     }
 
 

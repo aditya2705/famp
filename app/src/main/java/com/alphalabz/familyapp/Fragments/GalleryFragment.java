@@ -5,11 +5,8 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,14 +14,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.alphalabz.familyapp.Adapters.RecyclerGridAdapter;
 import com.alphalabz.familyapp.Objects.GalleryObject;
 import com.alphalabz.familyapp.R;
-import com.squareup.picasso.Picasso;
 import com.veinhorn.scrollgalleryview.MediaInfo;
 import com.veinhorn.scrollgalleryview.ScrollGalleryView;
 import com.veinhorn.scrollgalleryview.loader.DefaultImageLoader;
@@ -37,12 +30,13 @@ import butterknife.ButterKnife;
 public class GalleryFragment extends Fragment {
 
 
-
     private int screenWidth, screenHeight;
     private boolean gridViewActive = false;
 
-    @Bind(R.id.recycler_view) RecyclerView recyclerView;
-    @Bind(R.id.scroll_gallery_view) ScrollGalleryView scrollGalleryView;
+    @Bind(R.id.recycler_view)
+    RecyclerView recyclerView;
+    @Bind(R.id.scroll_gallery_view)
+    ScrollGalleryView scrollGalleryView;
 
     private RecyclerGridAdapter adapter;
 
@@ -60,7 +54,7 @@ public class GalleryFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_gallery, container, false);
-        ButterKnife.bind(this,v);
+        ButterKnife.bind(this, v);
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -90,9 +84,8 @@ public class GalleryFragment extends Fragment {
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        adapter = new RecyclerGridAdapter(getActivity(),galleryObjectArrayList);
+        adapter = new RecyclerGridAdapter(getActivity(), galleryObjectArrayList);
         recyclerView.setVisibility(View.INVISIBLE);
-
 
 
         return v;
@@ -124,13 +117,12 @@ public class GalleryFragment extends Fragment {
         //noinspection SimplifiableIfStatement
         if (id == R.id.grid_view) {
 
-            if(gridViewActive) {
+            if (gridViewActive) {
                 item.setIcon(R.drawable.ic_grid_on);
                 scrollGalleryView.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.INVISIBLE);
                 gridViewActive = false;
-            }
-            else {
+            } else {
                 item.setIcon(R.drawable.ic_grid_off);
                 switchToGridView();
                 scrollGalleryView.setVisibility(View.INVISIBLE);

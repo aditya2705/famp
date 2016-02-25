@@ -34,9 +34,11 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.alphalabz.familyapp.Fragments.CalendarFragment;
+import com.alphalabz.familyapp.Fragments.ContactFragment;
 import com.alphalabz.familyapp.Fragments.EventsTableFragment;
 import com.alphalabz.familyapp.Fragments.GalleryFragment;
 import com.alphalabz.familyapp.Fragments.SearchListFragment;
+import com.alphalabz.familyapp.Fragments.SettingsFragment;
 import com.alphalabz.familyapp.Fragments.SplashImageFragment;
 import com.alphalabz.familyapp.Fragments.TreeViewFragment;
 import com.alphalabz.familyapp.NotificationPublisher;
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_EMAIL = "email";
 
     JSONArray eventsJsonArray = null;
-    LinkedHashMap<String, Event> eventIDMap = new LinkedHashMap<>();
+    public LinkedHashMap<String, Event> eventIDMap = new LinkedHashMap<>();
 
     private int newDay = -1;
 
@@ -129,7 +131,9 @@ public class MainActivity extends AppCompatActivity {
                         new PrimaryDrawerItem().withName("Members List").withIcon(FontAwesome.Icon.faw_list_ul),
                         new PrimaryDrawerItem().withName("Calendar").withIcon(FontAwesome.Icon.faw_table),
                         new PrimaryDrawerItem().withName("Events").withIcon(FontAwesome.Icon.faw_birthday_cake),
-                        new PrimaryDrawerItem().withName("Gallery").withIcon(FontAwesome.Icon.faw_image)
+                        new PrimaryDrawerItem().withName("Gallery").withIcon(FontAwesome.Icon.faw_image),
+                        new PrimaryDrawerItem().withName("Settings").withIcon(FontAwesome.Icon.faw_cog),
+                        new PrimaryDrawerItem().withName("Contact").withIcon(FontAwesome.Icon.faw_user_md)
 
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -170,6 +174,14 @@ public class MainActivity extends AppCompatActivity {
                                     break;
                                 case 5:
                                     fragment = new GalleryFragment();
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                                    break;
+                                case 6:
+                                    fragment = new SettingsFragment();
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                                    break;
+                                case 7:
+                                    fragment = new ContactFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
                             }
@@ -699,9 +711,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        if(drawer.isDrawerOpen()){
+        if (drawer.isDrawerOpen()) {
             drawer.closeDrawer();
-        }else
+        } else
             super.onBackPressed();
 
     }

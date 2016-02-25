@@ -93,9 +93,9 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 MaterialDialog dialog = new MaterialDialog.Builder(ProfileActivity.this)
                         .theme(Theme.LIGHT)
-                        .customView(R.layout.profile_image_view,false)
+                        .customView(R.layout.profile_image_view, false)
                         .build();
-                ((ImageView)dialog.getCustomView().findViewById(R.id.image)).setImageResource(R.drawable.profile);
+                ((ImageView) dialog.getCustomView().findViewById(R.id.image)).setImageResource(R.drawable.profile);
                 dialog.show();
             }
         });

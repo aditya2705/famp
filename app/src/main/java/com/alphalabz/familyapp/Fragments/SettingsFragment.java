@@ -50,7 +50,6 @@ public class SettingsFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,10 +68,10 @@ public class SettingsFragment extends Fragment {
 
                 SharedPreferences.Editor editor = mainActivity.sharedPreferences.edit();
                 if (!isChecked) {
-                    disableNotifications();
+                    //disableNotifications();
                     editor.putBoolean("notif_on", false);
                 } else {
-                    allowNotifications();
+                    //allowNotifications();
                     editor.putBoolean("notif_on", true);
                 }
                 editor.apply();
@@ -82,10 +81,10 @@ public class SettingsFragment extends Fragment {
 
         return rootView;
     }
-
+/*
     private void allowNotifications() {
 
-        ArrayList<Event> eventArrayList = new ArrayList<>(mainActivity.eventIDMap.values());
+        ArrayList<Event> eventArrayList = mainActivity.eventArrayList;
 
         for (int i = 0; i < eventArrayList.size(); i++) {
 
@@ -182,7 +181,7 @@ public class SettingsFragment extends Fragment {
         }
 
     }
-
+*/
 
     @Override
     public void onAttach(Activity activity) {

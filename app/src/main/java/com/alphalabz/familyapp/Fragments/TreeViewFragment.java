@@ -73,7 +73,7 @@ public class TreeViewFragment extends Fragment {
     private String membersListJsonString;
     private Bitmap familyTreeBitmap;
 
-    private static final String RESULTS_FETCH_URL = "http://alpha95.net63.net/get_members_2.php";
+    private static final String RESULTS_FETCH_URL = "http://alpha95.net63.net/get_members_3.php";
 
     private static final String TAG_RESULTS = "result";
     private static final String TAG_ID = "unique_id";
@@ -91,9 +91,9 @@ public class TreeViewFragment extends Fragment {
     private static final String TAG_FATHER_NAME = "father_name";
     private static final String TAG_SPOUSE_ID = "spouse_id";
     private static final String TAG_SPOUSE_NAME = "spouse_name";
-    private static final String TAG_BIRTH_DATE = "birth_date";
-    private static final String TAG_MARRIAGE_DATE = "marriage_date";
-    private static final String TAG_DEATH_DATE = "death_date";
+    private static final String TAG_BIRTH_DATE = "dob";
+    private static final String TAG_MARRIAGE_DATE = "dom";
+    private static final String TAG_DEATH_DATE = "dod";
     private static final String TAG_MOBILE_NUMBER = "mobile_number";
     private static final String TAG_ALTERNATE_NUMBER = "alternate_number";
     private static final String TAG_RESIDENCE_NUMBER = "residence_number";

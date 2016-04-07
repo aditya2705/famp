@@ -43,9 +43,9 @@ public class ProfileActivity extends AppCompatActivity {
     private static final String TAG_FATHER_NAME = "father_name";
     private static final String TAG_SPOUSE_ID = "spouse_id";
     private static final String TAG_SPOUSE_NAME = "spouse_name";
-    private static final String TAG_BIRTH_DATE = "birth_date";
-    private static final String TAG_MARRIAGE_DATE = "marriage_date";
-    private static final String TAG_DEATH_DATE = "death_date";
+    private static final String TAG_BIRTH_DATE = "dob";
+    private static final String TAG_MARRIAGE_DATE = "dom";
+    private static final String TAG_DEATH_DATE = "dod";
     private static final String TAG_MOBILE_NUMBER = "mobile_number";
     private static final String TAG_ALTERNATE_NUMBER = "alternate_number";
     private static final String TAG_RESIDENCE_NUMBER = "residence_number";

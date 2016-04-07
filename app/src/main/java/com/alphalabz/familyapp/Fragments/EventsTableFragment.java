@@ -30,12 +30,7 @@ import java.net.URL;
  */
 public class EventsTableFragment extends Fragment {
 
-    private static final String RESULTS_FETCH_EVENTS_URL = "http://alpha95.net63.net/get_events.php";
 
-
-    private String eventsListJsonString;
-
-    private SharedPreferences sharedPreferences;
     private MainActivity mainActivity;
 
 
@@ -47,13 +42,6 @@ public class EventsTableFragment extends Fragment {
         // Required empty public constructor
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        sharedPreferences = getActivity().getSharedPreferences("FAMP", 0);
-        eventsListJsonString = sharedPreferences.getString("EVENTS_STRING", "");
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,74 +49,11 @@ public class EventsTableFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_events_table, container, false);
 
-        if (eventsListJsonString.equals("") || eventsListJsonString == null)
-            getEventsData();
-        else
-            showViews();
+        showViews();
 
         return rootView;
 
     }
-
-    public void getEventsData() {
-        class GetEventsData extends AsyncTask<String, Void, String> {
-
-            @Override
-            protected String doInBackground(String... params) {
-
-                URL obj = null;
-                String result = null;
-                InputStream inputStream = null;
-                try {
-                    obj = new URL(RESULTS_FETCH_EVENTS_URL);
-                    HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-                    //add request header
-                    con.setRequestProperty("Content-Type", "application/json");
-                    inputStream = con.getInputStream();
-                    BufferedReader reader = new BufferedReader(
-                            new InputStreamReader(inputStream, "UTF-8"), 8);
-
-                    StringBuilder sb = new StringBuilder();
-
-                    String line = null;
-                    while ((line = reader.readLine()) != null) {
-                        sb.append(line + "\n");
-                    }
-                    result = sb.toString();
-                    Log.d("RESULT", result);
-
-                } catch (Exception e) {
-                } finally {
-                    try {
-                        if (inputStream != null) inputStream.close();
-                    } catch (Exception squish) {
-                    }
-                }
-                return result;
-            }
-
-            @Override
-            protected void onPostExecute(String result) {
-                mainActivity.progressDialog.dismiss();
-                eventsListJsonString = result;
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("EVENTS_STRING", eventsListJsonString);
-                editor.apply();
-                showViews();
-            }
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                mainActivity.progressDialog.setTitle("Loading...");
-                mainActivity.progressDialog.show();
-            }
-        }
-        GetEventsData g = new GetEventsData();
-        g.execute();
-    }
-
     public void showViews() {
 
         monthPager = (ViewPager) rootView.findViewById(R.id.viewpager);

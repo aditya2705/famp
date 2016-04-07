@@ -2,9 +2,8 @@ package com.alphalabz.familyapp.Fragments;
 
 
 import android.Manifest;
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,15 +22,12 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.alphalabz.familyapp.Activities.MainActivity;
 import com.alphalabz.familyapp.Custom.RecyclerItemClickListener;
 import com.alphalabz.familyapp.Objects.Event;
 import com.alphalabz.familyapp.R;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -57,31 +53,17 @@ public class MonthEventFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_MONTH = "month";
 
-    private static final String TAG_RESULTS = "result";
-    private static final String TAG_ID = "events_id";
-    private static final String TAG_DATE = "date";
-    private static final String TAG_BIRTHDAY = "birthday";
-    private static final String TAG_ANNIVERSARY = "anniversary";
-    private static final String TAG_REMARKS = "remarks";
-    private static final String TAG_YEARS = "years";
-    private static final String TAG_CITY = "city";
-    private static final String TAG_CONTACT = "contact";
-    private static final String TAG_EMAIL = "email";
-
-    JSONArray eventsJsonArray = null;
-    private String eventsListJsonString;
-
-    private SharedPreferences sharedPreferences;
-
     // TODO: Rename and change types of parameters
     private int month;
     private String[] monthStrings = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
-    private ArrayList<Event> eventsList = new ArrayList<>();
     private RecyclerView mRecyclerView;
     private RecyclerAdapter adapter;
 
     private View rootView;
+    private ArrayList<Event> sortedEventsList;
+
+    private MainActivity mainActivity;
 
 
     public MonthEventFragment() {
@@ -103,8 +85,6 @@ public class MonthEventFragment extends Fragment {
         if (getArguments() != null) {
             month = getArguments().getInt(ARG_MONTH);
         }
-        sharedPreferences = getActivity().getSharedPreferences("FAMP", 0);
-        eventsListJsonString = sharedPreferences.getString("EVENTS_STRING", "");
     }
 
     @Override
@@ -123,9 +103,27 @@ public class MonthEventFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        showList();
+        LinkedHashMap<Event, String> dateStringMap = new LinkedHashMap<>();
 
-        adapter = new RecyclerAdapter(getActivity(), eventsList);
+        for (int i = 0; i < mainActivity.eventArrayList.size(); i++) {
+
+            Event event = mainActivity.eventArrayList.get(i);
+            String date = event.getDate();
+            String s = "";
+
+            if (date.length() >= 10)
+                s = date.substring(3, 6);
+
+            if (monthStrings[month].equals(s)) {
+                dateStringMap.put(event, date.substring(0, 6));
+            }
+        }
+
+        dateStringMap = sortHashMapByValuesD(dateStringMap);
+        sortedEventsList = new ArrayList<>(dateStringMap.keySet());
+
+
+        adapter = new RecyclerAdapter(mainActivity, sortedEventsList);
         mRecyclerView.setAdapter(adapter);
 
         mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
@@ -140,40 +138,54 @@ public class MonthEventFragment extends Fragment {
 
     private void showEventDialog(final int position) {
 
-        String birthday = eventsList.get(position).getBirthday();
-        String marriage = eventsList.get(position).getAnniversary();
+        final Event eventObject = sortedEventsList.get(position);
 
-        int event, titleColor;
-        if (!birthday.equals("null") && !birthday.equals("")) {
-            event = 0;
-            titleColor = R.color.birthday;
-        } else {
-            if (!marriage.equals("null") && !marriage.equals("")) {
-                event = 1;
+        int typeOfEvent = eventObject.getEventType();
+
+        String contentTitle = "", contentType ="";
+        int contentIcon = -1;
+        int titleColor = -1;
+
+        switch (typeOfEvent){
+
+            case 0:
+                contentTitle = "Birthday of "+mainActivity.membersListMap.get(eventObject.getMember_id()).getFirst_name();
+                contentType = "Birthday";
+                contentIcon = R.drawable.ic_cake;
+                titleColor = R.color.birthday;
+                break;
+            case 1:
+                contentTitle = "Marriage Anniversary of "+mainActivity.membersListMap.get(eventObject.getMember_id()).getFirst_name();
+                contentType = "Marriage Anniversary";
+                contentIcon = R.drawable.ic_love;
                 titleColor = R.color.marriage;
-            } else {
-                event = 2;
+                break;
+            case 2:
+                contentTitle = "Death Anniversary of "+mainActivity.membersListMap.get(eventObject.getMember_id()).getFirst_name();
+                contentType = "Death Anniversary";
+                contentIcon = R.drawable.ic_star;
                 titleColor = R.color.death;
-            }
+                break;
+
         }
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+        final MaterialDialog eventDialog = new MaterialDialog.Builder(getActivity())
                 .theme(Theme.LIGHT)
                 .title("Event")
-                .icon(getResources().getDrawable(event == 1 ? R.drawable.ic_love : R.drawable.ic_cake))
+                .icon(getResources().getDrawable(contentIcon))
                 .titleColor(getResources().getColor(titleColor))
                 .customView(R.layout.dialog_event_details, true)
                 .positiveText("OK")
                 .positiveColor(getResources().getColor(titleColor))
                 .build();
 
+        ((TextView) eventDialog.getCustomView().findViewById(R.id.event_type)).setText(contentTitle);
+        ((TextView) eventDialog.getCustomView().findViewById(R.id.members_concerned))
+                .setText(contentType);
 
-        ((TextView) dialog.getCustomView().findViewById(R.id.event_type)).setText(event == 1 ? "Anniversary" : "Birthday");
-        ((TextView) dialog.getCustomView().findViewById(R.id.members_concerned)).setText(event == 1 ? eventsList.get(position).getAnniversary() : eventsList.get(position).getBirthday());
+        String dateString = eventObject.getDate();
 
-        String dateString = eventsList.get(position).getDate();
-
-        ((TextView) dialog.getCustomView().findViewById(R.id.date)).setText(dateString.substring(0, 9));
+        ((TextView) eventDialog.getCustomView().findViewById(R.id.date)).setText(dateString.substring(0, 9));
 
         SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
         int year = Integer.parseInt(yearFormat.format(Date.parse(dateString)));
@@ -195,83 +207,38 @@ public class MonthEventFragment extends Fragment {
             diff--;
         }
 
-        ((TextView) dialog.getCustomView().findViewById(R.id.years)).setText("YEARS: " + diff);
+        ((TextView) eventDialog.getCustomView().findViewById(R.id.years)).setText("YEARS: " + diff);
 
-        String city = eventsList.get(position).getCity();
-        ((TextView) dialog.getCustomView().findViewById(R.id.city)).setText(city.equals("") || city.equals("null") ? "" : "CITY: " + city);
+        String city = eventObject.getCity();
+        ((TextView) eventDialog.getCustomView().findViewById(R.id.city)).setText(city.equals("") || city.equals("null") ? "" : "CITY: " + city);
 
-        (dialog.getCustomView().findViewById(R.id.contact_click_layout)).setOnClickListener(new View.OnClickListener() {
+        (eventDialog.getCustomView().findViewById(R.id.contact_click_layout)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                phoneIntent(eventsList.get(position).getContact());
+                phoneIntent(eventObject.getContact());
             }
         });
 
-        String temp = eventsList.get(position).getContact();
+        String temp = eventObject.getContact();
         if (!temp.equals("") && !temp.equals("null"))
-            ((TextView) dialog.getCustomView().findViewById(R.id.contact)).setText("Contact: " + temp);
+            ((TextView) eventDialog.getCustomView().findViewById(R.id.contact)).setText("Contact: " + temp);
         else
-            (dialog.getCustomView().findViewById(R.id.contact_click_layout)).setVisibility(View.GONE);
+            (eventDialog.getCustomView().findViewById(R.id.contact_click_layout)).setVisibility(View.GONE);
 
-        (dialog.getCustomView().findViewById(R.id.email_click_layout)).setOnClickListener(new View.OnClickListener() {
+        (eventDialog.getCustomView().findViewById(R.id.email_click_layout)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                emailIntent(eventsList.get(position).getEmail());
+                emailIntent(eventObject.getEmail());
             }
         });
 
-        temp = eventsList.get(position).getEmail();
+        temp = eventObject.getEmail();
         if (!temp.equals("") && !temp.equals("null"))
-            ((TextView) dialog.getCustomView().findViewById(R.id.email)).setText("Email: " + temp);
+            ((TextView) eventDialog.getCustomView().findViewById(R.id.email)).setText("Email: " + temp);
         else
-            (dialog.getCustomView().findViewById(R.id.email_click_layout)).setVisibility(View.GONE);
+            (eventDialog.getCustomView().findViewById(R.id.email_click_layout)).setVisibility(View.GONE);
 
-        dialog.show();
-    }
-
-    protected void showList() {
-
-        try {
-            JSONObject jsonObj = new JSONObject(eventsListJsonString);
-            eventsJsonArray = jsonObj.getJSONArray(TAG_RESULTS);
-
-            LinkedHashMap<Event, String> dateStringMap = new LinkedHashMap<>();
-
-            for (int i = 0; i < eventsJsonArray.length(); i++) {
-                JSONObject c = eventsJsonArray.getJSONObject(i);
-
-                String event_id, date, birthday, anniversary, remarks, years, city, contact, email;
-
-                event_id = c.getString(TAG_ID);
-                date = c.getString(TAG_DATE);
-                birthday = c.getString(TAG_BIRTHDAY);
-                anniversary = c.getString(TAG_ANNIVERSARY);
-                remarks = c.getString(TAG_REMARKS);
-                years = c.getString(TAG_YEARS);
-                city = c.getString(TAG_CITY);
-                contact = c.getString(TAG_CONTACT);
-                email = c.getString(TAG_EMAIL);
-
-                String s = "";
-
-                if (date.length() >= 10)
-                    s = date.substring(3, 6);
-
-                if (monthStrings[month].equals(s)) {
-
-                    Event event = new Event(event_id, date, birthday, anniversary, remarks, years, city, contact, email);
-                    dateStringMap.put(event, date.substring(0, 6));
-                }
-            }
-
-            dateStringMap = sortHashMapByValuesD(dateStringMap);
-            eventsList = new ArrayList<>(dateStringMap.keySet());
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+        eventDialog.show();
     }
 
     public LinkedHashMap sortHashMapByValuesD(HashMap passedMap) {
@@ -320,10 +287,10 @@ public class MonthEventFragment extends Fragment {
     private static class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
         private ArrayList<Event> eventArrayList;
-        private Context context;
+        private MainActivity mainActivity;
 
-        public RecyclerAdapter(Context context, ArrayList<Event> eventArrayList) {
-            this.context = context;
+        public RecyclerAdapter(MainActivity mainActivity, ArrayList<Event> eventArrayList) {
+            this.mainActivity = mainActivity;
             this.eventArrayList = eventArrayList;
         }
 
@@ -334,33 +301,36 @@ public class MonthEventFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.dateView.setText(eventArrayList.get(position).getDate().substring(0, 10));
-            String birthday = eventArrayList.get(position).getBirthday();
-            String marriage = eventArrayList.get(position).getAnniversary();
-            String deathAnniversary = eventArrayList.get(position).getAnniversary();
 
-            if (!birthday.equals("null") && !birthday.equals("")) {
-                holder.occasionView.setImageDrawable(new IconicsDrawable(context)
-                        .icon(FontAwesome.Icon.faw_birthday_cake)
-                        .color(context.getResources().getColor(R.color.birthday))
-                        .sizeDp(15));
-                holder.detailsView.setText(birthday);
-            } else {
-                if (!marriage.equals("null") && !marriage.equals("")) {
-                    holder.occasionView.setImageDrawable(new IconicsDrawable(context)
-                            .icon(FontAwesome.Icon.faw_heart)
-                            .color(context.getResources().getColor(R.color.marriage))
-                            .sizeDp(15));
-                    holder.detailsView.setText(marriage);
-                } else {
-                    holder.occasionView.setImageDrawable(new IconicsDrawable(context)
-                            .icon(FontAwesome.Icon.faw_star)
-                            .color(context.getResources().getColor(R.color.death))
-                            .sizeDp(15));
-                    holder.detailsView.setText(deathAnniversary);
-                }
+            Event event = eventArrayList.get(position);
+
+            holder.dateView.setText(event.getDate().substring(0, 10));
+            String memberConcerned = "";
+            FontAwesome.Icon icon = null;
+            int color = -1;
+            switch (eventArrayList.get(position).getEventType()){
+                case 0:
+                    memberConcerned = mainActivity.membersListMap.get(event.getMember_id()).getFirst_name();
+                    icon = FontAwesome.Icon.faw_birthday_cake;
+                    color = R.color.birthday;
+                    break;
+                case 1:
+                    memberConcerned = mainActivity.membersListMap.get(event.getMember_id()).getFirst_name();
+                    icon = FontAwesome.Icon.faw_heart;
+                    color = R.color.marriage;
+                    break;
+                case 2:
+                    memberConcerned = mainActivity.membersListMap.get(event.getMember_id()).getFirst_name();
+                    icon = FontAwesome.Icon.faw_star;
+                    color = R.color.death;
+                    break;
             }
 
+            holder.occasionView.setImageDrawable(new IconicsDrawable(mainActivity)
+                    .icon(icon)
+                    .color(mainActivity.getResources().getColor(color))
+                    .sizeDp(15));
+            holder.detailsView.setText(memberConcerned);
 
         }
 
@@ -455,4 +425,9 @@ public class MonthEventFragment extends Fragment {
 
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mainActivity = (MainActivity)activity;
+    }
 }

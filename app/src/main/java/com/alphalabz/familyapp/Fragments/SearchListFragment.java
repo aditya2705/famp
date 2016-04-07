@@ -43,45 +43,8 @@ import java.util.List;
 public class SearchListFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     private MainActivity mainActivity;
-    private String membersListJsonString;
-    private JSONArray membersJsonArray = null;
-    private static final String TAG_RESULTS = "result";
-    private static final String TAG_ID = "unique_id";
-    private static final String TAG_GEN = "gen";
-    private static final String TAG_TITLE = "title";
-    private static final String TAG_FIRST_NAME = "first_name";
-    private static final String TAG_MIDDLE_NAME = "middle_name";
-    private static final String TAG_LAST_NAME = "last_name";
-    private static final String TAG_NICK_NAME = "nick_name";
-    private static final String TAG_GENDER = "gender";
-    private static final String TAG_IN_LAW = "in_law";
-    private static final String TAG_MOTHER_ID = "mother_id";
-    private static final String TAG_MOTHER_NAME = "mother_name";
-    private static final String TAG_FATHER_ID = "father_id";
-    private static final String TAG_FATHER_NAME = "father_name";
-    private static final String TAG_SPOUSE_ID = "spouse_id";
-    private static final String TAG_SPOUSE_NAME = "spouse_name";
-    private static final String TAG_BIRTH_DATE = "birth_date";
-    private static final String TAG_MARRIAGE_DATE = "marriage_date";
-    private static final String TAG_DEATH_DATE = "death_date";
-    private static final String TAG_MOBILE_NUMBER = "mobile_number";
-    private static final String TAG_ALTERNATE_NUMBER = "alternate_number";
-    private static final String TAG_RESIDENCE_NUMBER = "residence_number";
-    private static final String TAG_EMAIL1 = "email1";
-    private static final String TAG_EMAIL2 = "email2";
-    private static final String TAG_ADDRESS_1 = "address_1";
-    private static final String TAG_ADDRESS_2 = "address_2";
-    private static final String TAG_CITY = "city";
-    private static final String TAG_STATE_COUNTRY = "state_country";
-    private static final String TAG_PINCODE = "pincode";
-    private static final String TAG_DESIGNATION = "designation";
-    private static final String TAG_COMPANY = "company";
-    private static final String TAG_INDUSTRY_SPECIAL = "industry_special";
-    private static final String TAG_IMAGE_URL = "image_url";
-
-    private ArrayList<Person> personList = new ArrayList<>();
+    
     private LinkedHashMap<String, String> searchableMembersStringMap = new LinkedHashMap<>();
-    private LinkedHashMap<String, Person> membersListMap = new LinkedHashMap<>();
 
     private View rootView;
 
@@ -115,76 +78,13 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
 
         mModels = new ArrayList<>();
 
-        membersListJsonString = mainActivity.sharedPreferences.getString("MEMBERS_STRING", "");
-
-        JSONObject jsonObj = null;
-        try {
-            jsonObj = new JSONObject(membersListJsonString);
-
-            membersJsonArray = jsonObj.getJSONArray(TAG_RESULTS);
-
-            for (int i = 0; i < membersJsonArray.length(); i++) {
-                JSONObject c = membersJsonArray.getJSONObject(i);
-
-                String unique_id, generation, title, first_name, middle_name, last_name, nick_name, gender, in_law, mother_id, mother_name, father_id, father_name, spouse_id, spouse_name, birth_date, marriage_date, death_date,
-                        mobile_number, alternate_number, residence_number, email1, email2, address_1, address_2, city, state_country, pincode, designation, company, industry_special, image_url;
-
-
-                unique_id = c.getString(TAG_ID);
-                generation = c.getString(TAG_GEN);
-                title = c.getString(TAG_TITLE);
-                first_name = c.getString(TAG_FIRST_NAME);
-                middle_name = c.getString(TAG_MIDDLE_NAME);
-                last_name = c.getString(TAG_LAST_NAME);
-                nick_name = c.getString(TAG_NICK_NAME);
-                gender = c.getString(TAG_GENDER);
-                in_law = c.getString(TAG_IN_LAW);
-                mother_id = c.getString(TAG_MOTHER_ID);
-                mother_name = c.getString(TAG_MOTHER_NAME);
-                father_id = c.getString(TAG_FATHER_ID);
-                father_name = c.getString(TAG_FATHER_NAME);
-                spouse_id = c.getString(TAG_SPOUSE_ID);
-                spouse_name = c.getString(TAG_SPOUSE_NAME);
-                birth_date = c.getString(TAG_BIRTH_DATE);
-                marriage_date = c.getString(TAG_MARRIAGE_DATE);
-                death_date = c.getString(TAG_DEATH_DATE);
-                mobile_number = c.getString(TAG_MOBILE_NUMBER);
-                alternate_number = c.getString(TAG_ALTERNATE_NUMBER);
-                residence_number = c.getString(TAG_RESIDENCE_NUMBER);
-                email1 = c.getString(TAG_EMAIL1);
-                email2 = c.getString(TAG_EMAIL2);
-                address_1 = c.getString(TAG_ADDRESS_1);
-                address_2 = c.getString(TAG_ADDRESS_2);
-                city = c.getString(TAG_CITY);
-                state_country = c.getString(TAG_STATE_COUNTRY);
-                pincode = c.getString(TAG_PINCODE);
-                designation = c.getString(TAG_DESIGNATION);
-                company = c.getString(TAG_COMPANY);
-                industry_special = c.getString(TAG_INDUSTRY_SPECIAL);
-                image_url = c.getString(TAG_IMAGE_URL);
-
-
-                Person person = new Person(unique_id, generation, title, first_name, middle_name, last_name, nick_name,
-                        gender, in_law, mother_id, mother_name, father_id, father_name, spouse_id,
-                        spouse_name, birth_date, marriage_date, death_date, mobile_number, alternate_number,
-                        residence_number, email1, email2, address_1, address_2, city, state_country, pincode,
-                        designation, company, industry_special, image_url, -1);
-
-                personList.add(person);
-
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        for (Person person : personList) {
+        for (Person person : mainActivity.personArrayList) {
             String s = "";
             s += person.getFirst_name().equals("null") || person.getFirst_name().equals("") ? "" : person.getFirst_name() + " ";
             s += person.getMiddle_name().equals("null") || person.getMiddle_name().equals("") ? "" : person.getMiddle_name() + " ";
             s += person.getLast_name().equals("null") || person.getLast_name().equals("") ? "" : person.getLast_name() + " ";
             searchableMembersStringMap.put(person.getUnique_id(), s);
-            membersListMap.put(person.getUnique_id(), person);
+            mainActivity.membersListMap.put(person.getUnique_id(), person);
         }
 
         searchableMembersStringMap = sortHashMapByValuesD(searchableMembersStringMap);
@@ -204,20 +104,20 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
                 Intent intent = new Intent(mainActivity, ProfileActivity.class);
                 Bundle bundle = new Bundle();
 
-                Person actualPerson = membersListMap.get(mAdapter.getItem(position).getUniqueIDString());
+                Person actualPerson = mainActivity.membersListMap.get(mAdapter.getItem(position).getUniqueIDString());
                 bundle.putSerializable("Actual_Person", actualPerson);
 
                 Person motherOfPerson = null, fatherOfPerson = null, spouseOfPerson = null;
 
-                if (membersListMap.get(actualPerson.getMother_id()) != null)
-                    motherOfPerson = new PersonLayout(membersListMap.get(actualPerson.getMother_id()));
+                if (mainActivity.membersListMap.get(actualPerson.getMother_id()) != null)
+                    motherOfPerson = new PersonLayout(mainActivity.membersListMap.get(actualPerson.getMother_id()));
 
-                if (membersListMap.get(actualPerson.getFather_id()) != null)
-                    fatherOfPerson = new PersonLayout(membersListMap.get(actualPerson.getFather_id()));
+                if (mainActivity.membersListMap.get(actualPerson.getFather_id()) != null)
+                    fatherOfPerson = new PersonLayout(mainActivity.membersListMap.get(actualPerson.getFather_id()));
 
 
-                if (membersListMap.get(actualPerson.getSpouse_id()) != null)
-                    spouseOfPerson = new PersonLayout(membersListMap.get(actualPerson.getSpouse_id()));
+                if (mainActivity.membersListMap.get(actualPerson.getSpouse_id()) != null)
+                    spouseOfPerson = new PersonLayout(mainActivity.membersListMap.get(actualPerson.getSpouse_id()));
 
 
                 bundle.putSerializable("Person_Mother", motherOfPerson);

@@ -7,26 +7,36 @@ import java.io.Serializable;
  */
 public class Event implements Serializable {
 
-    private String event_id,date,birthday,anniversary,remarks,years,city,contact,email;
+    private int event_id;
+    private String member_id;
+    private String date,city,contact,email;
+    private int eventType = -1;
+    private String spouse_id = "";
 
-    public Event(String event_id, String date, String birthday, String anniversary, String remarks, String years, String city, String contact, String email) {
+    public Event(int event_id, String member_id, String date, String city, String contact, String email, int eventType) {
         this.event_id = event_id;
+        this.member_id = member_id;
         this.date = date;
-        this.birthday = birthday;
-        this.anniversary = anniversary;
-        this.remarks = remarks;
-        this.years = years;
         this.city = city;
         this.contact = contact;
         this.email = email;
+        this.eventType = eventType;
     }
 
-    public String getEvent_id() {
+    public int getEvent_id() {
         return event_id;
     }
 
-    public void setEvent_id(String event_id) {
+    public void setEvent_id(int event_id) {
         this.event_id = event_id;
+    }
+
+    public String getMember_id() {
+        return member_id;
+    }
+
+    public void setMember_id(String member_id) {
+        this.member_id = member_id;
     }
 
     public String getDate() {
@@ -35,38 +45,6 @@ public class Event implements Serializable {
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public String getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
-    }
-
-    public String getAnniversary() {
-        return anniversary;
-    }
-
-    public void setAnniversary(String anniversary) {
-        this.anniversary = anniversary;
-    }
-
-    public String getRemarks() {
-        return remarks;
-    }
-
-    public void setRemarks(String remarks) {
-        this.remarks = remarks;
-    }
-
-    public String getYears() {
-        return years;
-    }
-
-    public void setYears(String years) {
-        this.years = years;
     }
 
     public String getCity() {
@@ -91,5 +69,21 @@ public class Event implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(int eventType) {
+        this.eventType = eventType;
+    }
+
+    public String getSpouse_id() {
+        return spouse_id;
+    }
+
+    public void setSpouse_id(String spouse_id) {
+        this.spouse_id = spouse_id;
     }
 }

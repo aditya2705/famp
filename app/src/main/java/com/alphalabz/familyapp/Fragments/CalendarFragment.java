@@ -2,14 +2,12 @@ package com.alphalabz.familyapp.Fragments;
 
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -21,6 +19,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.alphalabz.familyapp.Activities.MainActivity;
 import com.alphalabz.familyapp.Custom.EventDecorator;
 import com.alphalabz.familyapp.Objects.Event;
 import com.alphalabz.familyapp.R;
@@ -28,52 +27,26 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.concurrent.Executors;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class CalendarFragment extends Fragment {
-
-    private static final String TAG_RESULTS = "result";
-    private static final String TAG_ID = "events_id";
-    private static final String TAG_DATE = "date";
-    private static final String TAG_BIRTHDAY = "birthday";
-    private static final String TAG_ANNIVERSARY = "anniversary";
-    private static final String TAG_REMARKS = "remarks";
-    private static final String TAG_YEARS = "years";
-    private static final String TAG_CITY = "city";
-    private static final String TAG_CONTACT = "contact";
-    private static final String TAG_EMAIL = "email";
-
-    JSONArray eventsJsonArray = null;
+    
+    private MainActivity mainActivity;
 
     MaterialCalendarView calendarView;
-    private String eventsListJsonString;
 
-    private SharedPreferences sharedPreferences;
-    private ArrayList<Event> eventsList = new ArrayList<>();
+    private ArrayList<Event> calendarEventsList = new ArrayList<>();
 
     public CalendarFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        sharedPreferences = getActivity().getSharedPreferences("FAMP", 0);
-        eventsListJsonString = sharedPreferences.getString("EVENTS_STRING", "");
     }
 
     @Override
@@ -88,213 +61,198 @@ public class CalendarFragment extends Fragment {
         calendarView.setCurrentDate(new Date(System.currentTimeMillis()));
         calendarView.setSelectionColor(getResources().getColor(R.color.md_green_700));
 
+        calendarSetup();
 
-        new ApiSimulator().executeOnExecutor(Executors.newSingleThreadExecutor());
         return v;
     }
 
+    private void calendarSetup() {
 
-    private class ApiSimulator extends AsyncTask<Void, Void, List<CalendarDay>> {
+        final ArrayList<CalendarDay> calendarDatesList = new ArrayList<>();
 
-        @Override
-        protected List<CalendarDay> doInBackground(@NonNull Void... voids) {
+        for (int i = 0; i < mainActivity.eventArrayList.size(); i++) {
 
-            ArrayList<CalendarDay> calendarDatesList = new ArrayList<>();
+            Event event = mainActivity.eventArrayList.get(i);
+            String date = event.getDate();
 
-            try {
-                JSONObject jsonObj = new JSONObject(eventsListJsonString);
-                eventsJsonArray = jsonObj.getJSONArray(TAG_RESULTS);
+            Calendar currentCalendar = Calendar.getInstance();
 
-                for (int i = 0; i < eventsJsonArray.length(); i++) {
-                    JSONObject c = eventsJsonArray.getJSONObject(i);
+            SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+            int day = Integer.parseInt(dayFormat.format(Date.parse(date)));
 
-                    String event_id, date, birthday, anniversary, remarks, years, city, contact, email;
+            SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+            int month = Integer.parseInt(monthFormat.format(Date.parse(date)));
 
-                    event_id = c.getString(TAG_ID);
-                    date = c.getString(TAG_DATE);
-                    birthday = c.getString(TAG_BIRTHDAY);
-                    anniversary = c.getString(TAG_ANNIVERSARY);
-                    remarks = c.getString(TAG_REMARKS);
-                    years = c.getString(TAG_YEARS);
-                    city = c.getString(TAG_CITY);
-                    contact = c.getString(TAG_CONTACT);
-                    email = c.getString(TAG_EMAIL);
+            calendarEventsList.add(event);
+            Calendar calendarDate = new GregorianCalendar(currentCalendar.get(Calendar.YEAR), month - 1, day);
+            CalendarDay calendar = new CalendarDay(calendarDate);
+            calendarDatesList.add(calendar);
 
-                    if (!date.equals("null") && !date.equals("")) {
-                        Event event = new Event(event_id, date, birthday, anniversary, remarks, years, city, contact, email);
-                        eventsList.add(event);
+            calendarEventsList.add(event);
+            calendarDate = new GregorianCalendar(currentCalendar.get(Calendar.YEAR) - 1, month - 1, day);
+            calendar = new CalendarDay(calendarDate);
+            calendarDatesList.add(calendar);
 
-                        Calendar currentCalendar = Calendar.getInstance();
+            calendarEventsList.add(event);
+            calendarDate = new GregorianCalendar(currentCalendar.get(Calendar.YEAR) + 1, month - 1, day);
+            calendar = new CalendarDay(calendarDate);
+            calendarDatesList.add(calendar);
 
-                        SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
-                        int day = Integer.parseInt(dayFormat.format(Date.parse(date)));
+        }
 
-                        SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
-                        int month = Integer.parseInt(monthFormat.format(Date.parse(date)));
+        calendarView.addDecorator(new EventDecorator(getResources().getColor(R.color.md_green_700), calendarDatesList));
+        calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
+                final ArrayList<Integer> indexList = new ArrayList<Integer>();
+                for (int i = 0; i < calendarDatesList.size(); i++)
+                    if (date.equals(calendarDatesList.get(i)))
+                        indexList.add(i);
 
-                        Calendar calendarDate = new GregorianCalendar(currentCalendar.get(Calendar.YEAR), month - 1, day);
-                        CalendarDay calendar = new CalendarDay(calendarDate);
-                        calendarDatesList.add(calendar);
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.simple_text_view);
 
-                        eventsList.add(event);
-                        calendarDate = new GregorianCalendar(currentCalendar.get(Calendar.YEAR) - 1, month - 1, day);
-                        calendar = new CalendarDay(calendarDate);
-                        calendarDatesList.add(calendar);
+                for (int i = 0; i < indexList.size(); i++) {
 
-                        eventsList.add(event);
-                        calendarDate = new GregorianCalendar(currentCalendar.get(Calendar.YEAR) + 1, month - 1, day);
-                        calendar = new CalendarDay(calendarDate);
-                        calendarDatesList.add(calendar);
+                    Event curEvent = calendarEventsList.get(indexList.get(i));
+                    
+                    int eventInteger = curEvent.getEventType();
+                    String eventTitle = "";
+                    switch(eventInteger){
+                        case 0:
+                            eventTitle = "Birthday of "+mainActivity.membersListMap.get(curEvent.getMember_id()).getFirst_name();
+                            break;
+                        case 1:
+                            eventTitle = "Marriage Anniversary of "+mainActivity.membersListMap.get(curEvent.getMember_id()).getFirst_name();
+                            break;
+                        case 2:
+                            eventTitle = "Death Anniversary of "+mainActivity.membersListMap.get(curEvent.getMember_id()).getFirst_name();
+                            break;
                     }
+                    arrayAdapter.add(eventTitle);
 
                 }
 
+                new MaterialDialog.Builder(getActivity())
+                        .theme(Theme.LIGHT)
+                        .title("Events")
+                        .adapter(arrayAdapter, new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+                                final Event eventObject = calendarEventsList.get(indexList.get(which));
 
+                                int typeOfEvent = eventObject.getEventType();
 
-            return calendarDatesList;
-        }
+                                String contentTitle = "", contentType ="";
+                                int contentIcon = -1;
+                                int titleColor = -1;
 
-        @Override
-        protected void onPostExecute(@NonNull final List<CalendarDay> calendarDays) {
-            super.onPostExecute(calendarDays);
+                                switch (typeOfEvent){
 
-            calendarView.addDecorator(new EventDecorator(getResources().getColor(R.color.md_green_700), calendarDays));
-            calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
-                @Override
-                public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-
-                    final ArrayList<Integer> indexList = new ArrayList<Integer>();
-                    for (int i = 0; i < calendarDays.size(); i++)
-                        if (date.equals(calendarDays.get(i)))
-                            indexList.add(i);
-
-                    final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.simple_text_view);
-
-                    for (int i = 0; i < indexList.size(); i++) {
-
-                        Event curEvent = eventsList.get(indexList.get(i));
-                        String birthday = curEvent.getBirthday();
-                        int eventInteger;
-                        if (birthday.equals("null") || birthday.equals("")) {
-                            eventInteger = 1;
-                        } else {
-                            eventInteger = 0;
-                        }
-                        arrayAdapter.add(eventInteger == 1 ? "Anniversary of " + curEvent.getAnniversary() : "Birthday of " + curEvent.getBirthday());
-
-                    }
-
-                    new MaterialDialog.Builder(getActivity())
-                            .theme(Theme.LIGHT)
-                            .title("Events")
-                            .adapter(arrayAdapter, new MaterialDialog.ListCallback() {
-                                @Override
-                                public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-
-                                    final Event curEvent = eventsList.get(indexList.get(which));
-
-                                    String birthday = curEvent.getBirthday();
-                                    String marriage = curEvent.getAnniversary();
-
-                                    int event, titleColor;
-                                    if (!birthday.equals("null") && !birthday.equals("")) {
-                                        event = 0;
+                                    case 0:
+                                        contentTitle = "Birthday of "+mainActivity.membersListMap.get(eventObject.getMember_id()).getFirst_name();
+                                        contentType = "Birthday";
+                                        contentIcon = R.drawable.ic_cake;
                                         titleColor = R.color.birthday;
-                                    } else {
-                                        if (!marriage.equals("null") && !marriage.equals("")) {
-                                            event = 1;
-                                            titleColor = R.color.marriage;
-                                        } else {
-                                            event = 2;
-                                            titleColor = R.color.death;
-                                        }
-                                    }
-
-                                    final MaterialDialog eventDialog = new MaterialDialog.Builder(getActivity())
-                                            .theme(Theme.LIGHT)
-                                            .title("Event")
-                                            .icon(getResources().getDrawable(event == 1 ? R.drawable.ic_love : R.drawable.ic_cake))
-                                            .titleColor(getResources().getColor(titleColor))
-                                            .customView(R.layout.dialog_event_details, true)
-                                            .positiveText("OK")
-                                            .positiveColor(getResources().getColor(titleColor))
-                                            .build();
-
-
-                                    ((TextView) eventDialog.getCustomView().findViewById(R.id.event_type)).setText(event == 1 ? "Anniversary" : "Birthday");
-                                    ((TextView) eventDialog.getCustomView().findViewById(R.id.members_concerned)).setText(event == 1 ? curEvent.getAnniversary() : curEvent.getBirthday());
-
-                                    String dateString = curEvent.getDate();
-
-                                    ((TextView) eventDialog.getCustomView().findViewById(R.id.date)).setText(dateString.substring(0, 9));
-
-                                    SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
-                                    int year = Integer.parseInt(yearFormat.format(Date.parse(dateString)));
-
-                                    SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
-                                    int day = Integer.parseInt(dayFormat.format(Date.parse(dateString)));
-
-                                    SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
-                                    int month = Integer.parseInt(monthFormat.format(Date.parse(dateString)));
-
-
-                                    Calendar a = new GregorianCalendar(year, month - 1, day);
-                                    Calendar b = Calendar.getInstance();
-                                    int y1 = b.get(Calendar.YEAR);
-                                    int y2 = a.get(Calendar.YEAR);
-                                    int diff = y1 - y2;
-                                    if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) ||
-                                            (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DAY_OF_MONTH) > b.get(Calendar.DAY_OF_MONTH))) {
-                                        diff--;
-                                    }
-
-                                    ((TextView) eventDialog.getCustomView().findViewById(R.id.years)).setText("YEARS: " + diff);
-
-                                    String city = curEvent.getCity();
-                                    ((TextView) eventDialog.getCustomView().findViewById(R.id.city)).setText(city.equals("") || city.equals("null") ? "" : "CITY: " + city);
-
-                                    (eventDialog.getCustomView().findViewById(R.id.contact_click_layout)).setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            phoneIntent(curEvent.getContact());
-                                        }
-                                    });
-
-                                    String temp = curEvent.getContact();
-                                    if (!temp.equals("") && !temp.equals("null"))
-                                        ((TextView) eventDialog.getCustomView().findViewById(R.id.contact)).setText("Contact: " + temp);
-                                    else
-                                        (eventDialog.getCustomView().findViewById(R.id.contact_click_layout)).setVisibility(View.GONE);
-
-                                    (eventDialog.getCustomView().findViewById(R.id.email_click_layout)).setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            emailIntent(curEvent.getEmail());
-                                        }
-                                    });
-
-                                    temp = curEvent.getEmail();
-                                    if (!temp.equals("") && !temp.equals("null"))
-                                        ((TextView) eventDialog.getCustomView().findViewById(R.id.email)).setText("Email: " + temp);
-                                    else
-                                        (eventDialog.getCustomView().findViewById(R.id.email_click_layout)).setVisibility(View.GONE);
-
-                                    eventDialog.show();
-
+                                        break;
+                                    case 1:
+                                        contentTitle = "Marriage Anniversary of "+mainActivity.membersListMap.get(eventObject.getMember_id()).getFirst_name();
+                                        contentType = "Marriage Anniversary";
+                                        contentIcon = R.drawable.ic_love;
+                                        titleColor = R.color.marriage;
+                                        break;
+                                    case 2:
+                                        contentTitle = "Death Anniversary of "+mainActivity.membersListMap.get(eventObject.getMember_id()).getFirst_name();
+                                        contentType = "Death Anniversary";
+                                        contentIcon = R.drawable.ic_star;
+                                        titleColor = R.color.death;
+                                        break;
 
                                 }
-                            })
-                            .show();
+
+                                final MaterialDialog eventDialog = new MaterialDialog.Builder(getActivity())
+                                        .theme(Theme.LIGHT)
+                                        .title("Event")
+                                        .icon(getResources().getDrawable(contentIcon))
+                                        .titleColor(getResources().getColor(titleColor))
+                                        .customView(R.layout.dialog_event_details, true)
+                                        .positiveText("OK")
+                                        .positiveColor(getResources().getColor(titleColor))
+                                        .build();
+
+                                ((TextView) eventDialog.getCustomView().findViewById(R.id.event_type)).setText(contentTitle);
+                                ((TextView) eventDialog.getCustomView().findViewById(R.id.members_concerned))
+                                        .setText(contentType);
+
+                                String dateString = eventObject.getDate();
+
+                                ((TextView) eventDialog.getCustomView().findViewById(R.id.date)).setText(dateString.substring(0, 9));
+
+                                SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+                                int year = Integer.parseInt(yearFormat.format(Date.parse(dateString)));
+
+                                SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+                                int day = Integer.parseInt(dayFormat.format(Date.parse(dateString)));
+
+                                SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+                                int month = Integer.parseInt(monthFormat.format(Date.parse(dateString)));
 
 
-                }
-            });
-        }
+                                Calendar a = new GregorianCalendar(year, month - 1, day);
+                                Calendar b = Calendar.getInstance();
+                                int y1 = b.get(Calendar.YEAR);
+                                int y2 = a.get(Calendar.YEAR);
+                                int diff = y1 - y2;
+                                if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) ||
+                                        (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DAY_OF_MONTH) > b.get(Calendar.DAY_OF_MONTH))) {
+                                    diff--;
+                                }
+
+                                ((TextView) eventDialog.getCustomView().findViewById(R.id.years)).setText("YEARS: " + diff);
+
+                                String city = eventObject.getCity();
+                                ((TextView) eventDialog.getCustomView().findViewById(R.id.city)).setText(city.equals("") || city.equals("null") ? "" : "CITY: " + city);
+
+                                (eventDialog.getCustomView().findViewById(R.id.contact_click_layout)).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        phoneIntent(eventObject.getContact());
+                                    }
+                                });
+
+                                String temp = eventObject.getContact();
+                                if (!temp.equals("") && !temp.equals("null"))
+                                    ((TextView) eventDialog.getCustomView().findViewById(R.id.contact)).setText("Contact: " + temp);
+                                else
+                                    (eventDialog.getCustomView().findViewById(R.id.contact_click_layout)).setVisibility(View.GONE);
+
+                                (eventDialog.getCustomView().findViewById(R.id.email_click_layout)).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        emailIntent(eventObject.getEmail());
+                                    }
+                                });
+
+                                temp = eventObject.getEmail();
+                                if (!temp.equals("") && !temp.equals("null"))
+                                    ((TextView) eventDialog.getCustomView().findViewById(R.id.email)).setText("Email: " + temp);
+                                else
+                                    (eventDialog.getCustomView().findViewById(R.id.email_click_layout)).setVisibility(View.GONE);
+
+                                eventDialog.show();
+
+
+                            }
+                        })
+                        .show();
+
+
+            }
+        });
+
+
+
     }
 
     private void emailIntent(final String emailString) {
@@ -371,4 +329,9 @@ public class CalendarFragment extends Fragment {
 
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mainActivity = (MainActivity)activity;
+    }
 }

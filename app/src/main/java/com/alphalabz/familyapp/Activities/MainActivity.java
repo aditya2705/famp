@@ -43,6 +43,7 @@ import com.alphalabz.familyapp.Fragments.SplashImageFragment;
 import com.alphalabz.familyapp.Fragments.TreeViewFragment;
 import com.alphalabz.familyapp.NotificationPublisher;
 import com.alphalabz.familyapp.Objects.Event;
+import com.alphalabz.familyapp.Objects.Person;
 import com.alphalabz.familyapp.R;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.Drawer;
@@ -69,27 +70,55 @@ import java.util.LinkedHashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String RESULTS_FETCH_MEMBERS_URL = "http://alpha95.net63.net/get_members_2.php";
-    private static final String RESULTS_FETCH_EVENTS_URL = "http://alpha95.net63.net/get_events.php";
+    private static final String RESULTS_FETCH_MEMBERS_URL = "http://alpha95.net63.net/get_members_3.php";
+
+    private static final String TAG_RESULTS = "result";
+    private static final String TAG_ID = "unique_id";
+    private static final String TAG_GEN = "gen";
+    private static final String TAG_TITLE = "title";
+    private static final String TAG_FIRST_NAME = "first_name";
+    private static final String TAG_MIDDLE_NAME = "middle_name";
+    private static final String TAG_LAST_NAME = "last_name";
+    private static final String TAG_NICK_NAME = "nick_name";
+    private static final String TAG_GENDER = "gender";
+    private static final String TAG_IN_LAW = "in_law";
+    private static final String TAG_MOTHER_ID = "mother_id";
+    private static final String TAG_MOTHER_NAME = "mother_name";
+    private static final String TAG_FATHER_ID = "father_id";
+    private static final String TAG_FATHER_NAME = "father_name";
+    private static final String TAG_SPOUSE_ID = "spouse_id";
+    private static final String TAG_SPOUSE_NAME = "spouse_name";
+    private static final String TAG_BIRTH_DATE = "dob";
+    private static final String TAG_MARRIAGE_DATE = "dom";
+    private static final String TAG_DEATH_DATE = "dod";
+    private static final String TAG_MOBILE_NUMBER = "mobile_number";
+    private static final String TAG_ALTERNATE_NUMBER = "alternate_number";
+    private static final String TAG_RESIDENCE_NUMBER = "residence_number";
+    private static final String TAG_EMAIL1 = "email1";
+    private static final String TAG_EMAIL2 = "email2";
+    private static final String TAG_ADDRESS_1 = "address_1";
+    private static final String TAG_ADDRESS_2 = "address_2";
+    private static final String TAG_CITY = "city";
+    private static final String TAG_STATE_COUNTRY = "state_country";
+    private static final String TAG_PINCODE = "pincode";
+    private static final String TAG_DESIGNATION = "designation";
+    private static final String TAG_COMPANY = "company";
+    private static final String TAG_INDUSTRY_SPECIAL = "industry_special";
+    private static final String TAG_IMAGE_URL = "image_url";
+
+    public LinkedHashMap<String, Person> membersListMap = new LinkedHashMap<>();
+    private JSONArray membersJsonArray = null;
+
+    public ArrayList<Event> eventArrayList = new ArrayList<>();
+    public ArrayList<Person> personArrayList = new ArrayList<>();
+
+
     private static Context mContext;
     private Drawer drawer = null;
-    private String membersListJsonString, eventsListJsonString;
+    private String membersListJsonString;
     public SharedPreferences sharedPreferences;
     public ProgressDialog progressDialog;
 
-    private static final String TAG_RESULTS = "result";
-    private static final String TAG_ID = "events_id";
-    private static final String TAG_DATE = "date";
-    private static final String TAG_BIRTHDAY = "birthday";
-    private static final String TAG_ANNIVERSARY = "anniversary";
-    private static final String TAG_REMARKS = "remarks";
-    private static final String TAG_YEARS = "years";
-    private static final String TAG_CITY = "city";
-    private static final String TAG_CONTACT = "contact";
-    private static final String TAG_EMAIL = "email";
-
-    JSONArray eventsJsonArray = null;
-    public LinkedHashMap<String, Event> eventIDMap = new LinkedHashMap<>();
 
     private int newDay = -1;
 
@@ -210,24 +239,11 @@ public class MainActivity extends AppCompatActivity {
         drawer.setSelectionAtPosition(0, true);
 
         membersListJsonString = sharedPreferences.getString("MEMBERS_STRING", "");
-        eventsListJsonString = sharedPreferences.getString("EVENTS_STRING", "");
-        newDay = sharedPreferences.getInt("NEW_DAY", -1);
-
-        if (!notificationCall) {
-            if (membersListJsonString.equals("") || eventsListJsonString.equals("")) {
-                getMembersData();
-            } else {
-                if (newDay != Calendar.getInstance().get(Calendar.DAY_OF_YEAR)) {
-                    progressDialog.show();
-                    generateEventList();
-                    scheduleNotifications();
-                    progressDialog.dismiss();
-                }
-            }
-        } else {
-
-            showEventDialog((Event) getIntent().getSerializableExtra("Event"));
-
+        if(membersListJsonString.equals(""))
+            getMembersData();
+        else {
+            generateMembersList();
+            generateEventsList();
         }
 
 
@@ -305,6 +321,9 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString("MEMBERS_STRING", membersListJsonString);
                 editor.apply();
 
+                generateMembersList();
+                generateEventsList();
+
                 if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof TreeViewFragment) {
                     progressDialog.show();
                     new Handler().postDelayed(new Runnable() {
@@ -315,8 +334,6 @@ public class MainActivity extends AppCompatActivity {
                     }, 1000);
 
                 }
-
-                getEventsData();
 
             }
 
@@ -336,108 +353,64 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void getEventsData() {
-        class GetEventsData extends AsyncTask<String, Void, String> {
+    protected void generateMembersList(){
 
-            @Override
-            protected String doInBackground(String... params) {
+        membersListMap = new LinkedHashMap<>();
 
-                URL obj = null;
-                String result = null;
-                InputStream inputStream = null;
-                try {
-                    obj = new URL(RESULTS_FETCH_EVENTS_URL);
-                    HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-                    //add request header
-                    con.setRequestProperty("Content-Type", "application/json");
-                    inputStream = con.getInputStream();
-                    BufferedReader reader = new BufferedReader(
-                            new InputStreamReader(inputStream, "UTF-8"), 8);
-
-                    StringBuilder sb = new StringBuilder();
-
-                    String line = null;
-                    while ((line = reader.readLine()) != null) {
-                        sb.append(line + "\n");
-                    }
-                    result = sb.toString();
-                    Log.d("RESULT", result);
-
-                } catch (Exception e) {
-                } finally {
-                    try {
-                        if (inputStream != null) inputStream.close();
-                    } catch (Exception squish) {
-                    }
-                }
-                return result;
-            }
-
-            @Override
-            protected void onPostExecute(String result) {
-                progressDialog.dismiss();
-                eventsListJsonString = result;
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("EVENTS_STRING", eventsListJsonString);
-                editor.apply();
-
-                generateEventList();
-                scheduleNotifications();
-
-                if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof EventsTableFragment) {
-                    progressDialog.show();
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EventsTableFragment()).commit();
-                        }
-                    }, 1000);
-
-                }
-
-            }
-
-            @Override
-            protected void onPreExecute() {
-                progressDialog.setTitle("Loading...");
-                progressDialog.show();
-                if (!isNetworkAvailable()) {
-                    progressDialog.dismiss();
-                    Toast.makeText(MainActivity.this, "Check Internet connection and try again", Toast.LENGTH_SHORT).show();
-                }
-                super.onPreExecute();
-            }
-        }
-        GetEventsData g = new GetEventsData();
-        g.execute();
-    }
-
-    protected void generateEventList() {
-
+        JSONObject jsonObj = null;
         try {
-            JSONObject jsonObj = new JSONObject(eventsListJsonString);
-            eventsJsonArray = jsonObj.getJSONArray(TAG_RESULTS);
+            jsonObj = new JSONObject(membersListJsonString);
 
-            LinkedHashMap<Event, String> dateStringMap = new LinkedHashMap<>();
+            membersJsonArray = jsonObj.getJSONArray(TAG_RESULTS);
 
-            for (int i = 0; i < eventsJsonArray.length(); i++) {
-                JSONObject c = eventsJsonArray.getJSONObject(i);
+            for (int i = 0; i < membersJsonArray.length(); i++) {
+                JSONObject c = membersJsonArray.getJSONObject(i);
 
-                String event_id, date, birthday, anniversary, remarks, years, city, contact, email;
+                String unique_id, generation, title, first_name, middle_name, last_name, nick_name, gender, in_law, mother_id, mother_name, father_id, father_name, spouse_id, spouse_name, birth_date, marriage_date, death_date,
+                        mobile_number, alternate_number, residence_number, email1, email2, address_1, address_2, city, state_country, pincode, designation, company, industry_special, image_url;
 
-                event_id = c.getString(TAG_ID);
-                date = c.getString(TAG_DATE);
-                birthday = c.getString(TAG_BIRTHDAY);
-                anniversary = c.getString(TAG_ANNIVERSARY);
-                remarks = c.getString(TAG_REMARKS);
-                years = c.getString(TAG_YEARS);
-                city = c.getString(TAG_CITY);
-                contact = c.getString(TAG_CONTACT);
-                email = c.getString(TAG_EMAIL);
 
-                Event event = new Event(event_id, date, birthday, anniversary, remarks, years, city, contact, email);
-                eventIDMap.put(event_id, event);
+                unique_id = c.optString(TAG_ID);
+                generation = c.optString(TAG_GEN);
+                title = c.optString(TAG_TITLE);
+                first_name = c.optString(TAG_FIRST_NAME);
+                middle_name = c.optString(TAG_MIDDLE_NAME);
+                last_name = c.optString(TAG_LAST_NAME);
+                nick_name = c.optString(TAG_NICK_NAME);
+                gender = c.optString(TAG_GENDER);
+                in_law = c.optString(TAG_IN_LAW);
+                mother_id = c.optString(TAG_MOTHER_ID);
+                mother_name = c.optString(TAG_MOTHER_NAME);
+                father_id = c.optString(TAG_FATHER_ID);
+                father_name = c.optString(TAG_FATHER_NAME);
+                spouse_id = c.optString(TAG_SPOUSE_ID);
+                spouse_name = c.optString(TAG_SPOUSE_NAME);
+                birth_date = c.optString(TAG_BIRTH_DATE);
+                marriage_date = c.optString(TAG_MARRIAGE_DATE);
+                death_date = c.optString(TAG_DEATH_DATE);
+                mobile_number = c.optString(TAG_MOBILE_NUMBER);
+                alternate_number = c.optString(TAG_ALTERNATE_NUMBER);
+                residence_number = c.optString(TAG_RESIDENCE_NUMBER);
+                email1 = c.optString(TAG_EMAIL1);
+                email2 = c.optString(TAG_EMAIL2);
+                address_1 = c.optString(TAG_ADDRESS_1);
+                address_2 = c.optString(TAG_ADDRESS_2);
+                city = c.optString(TAG_CITY);
+                state_country = c.optString(TAG_STATE_COUNTRY);
+                pincode = c.optString(TAG_PINCODE);
+                designation = c.optString(TAG_DESIGNATION);
+                company = c.optString(TAG_COMPANY);
+                industry_special = c.optString(TAG_INDUSTRY_SPECIAL);
+                image_url = c.optString(TAG_IMAGE_URL);
+
+
+                Person person = new Person(unique_id, generation, title, first_name, middle_name, last_name, nick_name,
+                        gender, in_law, mother_id, mother_name, father_id, father_name, spouse_id,
+                        spouse_name, birth_date, marriage_date, death_date, mobile_number, alternate_number,
+                        residence_number, email1, email2, address_1, address_2, city, state_country, pincode,
+                        designation, company, industry_special, image_url, -1);
+
+                personArrayList.add(person);
 
             }
 
@@ -445,6 +418,41 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        for (Person person : personArrayList) {
+            membersListMap.put(person.getUnique_id(), person);
+        }
+
+
+    }
+
+    protected void generateEventsList() {
+
+        eventArrayList = new ArrayList<>();
+        int id=0;
+
+        for(Person person : membersListMap.values()){
+
+            Event tempEvent;
+
+            if(person.getBirth_date()!=null&&!person.getBirth_date().equals("null")&&!person.getBirth_date().equals("")){
+                tempEvent = new Event(id++,person.getUnique_id(),person.getBirth_date(),person.getCity(),person.getMobile_number(),person.getEmail1(),0);
+                eventArrayList.add(tempEvent);
+            }
+
+            if(person.getMarriage_date()!=null&&!person.getMarriage_date().equals("null")&&!person.getMarriage_date().equals("")){
+                tempEvent = new Event(id++,person.getUnique_id(),person.getMarriage_date(),person.getCity(),person.getMobile_number(),person.getEmail1(),1);
+                tempEvent.setSpouse_id(person.getSpouse_id());
+                eventArrayList.add(tempEvent);
+            }
+
+            if(person.getDeath_date()!=null&&!person.getDeath_date().equals("null")&&!person.getDeath_date().equals("")){
+                tempEvent = new Event(id++,person.getUnique_id(),person.getDeath_date(),person.getCity(),person.getMobile_number(),person.getEmail1(),2);
+                eventArrayList.add(tempEvent);
+            }
+
+        }
+
+        Log.d("Event List",eventArrayList.toString());
     }
 
     private void scheduleNotifications() {
@@ -453,20 +461,11 @@ public class MainActivity extends AppCompatActivity {
         editor.putInt("NEW_DAY", Calendar.getInstance().get(Calendar.DAY_OF_YEAR));
         editor.apply();
 
-        ArrayList<Event> eventArrayList = new ArrayList<>(eventIDMap.values());
-
         for (int i = 0; i < eventArrayList.size(); i++) {
 
             Event currentEvent = eventArrayList.get(i);
 
-            String birthday = currentEvent.getBirthday();
-
-            int event;
-            if (birthday.equals("null") || birthday.equals("")) {
-                event = 1;
-            } else {
-                event = 0;
-            }
+            int typeOfEvent = currentEvent.getEventType();
 
             String dateString = currentEvent.getDate();
             SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
@@ -501,11 +500,31 @@ public class MainActivity extends AppCompatActivity {
 
             Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
+            String contentTitle = "";
+            int contentIcon = -1;
+
+            switch (typeOfEvent){
+
+                case 0:
+                    contentTitle = "Birthday of "+ membersListMap.get(currentEvent.getMember_id()).getFirst_name();
+                    contentIcon = R.drawable.ic_cake;
+                    break;
+                case 1:
+                    contentTitle = "Marriage Anniversary of "+ membersListMap.get(currentEvent.getMember_id()).getFirst_name();
+                    contentIcon = R.drawable.ic_love;
+                    break;
+                case 2:
+                    contentTitle = "Death Anniversary of "+ membersListMap.get(currentEvent.getMember_id()).getFirst_name();
+                    contentIcon = R.drawable.ic_star;
+                    break;
+
+            }
+
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                    .setContentTitle(event == 1 ? "Anniversary of " + currentEvent.getAnniversary() : "Birthday of " + currentEvent.getBirthday())
+                    .setContentTitle(contentTitle)
                     .setContentText("Date: " + dateString.substring(0, 9) + " Years: " + diff)
                     .setContentIntent(goToDifferentPendingIntent)
-                    .setSmallIcon(event == 1 ? R.drawable.ic_love : R.drawable.ic_cake)
+                    .setSmallIcon(contentIcon)
                     .setSound(alarmSound);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -538,36 +557,48 @@ public class MainActivity extends AppCompatActivity {
 
     private void showEventDialog(final Event eventObject) {
 
-        String birthday = eventObject.getBirthday();
-        String marriage = eventObject.getAnniversary();
+        int typeOfEvent = eventObject.getEventType();
 
-        int event, titleColor;
-        if (!birthday.equals("null") && !birthday.equals("")) {
-            event = 0;
-            titleColor = R.color.birthday;
-        } else {
-            if (!marriage.equals("null") && !marriage.equals("")) {
-                event = 1;
+        String contentTitle = "", contentType ="";
+        int contentIcon = -1;
+        int titleColor = -1;
+
+        switch (typeOfEvent){
+
+            case 0:
+                contentTitle = "Birthday of "+ membersListMap.get(eventObject.getMember_id()).getFirst_name();
+                contentType = "Birthday";
+                contentIcon = R.drawable.ic_cake;
+                titleColor = R.color.birthday;
+                break;
+            case 1:
+                contentTitle = "Marriage Anniversary of "+ membersListMap.get(eventObject.getMember_id()).getFirst_name();
+                contentType = "Marriage Anniversary";
+                contentIcon = R.drawable.ic_love;
                 titleColor = R.color.marriage;
-            } else {
-                event = 2;
+                break;
+            case 2:
+                contentTitle = "Death Anniversary of "+ membersListMap.get(eventObject.getMember_id()).getFirst_name();
+                contentType = "Death Anniversary";
+                contentIcon = R.drawable.ic_star;
                 titleColor = R.color.death;
-            }
+                break;
+
         }
 
         final MaterialDialog dialog = new MaterialDialog.Builder(MainActivity.this)
                 .theme(Theme.LIGHT)
                 .title("Event")
-                .icon(getResources().getDrawable(event == 1 ? R.drawable.ic_love : R.drawable.ic_cake))
+                .icon(getResources().getDrawable(contentIcon))
                 .titleColor(getResources().getColor(titleColor))
                 .customView(R.layout.dialog_event_details, true)
                 .positiveText("OK")
                 .positiveColor(getResources().getColor(titleColor))
                 .build();
 
-        ((TextView) dialog.getCustomView().findViewById(R.id.event_type)).setText(event == 1 ? "Anniversary" : "Birthday");
+        ((TextView) dialog.getCustomView().findViewById(R.id.event_type)).setText(contentTitle);
         ((TextView) dialog.getCustomView().findViewById(R.id.members_concerned))
-                .setText(event == 1 ? eventObject.getAnniversary() : eventObject.getBirthday());
+                .setText(contentType);
 
         String dateString = eventObject.getDate();
 

@@ -1,29 +1,19 @@
-package com.alphalabz.familyapp.Fragments;
+package com.alphalabz.familyapp.fragments;
 
 
 import android.app.Activity;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.alphalabz.familyapp.Activities.MainActivity;
+import com.alphalabz.familyapp.activities.MainActivity;
 import com.alphalabz.familyapp.R;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 /**
  * A simple {@link Fragment} subclass.

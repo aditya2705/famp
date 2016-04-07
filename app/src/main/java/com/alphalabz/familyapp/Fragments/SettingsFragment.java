@@ -1,35 +1,18 @@
-package com.alphalabz.familyapp.Fragments;
+package com.alphalabz.familyapp.fragments;
 
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
-import com.alphalabz.familyapp.Activities.MainActivity;
-import com.alphalabz.familyapp.NotificationPublisher;
-import com.alphalabz.familyapp.Objects.Event;
+import com.alphalabz.familyapp.activities.MainActivity;
 import com.alphalabz.familyapp.R;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

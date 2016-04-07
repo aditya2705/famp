@@ -1,4 +1,4 @@
-package com.alphalabz.familyapp.Custom;
+package com.alphalabz.familyapp.custom;
 
 /**
  * Created by Rushabh on 07-01-2016.

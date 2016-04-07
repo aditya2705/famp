@@ -1,4 +1,4 @@
-package com.alphalabz.familyapp.Custom.SearchCustomClasses;
+package com.alphalabz.familyapp.custom.SearchCustomClasses;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

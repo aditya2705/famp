@@ -1,4 +1,4 @@
-package com.alphalabz.familyapp.Custom;
+package com.alphalabz.familyapp.custom;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

@@ -1,4 +1,4 @@
-package com.alphalabz.familyapp.Fragments;
+package com.alphalabz.familyapp.fragments;
 
 
 import android.Manifest;

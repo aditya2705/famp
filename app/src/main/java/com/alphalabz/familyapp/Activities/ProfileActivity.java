@@ -1,4 +1,4 @@
-package com.alphalabz.familyapp.Activities;
+package com.alphalabz.familyapp.activities;
 
 import android.Manifest;
 import android.content.Intent;
@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
-import com.alphalabz.familyapp.Objects.Person;
+import com.alphalabz.familyapp.objects.Person;
 import com.alphalabz.familyapp.R;
 
 import org.json.JSONArray;

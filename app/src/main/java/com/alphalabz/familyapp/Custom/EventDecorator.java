@@ -1,4 +1,4 @@
-package com.alphalabz.familyapp.Custom;
+package com.alphalabz.familyapp.custom;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;

@@ -1,4 +1,4 @@
-package com.alphalabz.familyapp.Custom.SearchCustomClasses;
+package com.alphalabz.familyapp.custom.SearchCustomClasses;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

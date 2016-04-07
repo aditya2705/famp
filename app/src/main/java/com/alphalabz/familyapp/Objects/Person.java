@@ -1,4 +1,4 @@
-package com.alphalabz.familyapp.Objects;
+package com.alphalabz.familyapp.objects;
 
 import java.io.Serializable;
 

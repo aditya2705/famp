@@ -1,4 +1,4 @@
-package com.alphalabz.familyapp.Objects;
+package com.alphalabz.familyapp.objects;
 
 /**
  * Created by Aditya Rathi on 24-Feb-16.

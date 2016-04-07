@@ -1,4 +1,4 @@
-package com.alphalabz.familyapp.Fragments;
+package com.alphalabz.familyapp.fragments;
 
 
 import android.app.Activity;
@@ -30,10 +30,10 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
-import com.alphalabz.familyapp.Activities.MainActivity;
-import com.alphalabz.familyapp.Activities.ProfileActivity;
-import com.alphalabz.familyapp.Objects.Person;
-import com.alphalabz.familyapp.Objects.PersonLayout;
+import com.alphalabz.familyapp.activities.MainActivity;
+import com.alphalabz.familyapp.activities.ProfileActivity;
+import com.alphalabz.familyapp.objects.Person;
+import com.alphalabz.familyapp.objects.PersonLayout;
 import com.alphalabz.familyapp.R;
 
 import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;

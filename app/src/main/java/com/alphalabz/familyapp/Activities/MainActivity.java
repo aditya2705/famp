@@ -1,4 +1,4 @@
-package com.alphalabz.familyapp.Activities;
+package com.alphalabz.familyapp.activities;
 
 import android.Manifest;
 import android.app.AlarmManager;
@@ -33,17 +33,17 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
-import com.alphalabz.familyapp.Fragments.CalendarFragment;
-import com.alphalabz.familyapp.Fragments.ContactFragment;
-import com.alphalabz.familyapp.Fragments.EventsTableFragment;
-import com.alphalabz.familyapp.Fragments.GalleryFragment;
-import com.alphalabz.familyapp.Fragments.SearchListFragment;
-import com.alphalabz.familyapp.Fragments.SettingsFragment;
-import com.alphalabz.familyapp.Fragments.SplashImageFragment;
-import com.alphalabz.familyapp.Fragments.TreeViewFragment;
+import com.alphalabz.familyapp.fragments.CalendarFragment;
+import com.alphalabz.familyapp.fragments.ContactFragment;
+import com.alphalabz.familyapp.fragments.EventsTableFragment;
+import com.alphalabz.familyapp.fragments.GalleryFragment;
+import com.alphalabz.familyapp.fragments.SearchListFragment;
+import com.alphalabz.familyapp.fragments.SettingsFragment;
+import com.alphalabz.familyapp.fragments.SplashImageFragment;
+import com.alphalabz.familyapp.fragments.TreeViewFragment;
 import com.alphalabz.familyapp.NotificationPublisher;
-import com.alphalabz.familyapp.Objects.Event;
-import com.alphalabz.familyapp.Objects.Person;
+import com.alphalabz.familyapp.objects.Event;
+import com.alphalabz.familyapp.objects.Person;
 import com.alphalabz.familyapp.R;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.Drawer;
@@ -239,11 +239,26 @@ public class MainActivity extends AppCompatActivity {
         drawer.setSelectionAtPosition(0, true);
 
         membersListJsonString = sharedPreferences.getString("MEMBERS_STRING", "");
-        if(membersListJsonString.equals(""))
-            getMembersData();
-        else {
-            generateMembersList();
-            generateEventsList();
+        newDay = sharedPreferences.getInt("NEW_DAY", -1);
+
+        if (!notificationCall) {
+            if (membersListJsonString.equals("")) {
+                getMembersData();
+            } else {
+
+                generateMembersList();
+                generateEventsList();
+
+                if (newDay != Calendar.getInstance().get(Calendar.DAY_OF_YEAR)) {
+                    progressDialog.show();
+                    scheduleNotifications();
+                    progressDialog.dismiss();
+                }
+            }
+        } else {
+
+            showEventDialog((Event) getIntent().getSerializableExtra("Event"));
+
         }
 
 
@@ -321,8 +336,10 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString("MEMBERS_STRING", membersListJsonString);
                 editor.apply();
 
-                generateMembersList();
-                generateEventsList();
+                if(!membersListJsonString.equals("")) {
+                    generateMembersList();
+                    generateEventsList();
+                }
 
                 if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof TreeViewFragment) {
                     progressDialog.show();
@@ -343,7 +360,8 @@ public class MainActivity extends AppCompatActivity {
                 progressDialog.show();
                 if (!isNetworkAvailable()) {
                     progressDialog.dismiss();
-                    Toast.makeText(MainActivity.this, "Check Internet connection and try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Check Internet connection and try again. Exiting app...", Toast.LENGTH_SHORT).show();
+                    MainActivity.this.finish();
                 }
                 super.onPreExecute();
             }
@@ -555,7 +573,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showEventDialog(final Event eventObject) {
+    public void showEventDialog(final Event eventObject) {
 
         int typeOfEvent = eventObject.getEventType();
 
@@ -563,22 +581,32 @@ public class MainActivity extends AppCompatActivity {
         int contentIcon = -1;
         int titleColor = -1;
 
+        Person actualMember = membersListMap.get(eventObject.getMember_id());
+
+        String memberName = ((actualMember.getTitle().equals("null") || actualMember.getTitle().equals("")) ? "" : (actualMember.getTitle() + " ")) +
+                actualMember.getFirst_name() + (actualMember.getMiddle_name().equals("null") ? "" : " " + actualMember.getMiddle_name())
+                + " " + actualMember.getLast_name();
+
         switch (typeOfEvent){
 
             case 0:
-                contentTitle = "Birthday of "+ membersListMap.get(eventObject.getMember_id()).getFirst_name();
+                contentTitle = "Birthday of "+memberName;
                 contentType = "Birthday";
                 contentIcon = R.drawable.ic_cake;
                 titleColor = R.color.birthday;
                 break;
             case 1:
-                contentTitle = "Marriage Anniversary of "+ membersListMap.get(eventObject.getMember_id()).getFirst_name();
+                Person spouseOfMember = membersListMap.get(actualMember.getSpouse_id());
+                String spouseName = ((spouseOfMember.getTitle().equals("null") || spouseOfMember.getTitle().equals("")) ? "" : (spouseOfMember.getTitle() + " ")) +
+                        spouseOfMember.getFirst_name() + (spouseOfMember.getMiddle_name().equals("null") ? "" : " " + spouseOfMember.getMiddle_name())
+                        + " " + spouseOfMember.getLast_name();
+                contentTitle = "Marriage Anniversary of "+memberName+" & "+spouseName;
                 contentType = "Marriage Anniversary";
                 contentIcon = R.drawable.ic_love;
                 titleColor = R.color.marriage;
                 break;
             case 2:
-                contentTitle = "Death Anniversary of "+ membersListMap.get(eventObject.getMember_id()).getFirst_name();
+                contentTitle = "Death Anniversary of "+memberName;
                 contentType = "Death Anniversary";
                 contentIcon = R.drawable.ic_star;
                 titleColor = R.color.death;
@@ -586,7 +614,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(MainActivity.this)
+        final MaterialDialog eventDialog = new MaterialDialog.Builder(MainActivity.this)
                 .theme(Theme.LIGHT)
                 .title("Event")
                 .icon(getResources().getDrawable(contentIcon))
@@ -596,13 +624,13 @@ public class MainActivity extends AppCompatActivity {
                 .positiveColor(getResources().getColor(titleColor))
                 .build();
 
-        ((TextView) dialog.getCustomView().findViewById(R.id.event_type)).setText(contentTitle);
-        ((TextView) dialog.getCustomView().findViewById(R.id.members_concerned))
+        ((TextView) eventDialog.getCustomView().findViewById(R.id.event_type)).setText(contentTitle);
+        ((TextView) eventDialog.getCustomView().findViewById(R.id.members_concerned))
                 .setText(contentType);
 
         String dateString = eventObject.getDate();
 
-        ((TextView) dialog.getCustomView().findViewById(R.id.date)).setText(dateString.substring(0, 9));
+        ((TextView) eventDialog.getCustomView().findViewById(R.id.date)).setText(dateString.substring(0, 9));
 
         SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
         int year = Integer.parseInt(yearFormat.format(Date.parse(dateString)));
@@ -624,12 +652,12 @@ public class MainActivity extends AppCompatActivity {
             diff--;
         }
 
-        ((TextView) dialog.getCustomView().findViewById(R.id.years)).setText("YEARS: " + diff);
+        ((TextView) eventDialog.getCustomView().findViewById(R.id.years)).setText("YEARS: " + diff);
 
         String city = eventObject.getCity();
-        ((TextView) dialog.getCustomView().findViewById(R.id.city)).setText(city.equals("") || city.equals("null") ? "" : "CITY: " + city);
+        ((TextView) eventDialog.getCustomView().findViewById(R.id.city)).setText(city.equals("") || city.equals("null") ? "" : "CITY: " + city);
 
-        (dialog.getCustomView().findViewById(R.id.contact_click_layout)).setOnClickListener(new View.OnClickListener() {
+        (eventDialog.getCustomView().findViewById(R.id.contact_click_layout)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 phoneIntent(eventObject.getContact());
@@ -638,11 +666,11 @@ public class MainActivity extends AppCompatActivity {
 
         String temp = eventObject.getContact();
         if (!temp.equals("") && !temp.equals("null"))
-            ((TextView) dialog.getCustomView().findViewById(R.id.contact)).setText("Contact: " + temp);
+            ((TextView) eventDialog.getCustomView().findViewById(R.id.contact)).setText("Contact: " + temp);
         else
-            (dialog.getCustomView().findViewById(R.id.contact_click_layout)).setVisibility(View.GONE);
+            (eventDialog.getCustomView().findViewById(R.id.contact_click_layout)).setVisibility(View.GONE);
 
-        (dialog.getCustomView().findViewById(R.id.email_click_layout)).setOnClickListener(new View.OnClickListener() {
+        (eventDialog.getCustomView().findViewById(R.id.email_click_layout)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 emailIntent(eventObject.getEmail());
@@ -651,11 +679,12 @@ public class MainActivity extends AppCompatActivity {
 
         temp = eventObject.getEmail();
         if (!temp.equals("") && !temp.equals("null"))
-            ((TextView) dialog.getCustomView().findViewById(R.id.email)).setText("Email: " + temp);
+            ((TextView) eventDialog.getCustomView().findViewById(R.id.email)).setText("Email: " + temp);
         else
-            (dialog.getCustomView().findViewById(R.id.email_click_layout)).setVisibility(View.GONE);
+            (eventDialog.getCustomView().findViewById(R.id.email_click_layout)).setVisibility(View.GONE);
 
-        dialog.show();
+        eventDialog.show();
+
     }
 
     private void emailIntent(final String emailString) {

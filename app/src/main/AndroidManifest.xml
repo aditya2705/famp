@@ -35,7 +35,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Activities.MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/CustomTheme">
             <intent-filter>
@@ -44,7 +44,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.ProfileActivity" />
+        <activity android:name=".activities.ProfileActivity" />
 
         <receiver android:name=".NotificationPublisher" android:enabled="true">
             <intent-filter> <action android:name="NOTIFICATION_SERVICE" /></intent-filter>

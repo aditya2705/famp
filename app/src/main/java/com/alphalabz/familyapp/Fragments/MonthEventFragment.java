@@ -1,4 +1,4 @@
-package com.alphalabz.familyapp.Fragments;
+package com.alphalabz.familyapp.fragments;
 
 
 import android.Manifest;
@@ -22,9 +22,10 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
-import com.alphalabz.familyapp.Activities.MainActivity;
-import com.alphalabz.familyapp.Custom.RecyclerItemClickListener;
-import com.alphalabz.familyapp.Objects.Event;
+import com.alphalabz.familyapp.objects.Person;
+import com.alphalabz.familyapp.activities.MainActivity;
+import com.alphalabz.familyapp.custom.RecyclerItemClickListener;
+import com.alphalabz.familyapp.objects.Event;
 import com.alphalabz.familyapp.R;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -146,22 +147,33 @@ public class MonthEventFragment extends Fragment {
         int contentIcon = -1;
         int titleColor = -1;
 
+        Person actualMember = mainActivity.membersListMap.get(eventObject.getMember_id());
+
+        String memberName = ((actualMember.getTitle().equals("null") || actualMember.getTitle().equals("")) ? "" : (actualMember.getTitle() + " ")) +
+                actualMember.getFirst_name() + (actualMember.getMiddle_name().equals("null") ? "" : " " + actualMember.getMiddle_name())
+                + " " + actualMember.getLast_name();
+
         switch (typeOfEvent){
 
             case 0:
-                contentTitle = "Birthday of "+mainActivity.membersListMap.get(eventObject.getMember_id()).getFirst_name();
+                contentTitle = "Birthday of "+memberName;
                 contentType = "Birthday";
                 contentIcon = R.drawable.ic_cake;
                 titleColor = R.color.birthday;
                 break;
             case 1:
-                contentTitle = "Marriage Anniversary of "+mainActivity.membersListMap.get(eventObject.getMember_id()).getFirst_name();
+                Person spouseOfMember = mainActivity.membersListMap.get(actualMember.getSpouse_id());
+                String spouseName = ((spouseOfMember.getTitle().equals("null") || spouseOfMember.getTitle().equals("")) ? "" : (spouseOfMember.getTitle() + " ")) +
+                        spouseOfMember.getFirst_name() + (spouseOfMember.getMiddle_name().equals("null") ? "" : " " + spouseOfMember.getMiddle_name())
+                        + " " + spouseOfMember.getLast_name();
+
+                contentTitle = "Marriage Anniversary of "+memberName+" & "+spouseName;
                 contentType = "Marriage Anniversary";
                 contentIcon = R.drawable.ic_love;
                 titleColor = R.color.marriage;
                 break;
             case 2:
-                contentTitle = "Death Anniversary of "+mainActivity.membersListMap.get(eventObject.getMember_id()).getFirst_name();
+                contentTitle = "Death Anniversary of "+memberName;
                 contentType = "Death Anniversary";
                 contentIcon = R.drawable.ic_star;
                 titleColor = R.color.death;
@@ -305,22 +317,33 @@ public class MonthEventFragment extends Fragment {
             Event event = eventArrayList.get(position);
 
             holder.dateView.setText(event.getDate().substring(0, 10));
-            String memberConcerned = "";
             FontAwesome.Icon icon = null;
             int color = -1;
-            switch (eventArrayList.get(position).getEventType()){
+
+            Person actualMember = mainActivity.membersListMap.get(event.getMember_id());
+
+            String memberName = ((actualMember.getTitle().equals("null") || actualMember.getTitle().equals("")) ? "" : (actualMember.getTitle() + " ")) +
+                    actualMember.getFirst_name() + (actualMember.getMiddle_name().equals("null") ? "" : " " + actualMember.getMiddle_name())
+                    + " " + actualMember.getLast_name();
+
+            String memberConcerned = "";
+            switch (event.getEventType()){
                 case 0:
-                    memberConcerned = mainActivity.membersListMap.get(event.getMember_id()).getFirst_name();
+                    memberConcerned = memberName;
                     icon = FontAwesome.Icon.faw_birthday_cake;
                     color = R.color.birthday;
                     break;
                 case 1:
-                    memberConcerned = mainActivity.membersListMap.get(event.getMember_id()).getFirst_name();
+                    Person spouseOfMember = mainActivity.membersListMap.get(actualMember.getSpouse_id());
+                    String spouseName = ((spouseOfMember.getTitle().equals("null") || spouseOfMember.getTitle().equals("")) ? "" : (spouseOfMember.getTitle() + " ")) +
+                            spouseOfMember.getFirst_name() + (spouseOfMember.getMiddle_name().equals("null") ? "" : " " + spouseOfMember.getMiddle_name())
+                            + " " + spouseOfMember.getLast_name();
+                    memberConcerned = memberName +" & "+spouseName;
                     icon = FontAwesome.Icon.faw_heart;
                     color = R.color.marriage;
                     break;
                 case 2:
-                    memberConcerned = mainActivity.membersListMap.get(event.getMember_id()).getFirst_name();
+                    memberConcerned = memberName;
                     icon = FontAwesome.Icon.faw_star;
                     color = R.color.death;
                     break;

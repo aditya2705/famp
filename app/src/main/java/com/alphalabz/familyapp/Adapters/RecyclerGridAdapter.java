@@ -1,4 +1,4 @@
-package com.alphalabz.familyapp.Adapters;
+package com.alphalabz.familyapp.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.alphalabz.familyapp.Objects.GalleryObject;
+import com.alphalabz.familyapp.objects.GalleryObject;
 import com.alphalabz.familyapp.R;
 import com.squareup.picasso.Picasso;
 

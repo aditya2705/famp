@@ -1,6 +1,5 @@
-package com.alphalabz.familyapp.Objects;
+package com.alphalabz.familyapp.objects;
 
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;

@@ -1,5 +1,4 @@
-package com.alphalabz.familyapp.Fragments;
-
+package com.alphalabz.familyapp.fragments;
 
 import android.Manifest;
 import android.app.Activity;
@@ -14,15 +13,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
-import com.alphalabz.familyapp.Activities.MainActivity;
-import com.alphalabz.familyapp.Custom.EventDecorator;
-import com.alphalabz.familyapp.Objects.Event;
+import com.alphalabz.familyapp.activities.MainActivity;
+import com.alphalabz.familyapp.custom.EventDecorator;
+import com.alphalabz.familyapp.objects.Event;
 import com.alphalabz.familyapp.R;
+import com.alphalabz.familyapp.objects.Person;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -114,19 +113,28 @@ public class CalendarFragment extends Fragment {
 
                 for (int i = 0; i < indexList.size(); i++) {
 
-                    Event curEvent = calendarEventsList.get(indexList.get(i));
-                    
-                    int eventInteger = curEvent.getEventType();
+                    Event event = calendarEventsList.get(indexList.get(i));
+
                     String eventTitle = "";
-                    switch(eventInteger){
+                    Person actualMember = mainActivity.membersListMap.get(event.getMember_id());
+
+                    String memberName = ((actualMember.getTitle().equals("null") || actualMember.getTitle().equals("")) ? "" : (actualMember.getTitle() + " ")) +
+                            actualMember.getFirst_name() + (actualMember.getMiddle_name().equals("null") ? "" : " " + actualMember.getMiddle_name())
+                            + " " + actualMember.getLast_name();
+
+                    switch(event.getEventType()){
                         case 0:
-                            eventTitle = "Birthday of "+mainActivity.membersListMap.get(curEvent.getMember_id()).getFirst_name();
+                            eventTitle = "Birthday of "+memberName;
                             break;
                         case 1:
-                            eventTitle = "Marriage Anniversary of "+mainActivity.membersListMap.get(curEvent.getMember_id()).getFirst_name();
+                            Person spouseOfMember = mainActivity.membersListMap.get(actualMember.getSpouse_id());
+                            String spouseName = ((spouseOfMember.getTitle().equals("null") || spouseOfMember.getTitle().equals("")) ? "" : (spouseOfMember.getTitle() + " ")) +
+                                    spouseOfMember.getFirst_name() + (spouseOfMember.getMiddle_name().equals("null") ? "" : " " + spouseOfMember.getMiddle_name())
+                                    + " " + spouseOfMember.getLast_name();
+                            eventTitle = "Marriage Anniversary of "+memberName+" & "+spouseName;
                             break;
                         case 2:
-                            eventTitle = "Death Anniversary of "+mainActivity.membersListMap.get(curEvent.getMember_id()).getFirst_name();
+                            eventTitle = "Death Anniversary of "+memberName;
                             break;
                     }
                     arrayAdapter.add(eventTitle);
@@ -142,111 +150,10 @@ public class CalendarFragment extends Fragment {
 
                                 final Event eventObject = calendarEventsList.get(indexList.get(which));
 
-                                int typeOfEvent = eventObject.getEventType();
-
-                                String contentTitle = "", contentType ="";
-                                int contentIcon = -1;
-                                int titleColor = -1;
-
-                                switch (typeOfEvent){
-
-                                    case 0:
-                                        contentTitle = "Birthday of "+mainActivity.membersListMap.get(eventObject.getMember_id()).getFirst_name();
-                                        contentType = "Birthday";
-                                        contentIcon = R.drawable.ic_cake;
-                                        titleColor = R.color.birthday;
-                                        break;
-                                    case 1:
-                                        contentTitle = "Marriage Anniversary of "+mainActivity.membersListMap.get(eventObject.getMember_id()).getFirst_name();
-                                        contentType = "Marriage Anniversary";
-                                        contentIcon = R.drawable.ic_love;
-                                        titleColor = R.color.marriage;
-                                        break;
-                                    case 2:
-                                        contentTitle = "Death Anniversary of "+mainActivity.membersListMap.get(eventObject.getMember_id()).getFirst_name();
-                                        contentType = "Death Anniversary";
-                                        contentIcon = R.drawable.ic_star;
-                                        titleColor = R.color.death;
-                                        break;
-
-                                }
-
-                                final MaterialDialog eventDialog = new MaterialDialog.Builder(getActivity())
-                                        .theme(Theme.LIGHT)
-                                        .title("Event")
-                                        .icon(getResources().getDrawable(contentIcon))
-                                        .titleColor(getResources().getColor(titleColor))
-                                        .customView(R.layout.dialog_event_details, true)
-                                        .positiveText("OK")
-                                        .positiveColor(getResources().getColor(titleColor))
-                                        .build();
-
-                                ((TextView) eventDialog.getCustomView().findViewById(R.id.event_type)).setText(contentTitle);
-                                ((TextView) eventDialog.getCustomView().findViewById(R.id.members_concerned))
-                                        .setText(contentType);
-
-                                String dateString = eventObject.getDate();
-
-                                ((TextView) eventDialog.getCustomView().findViewById(R.id.date)).setText(dateString.substring(0, 9));
-
-                                SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
-                                int year = Integer.parseInt(yearFormat.format(Date.parse(dateString)));
-
-                                SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
-                                int day = Integer.parseInt(dayFormat.format(Date.parse(dateString)));
-
-                                SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
-                                int month = Integer.parseInt(monthFormat.format(Date.parse(dateString)));
-
-
-                                Calendar a = new GregorianCalendar(year, month - 1, day);
-                                Calendar b = Calendar.getInstance();
-                                int y1 = b.get(Calendar.YEAR);
-                                int y2 = a.get(Calendar.YEAR);
-                                int diff = y1 - y2;
-                                if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) ||
-                                        (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DAY_OF_MONTH) > b.get(Calendar.DAY_OF_MONTH))) {
-                                    diff--;
-                                }
-
-                                ((TextView) eventDialog.getCustomView().findViewById(R.id.years)).setText("YEARS: " + diff);
-
-                                String city = eventObject.getCity();
-                                ((TextView) eventDialog.getCustomView().findViewById(R.id.city)).setText(city.equals("") || city.equals("null") ? "" : "CITY: " + city);
-
-                                (eventDialog.getCustomView().findViewById(R.id.contact_click_layout)).setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        phoneIntent(eventObject.getContact());
-                                    }
-                                });
-
-                                String temp = eventObject.getContact();
-                                if (!temp.equals("") && !temp.equals("null"))
-                                    ((TextView) eventDialog.getCustomView().findViewById(R.id.contact)).setText("Contact: " + temp);
-                                else
-                                    (eventDialog.getCustomView().findViewById(R.id.contact_click_layout)).setVisibility(View.GONE);
-
-                                (eventDialog.getCustomView().findViewById(R.id.email_click_layout)).setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        emailIntent(eventObject.getEmail());
-                                    }
-                                });
-
-                                temp = eventObject.getEmail();
-                                if (!temp.equals("") && !temp.equals("null"))
-                                    ((TextView) eventDialog.getCustomView().findViewById(R.id.email)).setText("Email: " + temp);
-                                else
-                                    (eventDialog.getCustomView().findViewById(R.id.email_click_layout)).setVisibility(View.GONE);
-
-                                eventDialog.show();
-
-
+                                mainActivity.showEventDialog(eventObject);
                             }
                         })
                         .show();
-
 
             }
         });

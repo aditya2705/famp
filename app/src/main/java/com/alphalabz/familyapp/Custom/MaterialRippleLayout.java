@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.alphalabz.familyapp.Custom;
+package com.alphalabz.familyapp.custom;
 
 import android.content.Context;
 import android.content.res.Resources;

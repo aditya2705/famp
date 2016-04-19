@@ -143,7 +143,7 @@ public class MonthEventFragment extends Fragment {
 
         int typeOfEvent = eventObject.getEventType();
 
-        String contentTitle = "", contentType ="";
+        String content = "", contentType ="";
         int contentIcon = -1;
         int titleColor = -1;
 
@@ -156,7 +156,7 @@ public class MonthEventFragment extends Fragment {
         switch (typeOfEvent){
 
             case 0:
-                contentTitle = "Birthday of "+memberName;
+                content = memberName;
                 contentType = "Birthday";
                 contentIcon = R.drawable.ic_cake;
                 titleColor = R.color.birthday;
@@ -167,13 +167,13 @@ public class MonthEventFragment extends Fragment {
                         spouseOfMember.getFirst_name() + (spouseOfMember.getMiddle_name().equals("null") ? "" : " " + spouseOfMember.getMiddle_name())
                         + " " + spouseOfMember.getLast_name();
 
-                contentTitle = "Marriage Anniversary of "+memberName+" & "+spouseName;
+                content = memberName+" & "+spouseName;
                 contentType = "Marriage Anniversary";
                 contentIcon = R.drawable.ic_love;
                 titleColor = R.color.marriage;
                 break;
             case 2:
-                contentTitle = "Death Anniversary of "+memberName;
+                content = memberName;
                 contentType = "Death Anniversary";
                 contentIcon = R.drawable.ic_star;
                 titleColor = R.color.death;
@@ -191,9 +191,9 @@ public class MonthEventFragment extends Fragment {
                 .positiveColor(getResources().getColor(titleColor))
                 .build();
 
-        ((TextView) eventDialog.getCustomView().findViewById(R.id.event_type)).setText(contentTitle);
+        ((TextView) eventDialog.getCustomView().findViewById(R.id.event_type)).setText(contentType);
         ((TextView) eventDialog.getCustomView().findViewById(R.id.members_concerned))
-                .setText(contentType);
+                .setText(content);
 
         String dateString = eventObject.getDate();
 

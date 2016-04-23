@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
 
-            showEventDialog((Event) getIntent().getSerializableExtra("Event"));
+            //showEventDialog((Event) getIntent().getSerializableExtra("Event"));
 
         }
 
@@ -458,9 +458,19 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if(person.getMarriage_date()!=null&&!person.getMarriage_date().equals("null")&&!person.getMarriage_date().equals("")){
-                tempEvent = new Event(id++,person.getUnique_id(),person.getMarriage_date(),person.getCity(),person.getMobile_number(),person.getEmail1(),1);
-                tempEvent.setSpouse_id(person.getSpouse_id());
-                eventArrayList.add(tempEvent);
+                boolean addEvent = true;
+                for(int k = 0; k < eventArrayList.size(); k++){
+                    Event event = eventArrayList.get(k);
+                    if(event.getMember_id().equals(person.getSpouse_id())&&event.getSpouse_id().equals(person.getUnique_id())&&event.getEventType()==1){
+                        addEvent = false;
+                        break;
+                    }
+                }
+                if(addEvent) {
+                    tempEvent = new Event(id++,person.getUnique_id(),person.getMarriage_date(),person.getCity(),person.getMobile_number(),person.getEmail1(),1);
+                    tempEvent.setSpouse_id(person.getSpouse_id());
+                    eventArrayList.add(tempEvent);
+                }
             }
 
             if(person.getDeath_date()!=null&&!person.getDeath_date().equals("null")&&!person.getDeath_date().equals("")){

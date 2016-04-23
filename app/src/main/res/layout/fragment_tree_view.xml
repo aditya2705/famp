@@ -57,6 +57,16 @@
         android:layout_alignParentBottom="true">
 
         <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_open_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_icon="@drawable/ic_open_complete"
+            fab:fab_colorNormal="@color/md_green_600"
+            fab:fab_title="Open Complete Tree"
+            fab:fab_colorPressed="@color/md_green_800"/>
+
+
+        <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
             android:id="@+id/action_reset_tree"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

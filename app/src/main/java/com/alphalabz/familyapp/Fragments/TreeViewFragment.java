@@ -2,6 +2,7 @@ package com.alphalabz.familyapp.fragments;
 
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -12,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -178,6 +180,39 @@ public class TreeViewFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 saveImage();
+                menuMultipleActions.collapse();
+            }
+        });
+
+        FloatingActionButton actionButton3 = (FloatingActionButton)
+                rootView.findViewById(R.id.action_open_all);
+        actionButton3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                resetTree();
+
+                mainActivity.progressDialog.show();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        openAllChildrenLayoutsRecursively(rootPerson);
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                int x = (int) (parentLayout.getRight()/2.053f);
+                                horizontalScrollView.scrollTo(x,0);
+                                mainActivity.progressDialog.dismiss();
+                            }
+                        },1000);
+
+                    }
+                },500);
+
                 menuMultipleActions.collapse();
             }
         });
@@ -560,6 +595,71 @@ public class TreeViewFragment extends Fragment {
         }
 
         return nodeLayout;
+
+    }
+
+    private void openAllChildrenLayoutsRecursively(final PersonLayout person) {
+
+        LinearLayout pChildLayout = (LinearLayout) person.getPersonLayout().findViewById(R.id.childLinearLayout);
+
+        for (int j = 0; j < person.getChildCount(); j++) {
+
+            person.getPersonLayout().findViewById(R.id.bottom_branch_connect).setVisibility(View.VISIBLE);
+
+            PersonLayout child = person.getChildren().get(j);
+
+            if (!child.isLayoutOpened()) {
+
+                RelativeLayout childLayout = getNodeLayout(child);
+
+                childLayout.findViewById(R.id.bottom_branch_connect).setVisibility(View.INVISIBLE);
+
+                child.setPersonLayout(childLayout);
+
+                child.setLayoutOpened(true);
+
+                pChildLayout.addView(childLayout);
+
+                person.getChildrenLayoutList().add(childLayout);
+
+                if (person.getChildrenLayoutList().size() > 1) {
+
+                    for (int i = 0; i < person.getChildrenLayoutList().size(); i++) {
+
+                        RelativeLayout cLayout = person.getChildrenLayoutList().get(i);
+
+                        if (i == 0) {
+                            cLayout.findViewById(R.id.left_branch).setVisibility(View.INVISIBLE);
+                            cLayout.findViewById(R.id.right_branch).setVisibility(View.VISIBLE);
+                        } else if (i == person.getChildrenLayoutList().size() - 1) {
+                            cLayout.findViewById(R.id.left_branch).setVisibility(View.VISIBLE);
+                            cLayout.findViewById(R.id.right_branch).setVisibility(View.INVISIBLE);
+                        } else {
+                            cLayout.findViewById(R.id.left_branch).setVisibility(View.VISIBLE);
+                            cLayout.findViewById(R.id.right_branch).setVisibility(View.VISIBLE);
+                        }
+
+                    }
+                } else {
+                    childLayout.findViewById(R.id.left_branch).setVisibility(View.INVISIBLE);
+                    childLayout.findViewById(R.id.right_branch).setVisibility(View.INVISIBLE);
+                }
+
+                int k = 0;
+                for (int i = 0; i < person.getChildren().size(); i++) {
+                    PersonLayout parentChild = person.getChildren().get(i);
+                    if (parentChild.isLayoutOpened())
+                        ++k;
+                }
+
+                if (k == person.getChildren().size())
+                    person.setAllChildrenOpened(true);
+
+                openAllChildrenLayoutsRecursively(child);
+
+            }
+
+        }
 
     }
 

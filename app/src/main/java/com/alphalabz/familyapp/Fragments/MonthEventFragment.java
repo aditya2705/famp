@@ -131,126 +131,12 @@ public class MonthEventFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
 
-                showEventDialog(position);
+                Event event = sortedEventsList.get(position);
+                mainActivity.showEventDialog(event);
 
             }
         }));
-    }
 
-    private void showEventDialog(final int position) {
-
-        final Event eventObject = sortedEventsList.get(position);
-
-        int typeOfEvent = eventObject.getEventType();
-
-        String content = "", contentType ="";
-        int contentIcon = -1;
-        int titleColor = -1;
-
-        Person actualMember = mainActivity.membersListMap.get(eventObject.getMember_id());
-
-        String memberName = ((actualMember.getTitle().equals("null") || actualMember.getTitle().equals("")) ? "" : (actualMember.getTitle() + " ")) +
-                actualMember.getFirst_name() + (actualMember.getMiddle_name().equals("null") ? "" : " " + actualMember.getMiddle_name())
-                + " " + actualMember.getLast_name();
-
-        switch (typeOfEvent){
-
-            case 0:
-                content = memberName;
-                contentType = "Birthday";
-                contentIcon = R.drawable.ic_cake;
-                titleColor = R.color.birthday;
-                break;
-            case 1:
-                Person spouseOfMember = mainActivity.membersListMap.get(actualMember.getSpouse_id());
-                String spouseName = ((spouseOfMember.getTitle().equals("null") || spouseOfMember.getTitle().equals("")) ? "" : (spouseOfMember.getTitle() + " ")) +
-                        spouseOfMember.getFirst_name() + (spouseOfMember.getMiddle_name().equals("null") ? "" : " " + spouseOfMember.getMiddle_name())
-                        + " " + spouseOfMember.getLast_name();
-
-                content = memberName+" & "+spouseName;
-                contentType = "Marriage Anniversary";
-                contentIcon = R.drawable.ic_love;
-                titleColor = R.color.marriage;
-                break;
-            case 2:
-                content = memberName;
-                contentType = "Death Anniversary";
-                contentIcon = R.drawable.ic_star;
-                titleColor = R.color.death;
-                break;
-
-        }
-
-        final MaterialDialog eventDialog = new MaterialDialog.Builder(getActivity())
-                .theme(Theme.LIGHT)
-                .title("Event")
-                .icon(getResources().getDrawable(contentIcon))
-                .titleColor(getResources().getColor(titleColor))
-                .customView(R.layout.dialog_event_details, true)
-                .positiveText("OK")
-                .positiveColor(getResources().getColor(titleColor))
-                .build();
-
-        ((TextView) eventDialog.getCustomView().findViewById(R.id.event_type)).setText(contentType);
-        ((TextView) eventDialog.getCustomView().findViewById(R.id.members_concerned))
-                .setText(content);
-
-        String dateString = eventObject.getDate();
-
-        ((TextView) eventDialog.getCustomView().findViewById(R.id.date)).setText(dateString.substring(0, 9));
-
-        SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
-        int year = Integer.parseInt(yearFormat.format(Date.parse(dateString)));
-
-        SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
-        int day = Integer.parseInt(dayFormat.format(Date.parse(dateString)));
-
-        SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
-        int month = Integer.parseInt(monthFormat.format(Date.parse(dateString)));
-
-
-        Calendar a = new GregorianCalendar(year, month - 1, day);
-        Calendar b = Calendar.getInstance();
-        int y1 = b.get(Calendar.YEAR);
-        int y2 = a.get(Calendar.YEAR);
-        int diff = y1 - y2;
-        if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) ||
-                (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DAY_OF_MONTH) > b.get(Calendar.DAY_OF_MONTH))) {
-            diff--;
-        }
-
-        ((TextView) eventDialog.getCustomView().findViewById(R.id.years)).setText("YEARS: " + diff);
-
-        String city = eventObject.getCity();
-        ((TextView) eventDialog.getCustomView().findViewById(R.id.city)).setText(city.equals("") || city.equals("null") ? "" : "CITY: " + city);
-
-        (eventDialog.getCustomView().findViewById(R.id.contact_click_layout)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                phoneIntent(eventObject.getContact());
-            }
-        });
-
-        String temp = eventObject.getContact();
-        if (!temp.equals("") && !temp.equals("null"))
-            ((TextView) eventDialog.getCustomView().findViewById(R.id.contact)).setText("Contact: " + temp);
-        else
-            (eventDialog.getCustomView().findViewById(R.id.contact_click_layout)).setVisibility(View.GONE);
-
-        (eventDialog.getCustomView().findViewById(R.id.email_click_layout)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                emailIntent(eventObject.getEmail());
-            }
-        });
-
-        temp = eventObject.getEmail();
-        if (!temp.equals("") && !temp.equals("null"))
-            ((TextView) eventDialog.getCustomView().findViewById(R.id.email)).setText("Email: " + temp);
-        else
-            (eventDialog.getCustomView().findViewById(R.id.email_click_layout)).setVisibility(View.GONE);
-
-        eventDialog.show();
     }
 
     public LinkedHashMap sortHashMapByValuesD(HashMap passedMap) {

@@ -9,5 +9,4 @@
     android:textSize="@dimen/_12sdp"
     android:textStyle="bold"
     android:layout_width="match_parent"
-    android:singleLine="true"
-    android:layout_height="match_parent"/>
+    android:layout_height="wrap_content"/>

@@ -39,7 +39,7 @@ import com.alphalabz.familyapp.fragments.EventsTableFragment;
 import com.alphalabz.familyapp.fragments.GalleryFragment;
 import com.alphalabz.familyapp.fragments.SearchListFragment;
 import com.alphalabz.familyapp.fragments.SettingsFragment;
-import com.alphalabz.familyapp.fragments.SplashImageFragment;
+import com.alphalabz.familyapp.fragments.HomeFragment;
 import com.alphalabz.familyapp.fragments.TreeViewFragment;
 import com.alphalabz.familyapp.NotificationPublisher;
 import com.alphalabz.familyapp.objects.Event;
@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
                             final Fragment fragment;
                             switch (i) {
                                 case 0:
-                                    fragment = new SplashImageFragment();
+                                    fragment = new HomeFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
                                 case 1:

@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
-import com.alphalabz.familyapp.activities.MainActivity;
 import com.alphalabz.familyapp.R;
+import com.alphalabz.familyapp.activities.MainActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

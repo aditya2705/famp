@@ -15,9 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.alphalabz.familyapp.R;
 import com.alphalabz.familyapp.adapters.RecyclerGridAdapter;
 import com.alphalabz.familyapp.objects.GalleryObject;
-import com.alphalabz.familyapp.R;
 import com.veinhorn.scrollgalleryview.MediaInfo;
 import com.veinhorn.scrollgalleryview.ScrollGalleryView;
 import com.veinhorn.scrollgalleryview.loader.DefaultImageLoader;

@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.alphalabz.familyapp.R;
 import com.alphalabz.familyapp.activities.MainActivity;
 import com.alphalabz.familyapp.activities.ProfileActivity;
 import com.alphalabz.familyapp.custom.RecyclerItemClickListener;
@@ -22,7 +23,6 @@ import com.alphalabz.familyapp.custom.SearchCustomClasses.SearchListAdapter;
 import com.alphalabz.familyapp.custom.SearchCustomClasses.SearchMemberModel;
 import com.alphalabz.familyapp.objects.Person;
 import com.alphalabz.familyapp.objects.PersonLayout;
-import com.alphalabz.familyapp.R;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.ArrayList;

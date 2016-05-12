@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_15sdp"
+            android:background="@color/md_grey_50"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textColor="@color/md_grey_700"
+                android:textStyle="bold"
+                android:textSize="@dimen/_13sdp"
+                android:text="Title"
+                android:singleLine="true"/>
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textColor="@color/md_grey_700"
+                android:textSize="@dimen/_13sdp"
+                android:maxLines="10"
+                android:text="Ddsfge scripadfg dfgtion Lorem Ipsum agr aer he F w EHR AF fsdfgsdsfg sd fgs dfgs dfg dsf h"
+                android:layout_marginTop="@dimen/_10sdp" />
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+</LinearLayout>

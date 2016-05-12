@@ -33,18 +33,19 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.alphalabz.familyapp.NotificationPublisher;
+import com.alphalabz.familyapp.R;
 import com.alphalabz.familyapp.fragments.CalendarFragment;
 import com.alphalabz.familyapp.fragments.ContactFragment;
 import com.alphalabz.familyapp.fragments.EventsTableFragment;
 import com.alphalabz.familyapp.fragments.GalleryFragment;
+import com.alphalabz.familyapp.fragments.HomeFragment;
+import com.alphalabz.familyapp.fragments.NewsFragment;
 import com.alphalabz.familyapp.fragments.SearchListFragment;
 import com.alphalabz.familyapp.fragments.SettingsFragment;
-import com.alphalabz.familyapp.fragments.HomeFragment;
 import com.alphalabz.familyapp.fragments.TreeViewFragment;
-import com.alphalabz.familyapp.NotificationPublisher;
 import com.alphalabz.familyapp.objects.Event;
 import com.alphalabz.familyapp.objects.Person;
-import com.alphalabz.familyapp.R;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
@@ -156,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
                 .withActionBarDrawerToggleAnimated(true)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName("Home").withIcon(FontAwesome.Icon.faw_home),
+                        new PrimaryDrawerItem().withName("News").withIcon(FontAwesome.Icon.faw_newspaper_o),
                         new PrimaryDrawerItem().withName("Tree View").withIcon(FontAwesome.Icon.faw_tree),
                         new PrimaryDrawerItem().withName("Members List").withIcon(FontAwesome.Icon.faw_list_ul),
                         new PrimaryDrawerItem().withName("Calendar").withIcon(FontAwesome.Icon.faw_table),
@@ -179,6 +181,10 @@ public class MainActivity extends AppCompatActivity {
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
                                 case 1:
+                                    fragment = new NewsFragment();
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                                    break;
+                                case 2:
                                     progressDialog.show();
                                     fragment = new TreeViewFragment();
                                     new Handler().postDelayed(new Runnable() {
@@ -189,27 +195,27 @@ public class MainActivity extends AppCompatActivity {
                                     }, 300);
 
                                     break;
-                                case 2:
+                                case 3:
                                     fragment = new SearchListFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
-                                case 3:
+                                case 4:
                                     fragment = new CalendarFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
-                                case 4:
+                                case 5:
                                     fragment = new EventsTableFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
-                                case 5:
+                                case 6:
                                     fragment = new GalleryFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
-                                case 6:
+                                case 7:
                                     fragment = new SettingsFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
-                                case 7:
+                                case 8:
                                     fragment = new ContactFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;

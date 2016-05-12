@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.alphalabz.familyapp.objects.GalleryObject;
 import com.alphalabz.familyapp.R;
+import com.alphalabz.familyapp.objects.GalleryObject;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

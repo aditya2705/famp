@@ -16,8 +16,8 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
-import com.alphalabz.familyapp.objects.Person;
 import com.alphalabz.familyapp.R;
+import com.alphalabz.familyapp.objects.Person;
 
 import org.json.JSONArray;
 import org.json.JSONException;

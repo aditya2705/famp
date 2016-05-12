@@ -11,8 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.alphalabz.familyapp.activities.MainActivity;
 import com.alphalabz.familyapp.R;
+import com.alphalabz.familyapp.activities.MainActivity;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
 /**

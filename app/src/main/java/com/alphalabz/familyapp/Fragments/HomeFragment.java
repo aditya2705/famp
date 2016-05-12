@@ -14,7 +14,6 @@ import com.alphalabz.familyapp.activities.MainActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.

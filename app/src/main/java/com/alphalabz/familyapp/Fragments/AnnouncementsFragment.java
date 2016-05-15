@@ -34,7 +34,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NewsFragment extends Fragment {
+public class AnnouncementsFragment extends Fragment {
 
     private static final String RESULTS_FETCH_NEWS = "http://alpha95.net63.net/get_news.php";
 
@@ -53,7 +53,7 @@ public class NewsFragment extends Fragment {
     private MainActivity mainActivity;
     private NewsListAdapter adapter;
 
-    public NewsFragment() {
+    public AnnouncementsFragment() {
         // Required empty public constructor
     }
 

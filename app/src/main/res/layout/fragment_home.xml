@@ -1,77 +1,139 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fbutton="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
-    android:background="@color/md_green_50">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+    android:background="@color/md_grey_50">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_150sdp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            >
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_tree_view"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="@dimen/_15sdp"
-                android:textSize="@dimen/_15sdp"
-                android:layout_margin="@dimen/_10sdp"
-                android:text="View Family Tree"
-                android:textColor="@color/md_white_1000"
-                android:theme="@style/CustomButtonStyle"/>
+            <com.daimajia.slider.library.SliderLayout
+                android:id="@+id/slider"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_height="@dimen/_185sdp"
+                android:layout_marginBottom="@dimen/_15sdp"
+                />
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_members_list"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="@dimen/_15sdp"
-                android:layout_margin="@dimen/_10sdp"
-                android:textSize="@dimen/_15sdp"
-                android:text="View Members List"
-                android:textColor="@color/md_white_1000"
-                android:theme="@style/CustomButtonStyle"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:orientation="horizontal">
+
+                <info.hoang8f.widget.FButton
+                    android:id="@+id/btn_family_tree"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Family Tree"
+                    android:textColor="#FFF"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/_11sdp"
+                    fbutton:cornerRadius="@dimen/_4sdp"
+                    fbutton:buttonColor="@color/md_green_600"
+                    android:layout_gravity="center_horizontal" />
+
+                <info.hoang8f.widget.FButton
+                    android:id="@+id/btn_members_list"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:text="Members List"
+                    android:textColor="#FFF"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/_11sdp"
+                    fbutton:cornerRadius="@dimen/_4sdp"
+                    fbutton:buttonColor="@color/md_green_600"
+                    android:layout_gravity="center_horizontal" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:orientation="horizontal">
+
+                <info.hoang8f.widget.FButton
+                    android:id="@+id/btn_calendar"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Calendar"
+                    android:textColor="#FFF"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/_11sdp"
+                    fbutton:cornerRadius="@dimen/_4sdp"
+                    fbutton:buttonColor="@color/md_green_600"
+                    android:layout_gravity="center_horizontal" />
+
+                <info.hoang8f.widget.FButton
+                    android:id="@+id/btn_all_events"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:text="Events"
+                    android:textColor="#FFF"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/_11sdp"
+                    fbutton:cornerRadius="@dimen/_4sdp"
+                    fbutton:buttonColor="@color/md_green_600"
+                    android:layout_gravity="center_horizontal" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:orientation="horizontal">
+
+                <info.hoang8f.widget.FButton
+                    android:id="@+id/btn_gallery"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Gallery"
+                    android:textColor="#FFF"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/_11sdp"
+                    fbutton:cornerRadius="@dimen/_4sdp"
+                    fbutton:buttonColor="@color/md_green_600"
+                    android:layout_gravity="center_horizontal" />
+
+                <info.hoang8f.widget.FButton
+                    android:id="@+id/btn_announcements"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:text="Announcements"
+                    android:textColor="#FFF"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/_11sdp"
+                    fbutton:cornerRadius="@dimen/_4sdp"
+                    fbutton:buttonColor="@color/md_green_600"
+                    android:layout_gravity="center_horizontal" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_150sdp"
-            android:orientation="horizontal">
-
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_calendar"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="@dimen/_15sdp"
-                android:textSize="@dimen/_15sdp"
-                android:layout_margin="@dimen/_10sdp"
-                android:text="Show Calendar"
-                android:textColor="@color/md_white_1000"
-                android:theme="@style/CustomButtonStyle"/>
-
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_all_events"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="@dimen/_15sdp"
-                android:layout_margin="@dimen/_10sdp"
-                android:textSize="@dimen/_15sdp"
-                android:text="Show All Events"
-                android:textColor="@color/md_white_1000"
-                android:theme="@style/CustomButtonStyle"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-</LinearLayout>
+</ScrollView>

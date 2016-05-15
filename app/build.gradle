@@ -53,5 +53,7 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'net.i2p.android.ext:floatingactionbutton:1.10.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'info.hoang8f:fbutton:1.0.5'
+    compile 'com.daimajia.slider:library:1.1.5@aar'
     compile 'com.jakewharton:butterknife:7.0.1'
 }

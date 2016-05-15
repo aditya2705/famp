@@ -15,6 +15,8 @@ import com.alphalabz.familyapp.R;
 import com.alphalabz.familyapp.activities.MainActivity;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
+import java.util.Calendar;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -54,6 +56,9 @@ public class EventsTableFragment extends Fragment {
         monthPager.setAdapter(adapter);
 
         viewPagerTab.setViewPager(monthPager);
+
+        Calendar currentDate = Calendar.getInstance();
+        monthPager.setCurrentItem(currentDate.get(Calendar.MONTH));
 
     }
 

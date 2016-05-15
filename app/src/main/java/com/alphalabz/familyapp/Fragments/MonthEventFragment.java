@@ -41,6 +41,9 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link MonthEventFragment#newInstance} factory method to
@@ -55,7 +58,6 @@ public class MonthEventFragment extends Fragment {
     private int month;
     private String[] monthStrings = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
-    private RecyclerView mRecyclerView;
     private RecyclerAdapter adapter;
 
     private View rootView;
@@ -63,6 +65,7 @@ public class MonthEventFragment extends Fragment {
 
     private MainActivity mainActivity;
 
+    @Bind(R.id.events_recycler_view) RecyclerView mRecyclerView;
 
     public MonthEventFragment() {
         // Required empty public constructor
@@ -90,7 +93,7 @@ public class MonthEventFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_month_event, container, false);
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.events_list_view);
+        ButterKnife.bind(this,rootView);
 
 
         return rootView;

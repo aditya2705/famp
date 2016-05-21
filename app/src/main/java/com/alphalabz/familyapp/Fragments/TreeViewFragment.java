@@ -457,7 +457,7 @@ public class TreeViewFragment extends Fragment {
 
                 String result = "";
                 //Save bitmap
-                File imageDirectory = new File(Environment.getExternalStorageDirectory() + "/Family Tree/");
+                File imageDirectory = new File(Environment.getExternalStorageDirectory() + "/Family App/");
                 imageDirectory.mkdirs();
                 String fileName = "family_tree.jpg";
                 File myPath = new File(imageDirectory, fileName);

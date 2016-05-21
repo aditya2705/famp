@@ -9,6 +9,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -16,6 +18,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -58,6 +61,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -297,6 +302,8 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.refresh) {
             getMembersData();
             return true;
+        }else if(id == R.id.download){
+            downloadAllImages();
         }
 
         return super.onOptionsItemSelected(item);
@@ -543,18 +550,36 @@ public class MainActivity extends AppCompatActivity {
             String contentTitle = "";
             int contentIcon = -1;
 
+            switch (diff){
+                case 25:
+                    contentTitle += "Silver Jubilee ";
+                    break;
+                case 40:
+                    contentTitle += "Ruby Jubilee ";
+                    break;
+                case 50:
+                    contentTitle += "Golden Jubilee ";
+                    break;
+                case 60:
+                    contentTitle += "Diamond Jubilee ";
+                    break;
+                case 75:
+                    contentTitle += "Platinum Jubilee ";
+                    break;
+            }
+
             switch (typeOfEvent){
 
                 case 0:
-                    contentTitle = "Birthday of "+ membersListMap.get(currentEvent.getMember_id()).getFirst_name();
+                    contentTitle += "Birthday of "+ membersListMap.get(currentEvent.getMember_id()).getFirst_name();
                     contentIcon = R.drawable.ic_cake;
                     break;
                 case 1:
-                    contentTitle = "Marriage Anniversary of "+ membersListMap.get(currentEvent.getMember_id()).getFirst_name();
+                    contentTitle += "Marriage Anniversary of "+ membersListMap.get(currentEvent.getMember_id()).getFirst_name();
                     contentIcon = R.drawable.ic_love;
                     break;
                 case 2:
-                    contentTitle = "Death Anniversary of "+ membersListMap.get(currentEvent.getMember_id()).getFirst_name();
+                    contentTitle += "Death Anniversary of "+ membersListMap.get(currentEvent.getMember_id()).getFirst_name();
                     contentIcon = R.drawable.ic_star;
                     break;
 
@@ -603,56 +628,7 @@ public class MainActivity extends AppCompatActivity {
         int contentIcon = -1;
         int titleColor = -1;
 
-        Person actualMember = membersListMap.get(eventObject.getMember_id());
-
-        String memberName = ((actualMember.getTitle().equals("null") || actualMember.getTitle().equals("")) ? "" : (actualMember.getTitle() + " ")) +
-                actualMember.getFirst_name() + (actualMember.getMiddle_name().equals("null") ? "" : " " + actualMember.getMiddle_name())
-                + " " + actualMember.getLast_name();
-
-        switch (typeOfEvent){
-
-            case 0:
-                content = memberName;
-                contentType = "Birthday";
-                contentIcon = R.drawable.ic_cake;
-                titleColor = R.color.birthday;
-                break;
-            case 1:
-                Person spouseOfMember = membersListMap.get(actualMember.getSpouse_id());
-                String spouseName = ((spouseOfMember.getTitle().equals("null") || spouseOfMember.getTitle().equals("")) ? "" : (spouseOfMember.getTitle() + " ")) +
-                        spouseOfMember.getFirst_name() + (spouseOfMember.getMiddle_name().equals("null") ? "" : " " + spouseOfMember.getMiddle_name())
-                        + " " + spouseOfMember.getLast_name();
-                content = memberName+" & "+spouseName;
-                contentType = "Marriage Anniversary";
-                contentIcon = R.drawable.ic_love;
-                titleColor = R.color.marriage;
-                break;
-            case 2:
-                content = memberName;
-                contentType = "Death Anniversary";
-                contentIcon = R.drawable.ic_star;
-                titleColor = R.color.death;
-                break;
-
-        }
-
-        final MaterialDialog eventDialog = new MaterialDialog.Builder(MainActivity.this)
-                .theme(Theme.LIGHT)
-                .title("Event")
-                .icon(getResources().getDrawable(contentIcon))
-                .titleColor(getResources().getColor(titleColor))
-                .customView(R.layout.dialog_event_details, true)
-                .positiveText("OK")
-                .positiveColor(getResources().getColor(titleColor))
-                .build();
-
-        ((TextView) eventDialog.getCustomView().findViewById(R.id.event_type)).setText(contentType);
-        ((TextView) eventDialog.getCustomView().findViewById(R.id.members_concerned))
-                .setText(content);
-
         String dateString = eventObject.getDate();
-
-        ((TextView) eventDialog.getCustomView().findViewById(R.id.date)).setText(dateString.substring(0, 9));
 
         SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
         int year = Integer.parseInt(yearFormat.format(Date.parse(dateString)));
@@ -673,6 +649,73 @@ public class MainActivity extends AppCompatActivity {
                 (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DAY_OF_MONTH) > b.get(Calendar.DAY_OF_MONTH))) {
             diff--;
         }
+
+        switch (diff){
+            case 25:
+                contentType += "Silver Jubilee ";
+                break;
+            case 40:
+                contentType += "Ruby Jubilee ";
+                break;
+            case 50:
+                contentType += "Golden Jubilee ";
+                break;
+            case 60:
+                contentType += "Diamond Jubilee ";
+                break;
+            case 75:
+                contentType += "Platinum Jubilee ";
+                break;
+        }
+
+        Person actualMember = membersListMap.get(eventObject.getMember_id());
+
+        String memberName = ((actualMember.getTitle().equals("null") || actualMember.getTitle().equals("")) ? "" : (actualMember.getTitle() + " ")) +
+                actualMember.getFirst_name() + (actualMember.getMiddle_name().equals("null") ? "" : " " + actualMember.getMiddle_name())
+                + " " + actualMember.getLast_name();
+
+        switch (typeOfEvent){
+
+            case 0:
+                content = memberName;
+                contentType += "Birthday";
+                contentIcon = R.drawable.ic_cake;
+                titleColor = R.color.birthday;
+                break;
+            case 1:
+                Person spouseOfMember = membersListMap.get(actualMember.getSpouse_id());
+                String spouseName = ((spouseOfMember.getTitle().equals("null") || spouseOfMember.getTitle().equals("")) ? "" : (spouseOfMember.getTitle() + " ")) +
+                        spouseOfMember.getFirst_name() + (spouseOfMember.getMiddle_name().equals("null") ? "" : " " + spouseOfMember.getMiddle_name())
+                        + " " + spouseOfMember.getLast_name();
+                content = memberName+" & "+spouseName;
+                contentType += "Marriage Anniversary";
+                contentIcon = R.drawable.ic_love;
+                titleColor = R.color.marriage;
+                break;
+            case 2:
+                content = memberName;
+                contentType += "Death Anniversary";
+                contentIcon = R.drawable.ic_star;
+                titleColor = R.color.death;
+                break;
+
+        }
+
+        final MaterialDialog eventDialog = new MaterialDialog.Builder(MainActivity.this)
+                .theme(Theme.LIGHT)
+                .title("Event")
+                .icon(getResources().getDrawable(contentIcon))
+                .titleColor(getResources().getColor(titleColor))
+                .customView(R.layout.dialog_event_details, true)
+                .positiveText("OK")
+                .positiveColor(getResources().getColor(titleColor))
+                .build();
+
+        ((TextView) eventDialog.getCustomView().findViewById(R.id.event_type)).setText(contentType);
+        ((TextView) eventDialog.getCustomView().findViewById(R.id.members_concerned))
+                .setText(content);
+
+        ((TextView) eventDialog.getCustomView().findViewById(R.id.date)).setText(dateString.substring(0, 9));
 
         ((TextView) eventDialog.getCustomView().findViewById(R.id.years)).setText("YEARS: " + diff);
 
@@ -779,6 +822,69 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .build()
                 .show();
+
+
+    }
+
+
+    private void downloadAllImages() {
+
+        class GetMembersData extends AsyncTask<String, Void, String> {
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                String result = "";
+                ArrayList<Bitmap> bitmapArrayList = new ArrayList<>();
+
+                bitmapArrayList.add(BitmapFactory.decodeResource( getResources(), R.drawable.gallery_1));
+                bitmapArrayList.add(BitmapFactory.decodeResource( getResources(), R.drawable.gallery_2));
+                bitmapArrayList.add(BitmapFactory.decodeResource( getResources(), R.drawable.gallery_3));
+                bitmapArrayList.add(BitmapFactory.decodeResource( getResources(), R.drawable.gallery_4));
+                bitmapArrayList.add(BitmapFactory.decodeResource( getResources(), R.drawable.gallery_5));
+                bitmapArrayList.add(BitmapFactory.decodeResource( getResources(), R.drawable.gallery_6));
+                bitmapArrayList.add(BitmapFactory.decodeResource( getResources(), R.drawable.gallery_7));
+
+                File imageDirectory = new File(Environment.getExternalStorageDirectory() + "/Family App/");
+                imageDirectory.mkdirs();
+
+                for(int i=0;i<7;i++) {
+
+                    File file = new File(imageDirectory, "gallery_"+(i+1)+".PNG");
+
+                    FileOutputStream outStream = null;
+                    try {
+
+                        outStream = new FileOutputStream(file);
+                        bitmapArrayList.get(i).compress(Bitmap.CompressFormat.PNG, 100, outStream);
+                        outStream.flush();
+                        outStream.close();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                Toast.makeText(MainActivity.this,"Gallery images saved to phone",Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+                Toast.makeText(MainActivity.this,"Saving images...",Toast.LENGTH_SHORT).show();
+            }
+        }
+        GetMembersData g = new GetMembersData();
+        g.execute();
 
 
     }

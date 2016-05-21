@@ -33,6 +33,8 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
     @Bind(R.id.btn_members_list) FButton membersListButton;
     @Bind(R.id.btn_gallery) FButton galleryButton;
     @Bind(R.id.btn_announcements) FButton announcementsButton;
+    @Bind(R.id.btn_settings) FButton settingsButton;
+    @Bind(R.id.btn_contact) FButton contactButton;
     @Bind(R.id.slider) SliderLayout mSlider;
 
     private View rootView;
@@ -58,7 +60,6 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         gallery_images.put("5", R.drawable.gallery_5);
         gallery_images.put("6", R.drawable.gallery_6);
         gallery_images.put("7", R.drawable.gallery_7);
-
 
         for(String name : gallery_images.keySet()){
             DefaultSliderView textSliderView = new DefaultSliderView(getActivity());
@@ -127,6 +128,24 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
             public void onClick(View v) {
 
                 mainActivity.drawer.setSelectionAtPosition(6);
+
+            }
+        });
+
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mainActivity.drawer.setSelectionAtPosition(7);
+
+            }
+        });
+
+        contactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mainActivity.drawer.setSelectionAtPosition(8);
 
             }
         });

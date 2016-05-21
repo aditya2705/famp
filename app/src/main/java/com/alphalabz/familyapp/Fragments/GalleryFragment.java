@@ -1,12 +1,19 @@
 package com.alphalabz.familyapp.fragments;
 
 
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.alphalabz.familyapp.R;
 import com.alphalabz.familyapp.adapters.RecyclerGridAdapter;
@@ -22,6 +30,14 @@ import com.veinhorn.scrollgalleryview.MediaInfo;
 import com.veinhorn.scrollgalleryview.ScrollGalleryView;
 import com.veinhorn.scrollgalleryview.loader.DefaultImageLoader;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 import butterknife.Bind;
@@ -32,6 +48,7 @@ public class GalleryFragment extends Fragment {
 
     private int screenWidth, screenHeight;
     private boolean gridViewActive = false;
+    private Menu menu;
 
     @Bind(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -101,9 +118,11 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
+        this.menu = menu;
         menu.findItem(R.id.search).setVisible(false);
         menu.findItem(R.id.refresh).setVisible(false);
         menu.findItem(R.id.grid_view).setVisible(true);
+        menu.findItem(R.id.download).setVisible(true);
 
     }
 
@@ -140,5 +159,10 @@ public class GalleryFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
+    @Override
+    public void onDetach() {
+        menu.findItem(R.id.download).setVisible(false);
+        super.onDetach();
 
+    }
 }

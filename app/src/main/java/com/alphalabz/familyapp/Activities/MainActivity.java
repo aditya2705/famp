@@ -35,12 +35,12 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.alphalabz.familyapp.NotificationPublisher;
 import com.alphalabz.familyapp.R;
+import com.alphalabz.familyapp.fragments.AnnouncementsFragment;
 import com.alphalabz.familyapp.fragments.CalendarFragment;
 import com.alphalabz.familyapp.fragments.ContactFragment;
 import com.alphalabz.familyapp.fragments.EventsTableFragment;
 import com.alphalabz.familyapp.fragments.GalleryFragment;
 import com.alphalabz.familyapp.fragments.HomeFragment;
-import com.alphalabz.familyapp.fragments.NewsFragment;
 import com.alphalabz.familyapp.fragments.SearchListFragment;
 import com.alphalabz.familyapp.fragments.SettingsFragment;
 import com.alphalabz.familyapp.fragments.TreeViewFragment;
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private static Context mContext;
-    private Drawer drawer = null;
+    public Drawer drawer = null;
     private String membersListJsonString;
     public SharedPreferences sharedPreferences;
     public ProgressDialog progressDialog;
@@ -157,12 +157,12 @@ public class MainActivity extends AppCompatActivity {
                 .withActionBarDrawerToggleAnimated(true)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName("Home").withIcon(FontAwesome.Icon.faw_home),
-                        new PrimaryDrawerItem().withName("News").withIcon(FontAwesome.Icon.faw_newspaper_o),
                         new PrimaryDrawerItem().withName("Tree View").withIcon(FontAwesome.Icon.faw_tree),
                         new PrimaryDrawerItem().withName("Members List").withIcon(FontAwesome.Icon.faw_list_ul),
                         new PrimaryDrawerItem().withName("Calendar").withIcon(FontAwesome.Icon.faw_table),
                         new PrimaryDrawerItem().withName("Events").withIcon(FontAwesome.Icon.faw_birthday_cake),
                         new PrimaryDrawerItem().withName("Gallery").withIcon(FontAwesome.Icon.faw_image),
+                        new PrimaryDrawerItem().withName("Announcements").withIcon(FontAwesome.Icon.faw_newspaper_o),
                         new PrimaryDrawerItem().withName("Settings").withIcon(FontAwesome.Icon.faw_cog),
                         new PrimaryDrawerItem().withName("Contact").withIcon(FontAwesome.Icon.faw_user_md)
 
@@ -181,10 +181,6 @@ public class MainActivity extends AppCompatActivity {
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
                                 case 1:
-                                    fragment = new NewsFragment();
-                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
-                                    break;
-                                case 2:
                                     progressDialog.show();
                                     fragment = new TreeViewFragment();
                                     new Handler().postDelayed(new Runnable() {
@@ -193,22 +189,25 @@ public class MainActivity extends AppCompatActivity {
                                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                         }
                                     }, 300);
-
                                     break;
-                                case 3:
+                                case 2:
                                     fragment = new SearchListFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
-                                case 4:
+                                case 3:
                                     fragment = new CalendarFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
-                                case 5:
+                                case 4:
                                     fragment = new EventsTableFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
-                                case 6:
+                                case 5:
                                     fragment = new GalleryFragment();
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                                    break;
+                                case 6:
+                                    fragment = new AnnouncementsFragment();
                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                     break;
                                 case 7:
@@ -263,13 +262,20 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
 
-            //showEventDialog((Event) getIntent().getSerializableExtra("Event"));
+            generateMembersList();
+            generateEventsList();
+            showEventDialog((Event) getIntent().getSerializableExtra("Event"));
 
         }
 
 
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        showEventDialog((Event) intent.getSerializableExtra("Event"));
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -789,8 +795,13 @@ public class MainActivity extends AppCompatActivity {
 
         if (drawer.isDrawerOpen()) {
             drawer.closeDrawer();
-        } else
-            super.onBackPressed();
+        } else {
+            if(getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof HomeFragment)
+                super.onBackPressed();
+            else
+                drawer.setSelectionAtPosition(0);
+
+        }
 
     }
 }

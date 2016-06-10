@@ -210,7 +210,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             String t1 = actualPerson.getBirth_date();
             if (t1.length() >= 10)
-                deathdateT.setText(t1.substring(0, 10) + " - " + temp.substring(0, 9));
+                deathdateT.setText(t1.substring(0, 11) + " - " + temp.substring(0, 9));
             else
                 deathdateT.setText("Demise: " + temp.substring(0, 9));
             birthdateT.setVisibility(View.GONE);

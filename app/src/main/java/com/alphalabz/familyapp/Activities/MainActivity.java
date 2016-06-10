@@ -716,7 +716,10 @@ public class MainActivity extends AppCompatActivity {
         ((TextView) eventDialog.getCustomView().findViewById(R.id.members_concerned))
                 .setText(content);
 
-        ((TextView) eventDialog.getCustomView().findViewById(R.id.date)).setText(dateString.substring(0, 9));
+        if(actualMember.getUnique_id().equals("1")&&typeOfEvent==0)
+            ((TextView) eventDialog.getCustomView().findViewById(R.id.date)).setText(dateString.substring(0, 11));
+        else
+            ((TextView) eventDialog.getCustomView().findViewById(R.id.date)).setText(dateString.substring(0, 9));
 
         ((TextView) eventDialog.getCustomView().findViewById(R.id.years)).setText("YEARS: " + diff);
 

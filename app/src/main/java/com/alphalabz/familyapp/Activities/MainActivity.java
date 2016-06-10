@@ -491,11 +491,12 @@ public class MainActivity extends AppCompatActivity {
                     eventArrayList.add(tempEvent);
                 }
             }
-
+            /*
             if(person.getDeath_date()!=null&&!person.getDeath_date().equals("null")&&!person.getDeath_date().equals("")){
                 tempEvent = new Event(id++,person.getUnique_id(),person.getDeath_date(),person.getCity(),person.getMobile_number(),person.getEmail1(),2);
                 eventArrayList.add(tempEvent);
             }
+            */
 
         }
 

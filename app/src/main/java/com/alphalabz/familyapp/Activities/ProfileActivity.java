@@ -210,7 +210,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             String t1 = actualPerson.getBirth_date();
             if (t1.length() >= 10)
-                deathdateT.setText(t1.substring(0, 9) + " - " + temp.substring(0, 9));
+                deathdateT.setText(t1.substring(0, 10) + " - " + temp.substring(0, 9));
             else
                 deathdateT.setText("Demise: " + temp.substring(0, 9));
             birthdateT.setVisibility(View.GONE);
@@ -298,9 +298,9 @@ public class ProfileActivity extends AppCompatActivity {
 
         TextView addressT = (TextView) findViewById(R.id.profile_address);
         temp = !actualPerson.getAddress_1().equals("null") ? actualPerson.getAddress_1() : "";
-        temp += !actualPerson.getAddress_2().equals("null") ? " " + actualPerson.getAddress_2() : "";
-        temp += !actualPerson.getCity().equals("null") ? "\n " + actualPerson.getCity() : "";
-        temp += !actualPerson.getState_country().equals("null") ? "\n " + actualPerson.getState_country() : "";
+        temp += !actualPerson.getAddress_2().equals("null") ? " " + actualPerson.getAddress_2()+"\n" : "";
+        temp += !actualPerson.getCity().equals("null") ? actualPerson.getCity()+"\n" : "";
+        temp += !actualPerson.getState_country().equals("null") ? actualPerson.getState_country() : "";
         if (!temp.equals(""))
             addressT.setText(temp);
         else {

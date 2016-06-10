@@ -202,11 +202,15 @@ public class MonthEventFragment extends Fragment {
 
             Event event = eventArrayList.get(position);
 
-            holder.dateView.setText(event.getDate().substring(0, 10));
             FontAwesome.Icon icon = null;
             int color = -1;
 
             Person actualMember = mainActivity.membersListMap.get(event.getMember_id());
+
+            if(actualMember.getUnique_id().equals("1") && event.getEventType()==0)
+                holder.dateView.setText(event.getDate().substring(0, 11));
+            else
+                holder.dateView.setText(event.getDate().substring(0, 10));
 
             String memberName = ((actualMember.getTitle().equals("null") || actualMember.getTitle().equals("")) ? "" : (actualMember.getTitle() + " ")) +
                     actualMember.getFirst_name() + (actualMember.getMiddle_name().equals("null") ? "" : " " + actualMember.getMiddle_name())

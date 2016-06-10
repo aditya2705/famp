@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fbutton="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/_16sdp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="center">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enter Password:"
+            android:textColor="@color/md_grey_700"
+            android:textSize="@dimen/_15sdp"
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/_10sdp"/>
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/password_edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/_10sdp"
+            android:paddingRight="@dimen/_10sdp"
+            android:inputType="textPassword"
+            android:textSize="@dimen/_13sdp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:maxLength="8"
+            android:hint="ABCD1234"
+            android:textColorHint="@color/md_grey_400"/>
+
+        <info.hoang8f.widget.FButton
+            android:id="@+id/btn_authenticate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="Authenticate"
+            android:textColor="#FFF"
+            android:textStyle="bold"
+            android:textSize="@dimen/_11sdp"
+            fbutton:cornerRadius="@dimen/_4sdp"
+            fbutton:buttonColor="@color/md_green_600"
+            android:layout_gravity="center_horizontal" />
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

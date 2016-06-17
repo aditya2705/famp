@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "70419195949",
+    "project_id": "bhandari-family-tree"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:70419195949:android:01ae23726049b1e6",
+        "android_client_info": {
+          "package_name": "com.alphalabz.familyapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "70419195949-d7gmgkes8ls6mejtlo45g6372uvu9lmh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alphalabz.familyapp",
+            "certificate_hash": "6C3C9CA6EA9D31B7D03EE244573047FE9793AF9C"
+          }
+        },
+        {
+          "client_id": "70419195949-bovors0ff861iuu93vi1r6cig6hgesqo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alphalabz.familyapp",
+            "certificate_hash": "738FC80ABE4DEFF22F5EDC6CC2FC6FBFEEAB183A"
+          }
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

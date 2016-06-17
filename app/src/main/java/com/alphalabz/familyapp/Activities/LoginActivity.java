@@ -7,15 +7,23 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.alphalabz.familyapp.R;
-import com.alphalabz.familyapp.fragments.TreeViewFragment;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -26,16 +34,22 @@ import java.net.URL;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import info.hoang8f.widget.FButton;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity{
 
     private static final String AUTHENTICATE_PASSWORD_URL = "http://alpha95.net63.net/authenticate.php";
+    private static final String VERIFY_EMAIL_URL = "http://alpha95.net63.net/get_emails.php";
+    private static final int RC_SIGN_IN = 9001;
 
     private SharedPreferences sharedPreferences;
     private boolean authenticated = false;
     private ProgressDialog progressDialog;
+    private GoogleApiClient mGoogleApiClient;
 
     @Bind(R.id.password_edit_text) AppCompatEditText passwordEditText;
+    @Bind(R.id.google_sign_in_button) SignInButton signInButton;
+    @Bind(R.id.google_sign_out_button) FButton signOutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +57,38 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        // [END configure_si
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(LoginActivity.this, new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+                        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
+                        // be available.
+                        Log.d("LoginActivity", "onConnectionFailed:" + connectionResult);
+
+                    }
+                })
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+        signInButton.setSize(SignInButton.SIZE_WIDE);
+        signInButton.setScopes(gso.getScopeArray());
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressDialog.setTitle("Attempting to Sign In...");
+                progressDialog.show();
+                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                startActivityForResult(signInIntent, RC_SIGN_IN);
+            }
+        });
+
         progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Loading...");
         progressDialog.setCancelable(false);
 
         sharedPreferences = getSharedPreferences("FAMP", 0);
@@ -54,6 +98,146 @@ public class LoginActivity extends AppCompatActivity {
             startMainActivity();
 
     }
+
+    // [START onActivityResult]
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+        }
+    }
+    // [END onActivityResult]
+
+    // [START handleSignInResult]
+    private void handleSignInResult(GoogleSignInResult result) {
+        Log.d("LoginActivity", "handleSignInResult:" + result.isSuccess());
+        if (result.isSuccess()) {
+
+            updateUI(true);
+            // Signed in successfully, show authenticated UI.
+            GoogleSignInAccount acct = result.getSignInAccount();
+            String personEmail = acct.getEmail();
+            Log.d("PERSON EMAIL",personEmail+" signed in");
+            progressDialog.dismiss();
+            verifyEmail(personEmail);
+
+        } else {
+            Toast.makeText(LoginActivity.this,"Sign in failed! Try again",Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
+        }
+
+    }
+
+    private void verifyEmail(final String email_id) {
+
+        class VerifyEmailTask extends AsyncTask<String, Void, String> {
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                String result = null;
+
+                try {
+                    URL obj = new URL(VERIFY_EMAIL_URL+"?email="+email_id);
+                    HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+                    con.setConnectTimeout(600000);
+
+                    // optional default is GET
+                    con.setRequestMethod("GET");
+
+                    //add request header
+                    con.setRequestProperty("User-Agent", "Mozilla/5.0");
+                    // writing response to log
+                    BufferedReader in = new BufferedReader(
+                            new InputStreamReader(con.getInputStream()));
+                    String inputLine;
+                    StringBuffer response = new StringBuffer();
+
+                    inputLine = in.readLine();
+                    response.append(inputLine);
+
+                    in.close();
+
+                    result = response.toString();
+
+                    Log.d("VERIFY EMAIL LENGTH", ""+result.length());
+                    return result;
+
+                } catch (Exception e) {
+                }
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                if(result.length()>0){
+                    authenticated = true;
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean("Auth",true);
+                    editor.apply();
+                    Toast.makeText(LoginActivity.this,"Verification successful!",Toast.LENGTH_SHORT).show();
+                    startMainActivity();
+                }else{
+                    authenticated = false;
+                    Toast.makeText(LoginActivity.this,"Verification failed!\nEmail ID not present in database.",Toast.LENGTH_SHORT).show();
+                    signOut();
+                }
+
+                progressDialog.dismiss();
+
+            }
+
+            @Override
+            protected void onPreExecute() {
+                progressDialog.setTitle("Verifying Email...");
+                progressDialog.show();
+                if (!isNetworkAvailable()) {
+                    progressDialog.dismiss();
+                    Toast.makeText(LoginActivity.this, "Check Internet connection and try again. Exiting app...", Toast.LENGTH_SHORT).show();
+                    LoginActivity.this.finish();
+                }
+                super.onPreExecute();
+            }
+        }
+        VerifyEmailTask g = new VerifyEmailTask();
+        g.execute();
+
+
+    }
+
+
+    private void updateUI(boolean signedIn) {
+        if (signedIn) {
+            signInButton.setVisibility(View.INVISIBLE);
+            signOutButton.setVisibility(View.VISIBLE);
+        } else {
+
+            signInButton.setVisibility(View.VISIBLE);
+            signOutButton.setVisibility(View.INVISIBLE);
+        }
+    }
+
+
+    @OnClick(R.id.google_sign_out_button)
+    public void signOut() {
+        progressDialog.show();
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        // [START_EXCLUDE]
+                        updateUI(false);
+                        // [END_EXCLUDE]
+                    }
+                });
+        progressDialog.dismiss();
+    }
+    // [END signOut]
+
 
     @OnClick(R.id.btn_authenticate)
     public void onAuthenticate(){
@@ -76,12 +260,11 @@ public class LoginActivity extends AppCompatActivity {
 
                     StringBuilder sb = new StringBuilder();
 
-                    String line = null;
-                    if((line = reader.readLine()) != null) {
-                        sb.append(line + "\n");
-                    }
+                    String line = reader.readLine() ;
+                    sb.append(line);
+
                     result = sb.toString();
-                    Log.d("RESULT", result.substring(0,8));
+                    Log.d("RESULT", result);
 
                 } catch (Exception e) {
                 } finally {
@@ -95,16 +278,17 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(String result) {
-                if(result.substring(0,8).equals(passwordEditText.getText().toString())){
+                if(result.equals(passwordEditText.getText().toString())){
                     authenticated = true;
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean("Auth",true);
                     editor.apply();
-                    Toast.makeText(LoginActivity.this,"Password successful!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this,"Authentication successful!",Toast.LENGTH_SHORT).show();
                     startMainActivity();
+
                 }else{
                     authenticated = false;
-                    Toast.makeText(LoginActivity.this,"Password failed!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this,"Authentication failed!\nIncorrect Password.",Toast.LENGTH_SHORT).show();
                 }
 
                 progressDialog.dismiss();
@@ -114,7 +298,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             protected void onPreExecute() {
-                progressDialog.setTitle("Authenticating...");
+                progressDialog.setTitle("Authenticating Password...");
                 progressDialog.show();
                 if (!isNetworkAvailable()) {
                     progressDialog.dismiss();
@@ -143,4 +327,6 @@ public class LoginActivity extends AppCompatActivity {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
+
 }

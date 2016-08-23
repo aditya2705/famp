@@ -36,6 +36,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.alphalabz.familyapp.MainApplication;
 import com.alphalabz.familyapp.NotificationPublisher;
 import com.alphalabz.familyapp.R;
 import com.alphalabz.familyapp.fragments.AnnouncementsFragment;
@@ -76,7 +77,7 @@ import java.util.LinkedHashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String RESULTS_FETCH_MEMBERS_URL = "http://alpha95.net63.net/get_members_3.php";
+    private String RESULTS_FETCH_MEMBERS_URL = "get_members_3.php";
 
     private static final String TAG_RESULTS = "result";
     private static final String TAG_ID = "unique_id";
@@ -140,6 +141,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MainApplication application = (MainApplication) getApplicationContext();
+        RESULTS_FETCH_MEMBERS_URL = application.getUrlToFetchFrom()+"/"+RESULTS_FETCH_MEMBERS_URL;
 
         notificationCall = getIntent().getBooleanExtra("Notification", false);
 
@@ -351,6 +355,11 @@ public class MainActivity extends AppCompatActivity {
             protected void onPostExecute(String result) {
                 progressDialog.dismiss();
                 membersListJsonString = result;
+                if(result.length()<=0){
+                    Toast.makeText(MainActivity.this, "Data not received properly.\nTry again.", Toast.LENGTH_SHORT).show();
+                    MainActivity.this.finish();
+                }
+
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("MEMBERS_STRING", membersListJsonString);
                 editor.apply();
@@ -403,8 +412,11 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < membersJsonArray.length(); i++) {
                 JSONObject c = membersJsonArray.getJSONObject(i);
 
-                String unique_id, generation, title, first_name, middle_name, last_name, nick_name, gender, in_law, mother_id, mother_name, father_id, father_name, spouse_id, spouse_name, birth_date, marriage_date, death_date,
-                        mobile_number, alternate_number, residence_number, email1, email2, address_1, address_2, city, state_country, pincode, designation, company, industry_special, image_url;
+                String unique_id, generation, title, first_name, middle_name, last_name, nick_name, gender, in_law, mother_id, mother_name,
+                        father_id, father_name, spouse_id, spouse_name, birth_date, marriage_date, death_date,
+                        mobile_number, alternate_number, residence_number, email1, email2, address_1, address_2,
+                        city, state_country, pincode, designation, company, industry_special,
+                        image_url=((MainApplication)getApplicationContext()).getUrlToFetchFrom()+"/";
 
 
                 unique_id = c.optString(TAG_ID);
@@ -438,8 +450,7 @@ public class MainActivity extends AppCompatActivity {
                 designation = c.optString(TAG_DESIGNATION);
                 company = c.optString(TAG_COMPANY);
                 industry_special = c.optString(TAG_INDUSTRY_SPECIAL);
-                image_url = c.optString(TAG_IMAGE_URL);
-
+                image_url += c.getString(TAG_IMAGE_URL);
 
                 Person person = new Person(unique_id, generation, title, first_name, middle_name, last_name, nick_name,
                         gender, in_law, mother_id, mother_name, father_id, father_name, spouse_id,

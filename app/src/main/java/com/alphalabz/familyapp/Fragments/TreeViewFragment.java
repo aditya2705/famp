@@ -31,11 +31,13 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.alphalabz.familyapp.MainApplication;
 import com.alphalabz.familyapp.R;
 import com.alphalabz.familyapp.activities.MainActivity;
 import com.alphalabz.familyapp.activities.ProfileActivity;
 import com.alphalabz.familyapp.objects.Person;
 import com.alphalabz.familyapp.objects.PersonLayout;
+import com.squareup.picasso.Picasso;
 
 import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
 import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
@@ -53,6 +55,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,7 +78,7 @@ public class TreeViewFragment extends Fragment {
     private String membersListJsonString;
     private Bitmap familyTreeBitmap;
 
-    private static final String RESULTS_FETCH_URL = "http://alpha95.net63.net/get_members_3.php";
+    private static String RESULTS_FETCH_URL = "get_members_3.php";
 
     private static final String TAG_RESULTS = "result";
     private static final String TAG_ID = "unique_id";
@@ -132,6 +136,9 @@ public class TreeViewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        MainApplication application = (MainApplication) getActivity().getApplicationContext();
+        RESULTS_FETCH_URL = application.getUrlToFetchFrom()+"/"+RESULTS_FETCH_URL;
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_tree_view, container, false);
 
@@ -310,8 +317,11 @@ public class TreeViewFragment extends Fragment {
             for (int i = 0; i < membersJsonArray.length(); i++) {
                 JSONObject c = membersJsonArray.getJSONObject(i);
 
-                String unique_id, generation, title, first_name, middle_name, last_name, nick_name, gender, in_law, mother_id, mother_name, father_id, father_name, spouse_id, spouse_name, birth_date, marriage_date, death_date,
-                        mobile_number, alternate_number, residence_number, email1, email2, address_1, address_2, city, state_country, pincode, designation, company, industry_special, image_url;
+                String unique_id, generation, title, first_name, middle_name, last_name, nick_name, gender, in_law, mother_id,
+                        mother_name, father_id, father_name, spouse_id, spouse_name, birth_date, marriage_date, death_date,
+                        mobile_number, alternate_number, residence_number, email1, email2, address_1, address_2, city,
+                        state_country, pincode, designation, company, industry_special,
+                        image_url=((MainApplication)getActivity().getApplicationContext()).getUrlToFetchFrom()+"/";
 
 
                 unique_id = c.getString(TAG_ID);
@@ -345,7 +355,7 @@ public class TreeViewFragment extends Fragment {
                 designation = c.getString(TAG_DESIGNATION);
                 company = c.getString(TAG_COMPANY);
                 industry_special = c.getString(TAG_INDUSTRY_SPECIAL);
-                image_url = c.getString(TAG_IMAGE_URL);
+                image_url += c.getString(TAG_IMAGE_URL);
 
 
                 PersonLayout person = new PersonLayout(unique_id, generation, title, first_name, middle_name, last_name, nick_name,
@@ -510,13 +520,16 @@ public class TreeViewFragment extends Fragment {
         nodeLayout = (RelativeLayout) LayoutInflater.from(getContext()).inflate(R.layout.node_layout, null, false);
 
         TextView personNameView = (TextView) nodeLayout.findViewById(R.id.person_name);
-        ImageView personImageView = (ImageView) nodeLayout.findViewById(R.id.person_image_view);
+        CircleImageView personImageView = (CircleImageView) nodeLayout.findViewById(R.id.person_image_view);
         TextView spouseNameView = (TextView) nodeLayout.findViewById(R.id.spouse_name);
-        ImageView spouseImageView = (ImageView) nodeLayout.findViewById(R.id.spouse_image_view);
+        CircleImageView spouseImageView = (CircleImageView) nodeLayout.findViewById(R.id.spouse_image_view);
 
         personNameView.setText((person.getTitle().equals("null") ? "" : person.getTitle() + " ") +
                 person.getFirst_name() + " " + (person.getMiddle_name().equals("null") ? "" : person.getMiddle_name() + " ") +
                 person.getLast_name());
+
+        Picasso.with(getActivity()).load(person.getImage_url())
+                .placeholder(getActivity().getResources().getDrawable(R.drawable.profile)).into(personImageView);
 
         personNameView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -553,6 +566,9 @@ public class TreeViewFragment extends Fragment {
             s = (p.getTitle().equals("null") ? "" : p.getTitle() + " ") + p.getFirst_name() + " "
                     + (p.getMiddle_name().equals("null") ? "" : p.getMiddle_name() + " ")
                     + p.getLast_name();
+
+            Picasso.with(getActivity()).load(p.getImage_url())
+                    .placeholder(getActivity().getResources().getDrawable(R.drawable.profile)).into(spouseImageView);
         }
 
         if (s != null && !s.equals("")) {

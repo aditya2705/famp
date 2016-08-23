@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.alphalabz.familyapp.MainApplication;
 import com.alphalabz.familyapp.R;
 import com.alphalabz.familyapp.activities.MainActivity;
 import com.alphalabz.familyapp.adapters.NewsListAdapter;
@@ -36,7 +37,7 @@ import butterknife.ButterKnife;
  */
 public class AnnouncementsFragment extends Fragment {
 
-    private static final String RESULTS_FETCH_NEWS = "http://alpha95.net63.net/get_news.php";
+    private static String RESULTS_FETCH_NEWS = "get_news.php";
 
     private static final String TAG_RESULTS = "result";
     private static final String TAG_ID = "id";
@@ -60,6 +61,9 @@ public class AnnouncementsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        MainApplication application = (MainApplication) getActivity().getApplicationContext();
+        RESULTS_FETCH_NEWS = application.getUrlToFetchFrom()+"/"+RESULTS_FETCH_NEWS;
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_news, container, false);
         ButterKnife.bind(this,rootView);
@@ -67,6 +71,8 @@ public class AnnouncementsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
         adapter = new NewsListAdapter(getActivity(),newsObjectArrayList);
         recyclerView.setAdapter(adapter);
+
+
 
         getNews();
 

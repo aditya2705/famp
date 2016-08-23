@@ -855,14 +855,17 @@
 
 
             <!-- cheat code: negative margin -->
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/user_icon"
                 android:layout_width="@dimen/_85sdp"
                 android:layout_height="@dimen/_85sdp"
                 android:layout_above="@+id/informations_container"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="@dimen/_minus20sdp"
-                android:src="@drawable/profile" />
+                android:src="@drawable/profile"
+                android:scaleType="centerCrop"
+                app:civ_border_width="@dimen/_1sdp"
+                app:civ_border_color="#000"/>
 
         </RelativeLayout>
     </com.nirhart.parallaxscroll.views.ParallaxScrollView>

@@ -86,8 +86,10 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
         searchableMembersStringMap = sortHashMapByValuesD(searchableMembersStringMap);
         final ArrayList<String> mapKeys = new ArrayList(searchableMembersStringMap.keySet());
         int k = 0;
-        for (String s : searchableMembersStringMap.values())
-            mModels.add(new SearchMemberModel(mapKeys.get(k++), s));
+        for (String s : searchableMembersStringMap.values()) {
+            mModels.add(new SearchMemberModel(mapKeys.get(k), s, mainActivity.membersListMap.get(mapKeys.get(k)).getImage_url()));
+            ++k;
+        }
 
         mAdapter = new SearchListAdapter(getActivity(), mModels);
         mRecyclerView.setAdapter(mAdapter);

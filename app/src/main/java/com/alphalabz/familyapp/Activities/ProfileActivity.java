@@ -18,12 +18,15 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.alphalabz.familyapp.R;
 import com.alphalabz.familyapp.objects.Person;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -87,7 +90,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         int k = 0;
-        ImageView userIcon = (ImageView) findViewById(R.id.user_icon);
+        CircleImageView userIcon = (CircleImageView) findViewById(R.id.user_icon);
         userIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,11 +98,14 @@ public class ProfileActivity extends AppCompatActivity {
                         .theme(Theme.LIGHT)
                         .customView(R.layout.profile_image_view, false)
                         .build();
-                ((ImageView) dialog.getCustomView().findViewById(R.id.image)).setImageResource(R.drawable.profile);
+
+                Picasso.with(ProfileActivity.this).load(actualPerson.getImage_url()).placeholder(ProfileActivity.this.getResources().getDrawable(R.drawable.profile))
+                        .into(((ImageView) dialog.getCustomView().findViewById(R.id.image)));
+
                 dialog.show();
             }
         });
-        userIcon.setImageResource(R.drawable.profile);
+        Picasso.with(ProfileActivity.this).load(actualPerson.getImage_url()).placeholder(ProfileActivity.this.getResources().getDrawable(R.drawable.profile)).into(userIcon);
 
         TextView nameT = (TextView) findViewById(R.id.profile_name);
         String newName = ((actualPerson.getTitle().equals("null") || actualPerson.getTitle().equals("")) ? "" : (actualPerson.getTitle() + " ")) +

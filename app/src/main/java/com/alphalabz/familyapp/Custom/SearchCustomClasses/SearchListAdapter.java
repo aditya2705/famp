@@ -22,8 +22,10 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchItemViewHolder
 
     private final LayoutInflater mInflater;
     private final List<SearchMemberModel> mModels;
+    private Context context;
 
     public SearchListAdapter(Context context, List<SearchMemberModel> models) {
+        this.context = context;
         mInflater = LayoutInflater.from(context);
         mModels = new ArrayList<>(models);
     }
@@ -31,7 +33,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchItemViewHolder
     @Override
     public SearchItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View itemView = mInflater.inflate(R.layout.members_list_item, parent, false);
-        return new SearchItemViewHolder(itemView);
+        return new SearchItemViewHolder(itemView,context);
     }
 
     @Override

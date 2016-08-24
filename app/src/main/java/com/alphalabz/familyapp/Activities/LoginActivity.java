@@ -60,7 +60,23 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
+        sharedPreferences = getSharedPreferences("FAMP", 0);
+        authenticated = sharedPreferences.getBoolean("Auth", false);
 
+        if (authenticated) {
+            String url = sharedPreferences.getString("URL_TO_FETCH_FROM","");
+            ((MainApplication)getApplicationContext()).setUrlToFetchFrom(url);
+            startMainActivity();
+        }else{
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setCancelable(false);
+            getURLToFetchFrom();
+            defaultSettingUp();
+        }
+
+    }
+
+    private void defaultSettingUp() {
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -93,18 +109,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
-
-        sharedPreferences = getSharedPreferences("FAMP", 0);
-        authenticated = sharedPreferences.getBoolean("Auth", false);
-
-        if (authenticated) {
-            startMainActivity();
-        }else{
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setCancelable(false);
-            getURLToFetchFrom();
-        }
 
     }
 
@@ -288,7 +292,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(String result) {
-                if (result.equals(passwordEditText.getText().toString())) {
+                progressDialog.dismiss();
+                if (result!=null && result.equals(passwordEditText.getText().toString())) {
                     authenticated = true;
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean("Auth", true);
@@ -298,11 +303,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 } else {
                     authenticated = false;
-                    Toast.makeText(LoginActivity.this, "Authentication failed!\nIncorrect Password.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Authentication failed!\n", Toast.LENGTH_SHORT).show();
                 }
-
-                progressDialog.dismiss();
-
 
             }
 
@@ -312,8 +314,7 @@ public class LoginActivity extends AppCompatActivity {
                 progressDialog.show();
                 if (!isNetworkAvailable()) {
                     progressDialog.dismiss();
-                    Toast.makeText(LoginActivity.this, "Check Internet connection and try again. Exiting app...", Toast.LENGTH_SHORT).show();
-                    LoginActivity.this.finish();
+                    Toast.makeText(LoginActivity.this, "Check Internet connection and try again.", Toast.LENGTH_SHORT).show();
                 }
                 super.onPreExecute();
             }
@@ -376,17 +377,19 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(String result) {
-                if (result.length()>0) {
+                progressDialog.dismiss();
+                if (result!=null&&result.length()>0) {
                     ((MainApplication)getApplicationContext()).setUrlToFetchFrom("http://"+result);
                     MainApplication application = (MainApplication) getApplicationContext();
                     AUTHENTICATE_PASSWORD_URL = application.getUrlToFetchFrom()+"/"+AUTHENTICATE_PASSWORD_URL;
                     VERIFY_EMAIL_URL = application.getUrlToFetchFrom()+"/"+VERIFY_EMAIL_URL;
+                    sharedPreferences.edit().putString("URL_TO_FETCH_FROM","http://"+result).apply();
                 } else {
-                    authenticated = false;
-                    Toast.makeText(LoginActivity.this, "Authentication failed!\nIncorrect Password.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Check internet connection and try again. Exiting app...", Toast.LENGTH_SHORT).show();
+                    LoginActivity.this.finish();
                 }
 
-                progressDialog.dismiss();
+
 
 
             }
@@ -397,7 +400,7 @@ public class LoginActivity extends AppCompatActivity {
                 progressDialog.show();
                 if (!isNetworkAvailable()) {
                     progressDialog.dismiss();
-                    Toast.makeText(LoginActivity.this, "Check Internet connection and try again. Exiting app...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Check internet connection and try again. Exiting app...", Toast.LENGTH_SHORT).show();
                     LoginActivity.this.finish();
                 }
                 super.onPreExecute();

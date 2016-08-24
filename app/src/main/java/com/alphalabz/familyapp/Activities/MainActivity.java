@@ -77,6 +77,8 @@ import java.util.LinkedHashMap;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String DEFAULT_URL = "http://www.alphalabz.com/family_app_url.php";
+
     private String RESULTS_FETCH_MEMBERS_URL = "get_members_3.php";
 
     private static final String TAG_RESULTS = "result";
@@ -304,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.refresh) {
-            getMembersData();
+            getURLToFetchFrom();
             return true;
         }else if(id == R.id.download){
             downloadAllImages();
@@ -354,30 +356,33 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(String result) {
                 progressDialog.dismiss();
-                membersListJsonString = result;
-                if(result.length()<=0){
+                if(result==null || result.length()<=0){
                     Toast.makeText(MainActivity.this, "Data not received properly.\nTry again.", Toast.LENGTH_SHORT).show();
+                    super.onPostExecute(result);
                     MainActivity.this.finish();
-                }
 
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("MEMBERS_STRING", membersListJsonString);
-                editor.apply();
+                }else {
+                    membersListJsonString = result;
 
-                if(!membersListJsonString.equals("")) {
-                    generateMembersList();
-                    generateEventsList();
-                }
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("MEMBERS_STRING", membersListJsonString);
+                    editor.apply();
 
-                if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof TreeViewFragment) {
-                    progressDialog.show();
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TreeViewFragment()).commit();
-                        }
-                    }, 1000);
+                    if (!membersListJsonString.equals("")) {
+                        generateMembersList();
+                        generateEventsList();
+                    }
 
+                    if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof TreeViewFragment) {
+                        progressDialog.show();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TreeViewFragment()).commit();
+                            }
+                        }, 1000);
+
+                    }
                 }
 
             }
@@ -899,6 +904,77 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         GetMembersData g = new GetMembersData();
+        g.execute();
+
+
+    }
+
+    private void getURLToFetchFrom() {
+
+        class getURLToFetchFromTask extends AsyncTask<String, Void, String> {
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                URL obj = null;
+                String result = null;
+                InputStream inputStream = null;
+                try {
+                    obj = new URL(DEFAULT_URL);
+                    HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+                    inputStream = con.getInputStream();
+                    BufferedReader reader = new BufferedReader(
+                            new InputStreamReader(inputStream, "UTF-8"), 8);
+
+                    StringBuilder sb = new StringBuilder();
+
+                    String line = reader.readLine();
+                    sb.append(line);
+
+                    result = sb.toString();
+                    Log.d("RESULT", result);
+
+                } catch (Exception e) {
+                } finally {
+                    try {
+                        if (inputStream != null) inputStream.close();
+                    } catch (Exception squish) {
+                    }
+                }
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                progressDialog.dismiss();
+                if (result!=null&&result.length()>0) {
+                    ((MainApplication)getApplicationContext()).setUrlToFetchFrom("http://"+result);
+                    sharedPreferences.edit().putString("URL_TO_FETCH_FROM","http://"+result).apply();
+                    RESULTS_FETCH_MEMBERS_URL =((MainApplication)getApplicationContext()).getUrlToFetchFrom()+"/"+"get_members_3.php";
+                    getMembersData();
+                } else {
+                    Toast.makeText(MainActivity.this, "Check Internet connection and try again.", Toast.LENGTH_SHORT).show();
+                }
+
+
+
+
+            }
+
+            @Override
+            protected void onPreExecute() {
+                progressDialog.setTitle("Loading...");
+                progressDialog.show();
+                if (!isNetworkAvailable()) {
+                    progressDialog.dismiss();
+                    Toast.makeText(MainActivity.this, "Check Internet connection and try again.", Toast.LENGTH_SHORT).show();
+
+                }
+                super.onPreExecute();
+            }
+        }
+        getURLToFetchFromTask g = new getURLToFetchFromTask();
         g.execute();
 
 
